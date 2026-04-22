@@ -3,597 +3,341 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>버스 가이드</title>
+<title>스마트 버스 가이드</title>
 <style>
-  /* 토스 스타일 컬러 시스템 */
   :root {
-    --bg: #f2f4f6;
-    --card: #ffffff;
-    --text-main: #191f28;
-    --text-sub: #4e5968;
-    --primary: #3182f6;
-    --accent: #00d564;
-    --warning: #f04452;
-    --border: rgba(0, 0, 0, 0.05);
-    --chip-bg: #eff1f3;
+    --bg: #f2f4f6; --card: #ffffff; --text-main: #191f28; --text-sub: #4e5968;
+    --primary: #3182f6; --accent: #00d564; --warning: #f04452; --border: rgba(0,0,0,0.05); --chip-bg: #eff1f3;
   }
-
   body.dark-mode {
-    --bg: #0f1012;
-    --card: #1c1d1f;
-    --text-main: #f9fafb;
-    --text-sub: #adb5bd;
-    --primary: #3182f6;
-    --border: rgba(255, 255, 255, 0.06);
-    --chip-bg: #2c2d2f;
+    --bg: #0f1012; --card: #1c1d1f; --text-main: #f9fafb; --text-sub: #adb5bd;
+    --primary: #3182f6; --border: rgba(255,255,255,0.06); --chip-bg: #2c2d2f;
   }
-
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-  body { 
-    background: var(--bg); 
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Pretendard", sans-serif; 
-    color: var(--text-main); 
-    transition: background 0.3s ease;
-    overflow-x: hidden;
-  }
+  body { background: var(--bg); font-family: -apple-system, sans-serif; color: var(--text-main); overflow-x: hidden; transition: background 0.3s ease; }
   
-  .header {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 20px 24px; background: var(--card); border-bottom: 1px solid var(--border);
-  }
-  .header h1 { font-size: 20px; font-weight: 700; }
-  .header-btns { display: flex; gap: 8px; }
-  .top-btn {
-    background: var(--chip-bg); border: none; padding: 8px 14px;
-    border-radius: 10px; color: var(--text-sub); font-size: 13px; font-weight: 600; cursor: pointer;
-  }
-
+  .header { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; background: var(--card); border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 10px; }
+  .header h1 { font-size: 18px; font-weight: 700; margin: 0; }
+  .header-btns { display: flex; gap: 6px; }
+  .top-btn { background: var(--chip-bg); border: none; padding: 6px 10px; border-radius: 8px; color: var(--text-sub); font-size: 12px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+  .top-btn.gps { color: var(--primary); background: rgba(49,130,246,0.1); }
+  
   .nav { display: flex; background: var(--card); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
-  .nav-item { flex: 1; padding: 18px; text-align: center; font-weight: 600; font-size: 16px; color: var(--text-sub); cursor: pointer; }
+  .nav-item { flex: 1; padding: 16px; text-align: center; font-weight: 600; font-size: 15px; color: var(--text-sub); cursor: pointer; }
   .nav-item.active { color: var(--primary); border-bottom: 3px solid var(--primary); }
 
   .main { padding: 16px; max-width: 600px; margin: 0 auto; padding-bottom: 120px; }
-  
-  body.desktop-mode .main {
-    max-width: 1200px;
-    display: flex;
-    gap: 24px;
-  }
+  body.desktop-mode .main { max-width: 1200px; display: flex; gap: 24px; padding-bottom: 40px; }
   .left-pane, .right-pane { flex: 1; min-width: 0; }
   body:not(.desktop-mode) .right-pane { display: none; }
 
-  .section { display: none; }
+  .section { display: none; animation: fadeIn 0.3s ease; }
   .section.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-  .card { 
-    background: var(--card); border-radius: 24px; padding: 24px; margin-bottom: 16px; 
-    box-shadow: 0 2px 10px rgba(0,0,0,0.03);
-  }
-  .label { font-size: 13px; color: var(--text-sub); margin-bottom: 14px; display: block; font-weight: 600; }
+  .card { background: var(--card); border-radius: 24px; padding: 20px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
+  .label { font-size: 12px; color: var(--text-sub); margin-bottom: 12px; display: block; font-weight: 600; }
   
-  .time-select-row { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
-  .time-input { 
-    flex: 1; background: var(--bg); border: none; border-radius: 14px; 
-    color: var(--text-main); padding: 16px; font-size: 20px; font-weight: 700; outline: none; color-scheme: dark;
-  }
-  .now-btn { 
-    padding: 16px 24px; background: var(--primary); border: none; border-radius: 14px; 
-    color: #fff; font-size: 15px; font-weight: 600; cursor: pointer; 
-  }
+  .search-row { display: flex; gap: 8px; margin-bottom: 12px; }
+  .search-input { flex: 1; background: var(--chip-bg); border: none; border-radius: 12px; padding: 12px 14px; font-size: 14px; color: var(--text-main); font-weight: 600; outline: none; }
+  .time-input { width: 110px; background: var(--chip-bg); border: none; border-radius: 12px; padding: 12px; font-size: 15px; font-weight: 700; color: var(--text-main); outline: none; color-scheme: dark; }
 
   .result-display { border-top: 1px solid var(--border); margin-top: 15px; padding-top: 15px; }
-  .bus-row { display: flex; justify-content: space-between; align-items: center; padding: 18px 0; border-bottom: 1px solid var(--border); }
+  .bus-row { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--border); }
   .bus-row:last-child { border: none; }
-  .bus-time { font-size: 26px; font-weight: 700; color: var(--text-main); }
-  .bus-meta { text-align: right; }
-  .bus-wait { font-size: 16px; color: var(--primary); font-weight: 700; display: block; }
-  .bus-order { font-size: 12px; color: var(--text-sub); }
-
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px; }
-  .chip { 
-    padding: 16px 8px; background: var(--bg); border-radius: 16px; 
-    font-size: 13px; text-align: center; border: 1px solid transparent; 
-    cursor: pointer; color: var(--text-sub); font-weight: 600; transition: 0.2s;
-  }
+  .bus-time { font-size: 22px; font-weight: 700; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
+  .bus-wait { font-size: 14px; color: var(--primary); font-weight: 700; }
+  .share-btn { background: var(--chip-bg); border: none; padding: 6px 10px; border-radius: 8px; font-size: 12px; cursor: pointer; color: var(--text-main); font-weight: 600; }
+  
+  .grid-origins { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 8px; }
+  
+  .chip { padding: 12px 6px; background: var(--bg); border-radius: 14px; font-size: 12px; text-align: center; border: 1px solid transparent; cursor: pointer; color: var(--text-sub); font-weight: 600; transition: 0.2s; position: relative; }
   .chip.active { background: rgba(49, 130, 246, 0.1); border-color: var(--primary); color: var(--primary); }
+  
+  .fav-star { position: absolute; top: 4px; right: 6px; font-size: 12px; color: #ccc; }
+  .chip.favorite .fav-star { color: #f5a623; }
 
-  .cat-title { font-size: 16px; color: var(--text-main); margin: 32px 0 16px; font-weight: 700; border-left: 4px solid var(--primary); padding-left: 12px; }
+  .cat-title { font-size: 14px; color: var(--text-main); margin: 24px 0 10px; font-weight: 700; border-left: 4px solid var(--primary); padding-left: 8px; }
+  #favSection { border: 2px solid var(--primary); background: rgba(49,130,246,0.02); }
 
-  .footer-btn { 
-    position: fixed; bottom: 24px; left: 24px; right: 24px; 
-    background: var(--primary); color: white; border: none; padding: 20px; 
-    border-radius: 20px; font-weight: 700; font-size: 17px; z-index: 100; cursor: pointer;
-    box-shadow: 0 10px 20px rgba(49, 130, 246, 0.3);
-  }
+  .footer-btn { position: fixed; bottom: 20px; left: 20px; right: 20px; background: var(--primary); color: white; border: none; padding: 16px; border-radius: 16px; font-weight: 700; font-size: 15px; z-index: 100; cursor: pointer; box-shadow: 0 8px 16px rgba(49, 130, 246, 0.3); }
   body.desktop-mode .footer-btn { display: none; }
 
-  .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 1000; display: none; flex-direction: column; }
-  .modal-head { padding: 20px 24px; display: flex; justify-content: space-between; align-items: center; background: var(--card); border-bottom: 1px solid var(--border); }
-  .modal-body { flex: 1; overflow-y: auto; padding: 20px; }
+  .desktop-table-card { height: calc(100vh - 140px); overflow-y: auto; position: sticky; top: 80px; }
+
+  .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 1000; display: none; flex-direction: column; animation: slideUp 0.2s forwards; }
+  @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+  .modal-head { padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; background: var(--card); border-bottom: 1px solid var(--border); }
+  .modal-body { flex: 1; overflow-y: auto; padding: 16px; scroll-behavior: smooth; }
 
   .full-table { width: 100%; border-collapse: collapse; }
-  .full-table td { padding: 18px 12px; border-bottom: 1px solid var(--border); font-size: 14px; }
-  .t-dest { color: var(--primary); font-weight: 700; width: 110px; vertical-align: top; }
+  .full-table td { padding: 14px 10px; border-bottom: 1px solid var(--border); font-size: 13px; }
+  .t-dest { color: var(--primary); font-weight: 700; width: 90px; vertical-align: top; }
   .t-times { color: var(--text-sub); line-height: 1.8; word-break: keep-all; }
+  
+  .time-past { opacity: 0.3; text-decoration: line-through; }
+  .time-future { color: var(--text-main); font-weight: 500; }
+  .time-next { color: var(--primary); font-weight: 800; }
+  .badge-next { background: var(--primary); color: #fff; font-size: 10px; padding: 2px 5px; border-radius: 4px; margin-left: 4px; vertical-align: middle; }
+
+  /* 토스트 알림 UI */
+  .toast-container { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); z-index: 2000; display: flex; flex-direction: column; gap: 10px; align-items: center; pointer-events: none; }
+  .toast { background: rgba(33, 37, 41, 0.9); color: white; padding: 12px 20px; border-radius: 20px; font-size: 13px; font-weight: 600; box-shadow: 0 4px 12px rgba(0,0,0,0.15); animation: toastFadeInOut 2.5s forwards; }
+  @keyframes toastFadeInOut { 0% { opacity: 0; transform: translateY(20px); } 10% { opacity: 1; transform: translateY(0); } 90% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-10px); } }
 </style>
 </head>
 <body class="dark-mode">
 
+<div class="toast-container" id="toastContainer"></div>
+
 <div class="header">
   <h1>버스 가이드</h1>
   <div class="header-btns">
-    <button class="top-btn" id="viewToggle" onclick="toggleViewMode()">데스크톱 모드</button>
+    <button class="top-btn gps" onclick="findNearestTerminal()">위치 찾기</button>
+    <button class="top-btn" id="voiceBtn" onclick="startVoiceSearch()">음성 검색</button>
+    <button class="top-btn" id="viewToggle" onclick="toggleViewMode()">PC 모드</button>
     <button class="top-btn" id="darkToggle" onclick="toggleDarkMode()">라이트 모드</button>
   </div>
 </div>
 
 <div class="nav">
-  <div class="nav-item active" onclick="setTab('inter', this)">시외버스</div>
+  <div class="nav-item active" onclick="setTab('inter', this)">시외/고속</div>
   <div class="nav-item" onclick="setTab('town', this)">시내버스</div>
 </div>
 
 <div class="main">
   <div class="left-pane">
     <div class="card">
-      <span class="label">조회 기준 시간</span>
-      <div class="time-select-row">
-        <input type="time" id="searchTime" class="time-input">
-        <button class="now-btn" onclick="setToNow()">현재</button>
+      <div class="search-row">
+        <input type="text" id="searchInput" class="search-input" placeholder="목적지 검색 (입력 및 음성)" onkeyup="searchBus()">
+        <input type="time" id="searchTime" class="time-input" onchange="manualTimeChange()">
       </div>
       <div class="result-display" id="resArea">
-        <div style="text-align:center; color:var(--text-sub); font-size: 14px; padding:10px;">노선을 선택해 주세요.</div>
+        <div style="text-align:center; color:var(--text-sub); font-size: 13px; padding:10px;">노선을 선택하거나 검색하십시오.<br>(우측 상단 별표를 눌러 즐겨찾기)</div>
       </div>
+    </div>
+
+    <div class="card" id="favSection" style="display:none;">
+      <span class="label" style="color:var(--primary);">내 즐겨찾기</span>
+      <div class="grid" id="favGrid"></div>
     </div>
 
     <div id="view-inter" class="section active">
       <div class="card">
         <span class="label">출발 터미널</span>
-        <div class="grid">
+        <div class="grid-origins">
           <div class="chip active" onclick="setOrigin('jeonju', this)">전주발</div>
           <div class="chip" onclick="setOrigin('buan', this)">부안발</div>
+          <div class="chip" onclick="setOrigin('gimje', this)">김제발</div>
+          <div class="chip" onclick="setOrigin('gunsan', this)">군산발</div>
         </div>
       </div>
-      
-      <div id="jeonjuCats">
-        <div class="cat-title">수도권 (서울/경기)</div>
-        <div class="grid" id="jeonju-cat-1"></div>
-        <div class="cat-title">충청 · 강원 · 경상</div>
-        <div class="grid" id="jeonju-cat-2"></div>
-        <div class="cat-title">전남 · 전북권</div>
-        <div class="grid" id="jeonju-cat-3"></div>
-      </div>
-
-      <div id="buanCats" style="display:none;">
-        <div class="cat-title">부안 출발 시외</div>
-        <div class="grid" id="buan-grid"></div>
-      </div>
+      <div id="cats-inter"></div>
     </div>
 
     <div id="view-town" class="section">
-      <div class="cat-title">격포 · 변산 · 내소사</div>
-      <div class="grid" id="town-cat-1"></div>
-      <div class="cat-title">줄포 · 곰소 · 흥덕 · 주산</div>
-      <div class="grid" id="town-cat-2"></div>
-      <div class="cat-title">정읍 · 백산 · 영원 · 화호</div>
-      <div class="grid" id="town-cat-3"></div>
-      <div class="cat-title">계화 · 돈지 · 조포 · 기타</div>
-      <div class="grid" id="town-cat-4"></div>
+      <div id="cats-town"></div>
     </div>
   </div>
 
   <div class="right-pane">
-    <div class="card" style="height: calc(100vh - 160px); overflow-y: auto; position: sticky; top: 100px;">
-      <div class="cat-title" id="desktopTableTitle" style="margin-top:0">전체 노선 리스트</div>
-      <div id="desktopTableBody"></div>
-    </div>
-  </div>
-</div>
-
-<button class="footer-btn" onclick="openMobileModal()">전체 노선 정보 보기</button>
-
-<div class="modal" id="mobileModal">
-  <div class="modal-head">
-    <div id="mTitle" style="font-weight:700; font-size:18px;">전체 시간표</div>
-    <button onclick="closeMobileModal()" style="background:none; border:none; color:var(--text-main); font-size:28px;">✕</button>
-  </div>
-  <div class="modal-body" id="mBody"></div>
-</div>
-
-<script>
-const busData = {
-  inter: {
-    jeonju: [
-      // 수도권 (7425, 7426)
-      { cat: 1, name: "서울남부(우)", times: ["05:45","06:25","06:45","07:05","07:35","08:05","08:45","09:05","09:25","10:05","10:25","10:55","11:25","11:45","12:15","12:45","13:15","13:45","14:15","14:45","15:15","15:45","16:15","16:45","17:15","17:45","18:15","18:45","19:15","19:45","20:15","20:45","21:15"] },
-      { cat: 1, name: "서울남부(일)", times: ["06:05","08:25","09:45","10:45","11:05","12:15","13:35","15:05","16:05","17:25","19:05","20:25"] },
-      { cat: 1, name: "인천공항", times: ["03:10","03:30","04:00","04:30","05:00","06:00","07:00","08:00","09:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00"] },
-      { cat: 1, name: "수원(우)", times: ["08:20","10:00","11:40","13:20","14:50","16:20","18:10"] },
-      { cat: 1, name: "안산(우)", times: ["08:30","10:35","12:40","14:35","16:30","18:30"] },
-      { cat: 1, name: "인천·부천", times: ["08:05","09:05","10:05","11:05","12:05","13:10","14:10","15:05","16:00","17:10","18:20"] },
-      { cat: 1, name: "시화·고양", times: ["07:50","09:50","11:50","13:50","15:50"] },
-
-      // 충청/강원/경상 (7427, 7428, 7429, 7430)
-      { cat: 2, name: "대전복합(직)", times: ["06:30","07:40","08:50","10:00","11:10","12:20","13:30","14:40","15:50","17:00","18:10","19:20"] },
-      { cat: 2, name: "유성·청주", times: ["07:05","08:00","08:40","09:45","10:30","11:20","12:25","13:10","14:10","15:20","16:10","17:10","18:00","19:10"] },
-      { cat: 2, name: "천안·평택", times: ["06:40","07:40","08:40","09:30","10:20","11:10","12:00","12:50","13:40","14:30","15:20","16:10","17:00","17:50","18:45","19:30"] },
-      { cat: 2, name: "강릉·원주", times: ["09:05","11:05","14:20","16:40"] },
-      { cat: 2, name: "부산(사상)", times: ["07:00","08:10","09:20","10:30","11:40","12:50","14:00","15:10","16:20","17:30","18:40","19:50"] },
-      { cat: 2, name: "대구(서부)", times: ["06:35","08:05","09:25","10:45","12:05","13:25","14:45","16:05","17:25","18:45"] },
-      { cat: 2, name: "진주·마산", times: ["09:10","11:20","13:10","15:20","17:30","19:00"] },
-
-      // 전남/전북 (7431, 7432, 3526, 3527)
-      { cat: 3, name: "광주(직통)", times: ["06:40","07:30","08:20","09:20","10:20","11:20","12:20","13:20","14:20","15:20","16:20","17:20","18:20","19:45"] },
-      { cat: 3, name: "부안(직통)", times: ["07:10","08:00","08:40","09:20","10:00","10:25","11:00","11:35","12:20","12:40","13:15","13:50","14:40","15:00","15:45","16:00","16:30","17:15","18:10","18:50","19:40"] },
-      { cat: 3, name: "정읍(직통)", times: ["06:30","07:10","08:20","09:30","10:30","11:20","12:20","13:20","14:50","16:20","17:40","18:10","19:10","20:00","21:40"] },
-      { cat: 3, name: "김제", times: ["06:45","07:20","08:00","08:50","10:20","11:00","12:40","14:10","15:25","17:20","18:40","20:00","22:00"] },
-      { cat: 3, name: "군산(직)", times: ["06:00","07:00","08:15","09:10","10:00","11:05","12:15","13:20","14:30","15:40","16:50","18:00","19:30","21:00"] },
-      { cat: 3, name: "고창(직)", times: ["06:05","07:23","09:26","11:04","11:53","13:06","13:55","15:09","16:44","18:21","20:02"] }
-    ],
-    buan: [
-      { name: "전주(직통)", times: ["07:10","08:00","08:40","09:40","10:50","11:55","12:50","13:15","13:50","14:40","15:45","16:40","17:40","18:40","19:30"] },
-      { name: "서울(강남)", times: ["07:00","08:00","09:00","10:30","12:30","13:40","14:50","16:10","17:50","19:30"] },
-      { name: "광주(직)", times: ["10:30","14:40","18:20"] },
-      { name: "정읍", times: ["07:55","12:30","15:30","18:45"] },
-      { name: "인천·안산", times: ["09:40","18:20"] }
-    ]
-  },
-  town: [
-    { cat: 1, name: "격포(마실)", times: ["06:40","07:30","08:40","09:10","10:00","11:00","11:50","12:20","13:30","14:30","15:30","16:30","17:55"] },
-    { cat: 1, name: "내소사(상서)", times: ["06:00","06:40","07:10","08:10","09:10","10:40","12:10","13:30","15:10","16:30","18:10"] },
-    { cat: 2, name: "줄포·흥덕", times: ["06:20","07:30","08:50","10:30","12:10","14:10","15:50","17:30","19:10"] },
-    { cat: 2, name: "곰소", times: ["06:30","08:20","10:00","12:10","14:10","16:10","18:10"] },
-    { cat: 3, name: "정읍(시내)", times: ["07:10","08:30","09:10","11:00","13:30","15:40","18:10"] },
-    { cat: 3, name: "백산·화호", times: ["07:15","08:45","11:50","15:15","18:40"] },
-    { cat: 4, name: "계화·거화", times: ["06:30","07:50","09:30","11:30","13:30","15:30","17:30","18:25"] },
-    { cat: 4, name: "돈지·창북", times: ["06:25","08:30","11:30","14:40","17:20"] }
-  ]
-};
-
-let curMode = 'inter', curOrigin = 'jeonju';
-
-function timeToMin(t) { if(!t) return 0; const [h,m] = t.split(':').map(Number); return h*60+m; }
-
-function setToNow() {
-  const now = new Date();
-  document.getElementById('searchTime').value = now.getHours().toString().padStart(2,'0') + ":" + now.getMinutes().toString().padStart(2,'0');
-  clearRes();
-}
-
-function toggleDarkMode() {
-  const isDark = document.body.classList.toggle('dark-mode');
-  document.getElementById('darkToggle').innerText = isDark ? '라이트 모드' : '다크 모드';
-}
-
-function toggleViewMode() {
-  const isDesktop = document.body.classList.toggle('desktop-mode');
-  document.getElementById('viewToggle').innerText = isDesktop ? '휴대폰 모드' : '데스크톱 모드';
-  if(isDesktop) updateDesktopTable();
-}
-
-function setTab(mode, el) {
-  curMode = mode;
-  document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-  el.classList.add('active');
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.getElementById('view-'+mode).classList.add('active');
-  clearRes();
-  if(document.body.classList.contains('desktop-mode')) updateDesktopTable();
-}
-
-function setOrigin(o, el) {
-  curOrigin = o;
-  el.parentNode.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-  el.classList.add('active');
-  document.getElementById('jeonjuCats').style.display = o === 'jeonju' ? 'block' : 'none';
-  document.getElementById('buanCats').style.display = o === 'buan' ? 'block' : 'none';
-  clearRes();
-  if(document.body.classList.contains('desktop-mode')) updateDesktopTable();
-}
-
-function clearRes() {
-  document.getElementById('resArea').innerHTML = '<div style="text-align:center; color:var(--text-sub); font-size: 14px; padding:10px;">노선을 선택해 보세요.</div>';
-  document.querySelectorAll('.chip').forEach(c => { if(!c.getAttribute('onclick').includes('setOrigin')) c.classList.remove('active'); });
-}
-
-function calcBus(mode, name, el) {
-  document.querySelectorAll('.section.active .chip').forEach(c => { if(!c.getAttribute('onclick').includes('setOrigin')) c.classList.remove('active'); });
-  el.classList.add('active');
-  const refTime = timeToMin(document.getElementById('searchTime').value);
-  const bus = (mode === 'inter' ? busData.inter[curOrigin] : busData.town).find(b => b.name === name);
-  const valid = bus.times.filter(t => timeToMin(t) >= refTime).slice(0, 2);
-  const resArea = document.getElementById('resArea');
-  
-  if(!valid.length) {
-    resArea.innerHTML = `<div style="text-align:center; color:var(--warning); padding:10px; font-weight:700;">금일 운행 종료</div>`;
-  } else {
-    resArea.innerHTML = valid.map((t, idx) => `
-      <div class="bus-row">
-        <div class="bus-time">${t} ${idx===0?'<span style="font-size:12px; color:var(--text-sub); font-weight:400;">(가장 빠름)</span>':''}</div>
-        <div class="bus-wait">${timeToMin(t)-refTime}분 후</div>
-      </div>`).join('');
-  }
-}
-
-function updateDesktopTable() {
-  const list = (curMode === 'inter' ? busData.inter[curOrigin] : busData.town);
-  let h = '<table class="full-table">';
-  list.forEach(r => h += `<tr><td class="t-dest">${r.name}</td><td class="t-times">${r.times.join(' · ')}</td></tr>`);
-  document.getElementById('desktopTableTitle').innerText = curMode==='inter'?(curOrigin==='jeonju'?'전주발 전체':'부안발 전체'):'부안 시내 전체';
-  document.getElementById('desktopTableBody').innerHTML = h + '</table>';
-}
-
-function openMobileModal() {
-  const list = (curMode === 'inter' ? busData.inter[curOrigin] : busData.town);
-  let h = '<table class="full-table">';
-  list.forEach(r => h += `<tr><td class="t-dest">${r.name}</td><td class="t-times">${r.times.join(' · ')}</td></tr>`);
-  document.getElementById('mTitle').innerText = curMode==='inter'?(curOrigin==='jeonju'?'전주발 전체':'부안발 전체'):'부안 시내 전체';
-  document.getElementById('mBody').innerHTML = h + '</table>';
-  document.getElementById('mobileModal').style.display = 'flex';
-}
-
-function closeMobileModal() { document.getElementById('mobileModal').style.display = 'none'; }
-
-function renderGrids() {
-  for(let i=1; i<=3; i++) {
-    document.getElementById('jeonju-cat-'+i).innerHTML = busData.inter.jeonju.filter(b => b.cat === i).map(b => `<div class="chip" onclick="calcBus('inter', '${b.name}', this)">${b.name}</div>`).join('');
-  }
-  document.getElementById('buan-grid').innerHTML = busData.inter.buan.map(b => `<div class="chip" onclick="calcBus('inter', '${b.name}', this)">${b.name}</div>`).join('');
-  for(let i=1; i<=4; i++) {
-    document.getElementById('town-cat-'+i).innerHTML = busData.town.filter(b => b.cat === i).map(b => `<div class="chip" onclick="calcBus('town', '${b.name}', this)">${b.name}</div>`).join('');
-  }
-}
-
-setToNow();
-renderGrids();
-</script>
-</body>
-</html>
-    display: flex;
-    gap: 24px;
-    padding-bottom: 40px;
-  }
-  .left-pane, .right-pane { flex: 1; min-width: 0; }
-  body:not(.desktop-mode) .right-pane { display: none; }
-
-  .section { display: none; }
-  .section.active { display: block; }
-
-  /* 카드 및 요소 */
-  .card { 
-    background: var(--card); border-radius: 24px; padding: 24px; margin-bottom: 16px; 
-    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-  }
-  .label { font-size: 13px; color: var(--text-sub); margin-bottom: 12px; display: block; font-weight: 600; }
-  
-  .time-select-row { display: flex; align-items: center; gap: 8px; margin-bottom: 15px; }
-  .time-input { 
-    flex: 1; background: var(--bg); border: none; border-radius: 14px; 
-    color: var(--text-main); padding: 14px; font-size: 18px; font-weight: 700; outline: none; color-scheme: dark;
-  }
-  .now-btn { 
-    padding: 14px 20px; background: var(--primary); border: none; border-radius: 14px; 
-    color: #fff; font-size: 14px; font-weight: 600; cursor: pointer; 
-  }
-
-  .result-display { border-top: 1px solid var(--border); margin-top: 15px; padding-top: 15px; }
-  .bus-row { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid var(--border); }
-  .bus-time { font-size: 24px; font-weight: 700; color: var(--text-main); }
-  .bus-wait { font-size: 15px; color: var(--primary); font-weight: 700; }
-
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(105px, 1fr)); gap: 10px; }
-  .chip { 
-    padding: 14px 8px; background: var(--bg); border-radius: 16px; 
-    font-size: 13px; text-align: center; border: 1px solid transparent; 
-    cursor: pointer; color: var(--text-sub); font-weight: 600; transition: 0.2s;
-  }
-  .chip.active { background: rgba(49, 130, 246, 0.1); border-color: var(--primary); color: var(--primary); }
-
-  .cat-title { font-size: 15px; color: var(--text-main); margin: 28px 0 12px; font-weight: 700; border-left: 4px solid var(--primary); padding-left: 10px; }
-
-  /* 푸터 버튼 */
-  .footer-btn { 
-    position: fixed; bottom: 24px; left: 24px; right: 24px; 
-    background: var(--primary); color: white; border: none; padding: 18px; 
-    border-radius: 18px; font-weight: 700; font-size: 16px; z-index: 100; cursor: pointer;
-    box-shadow: 0 10px 20px rgba(49, 130, 246, 0.3);
-  }
-  body.desktop-mode .footer-btn { display: none; }
-
-  /* 모달 */
-  .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 1000; display: none; flex-direction: column; }
-  .modal-head { padding: 20px 24px; display: flex; justify-content: space-between; align-items: center; background: var(--card); border-bottom: 1px solid var(--border); }
-  .modal-body { flex: 1; overflow-y: auto; padding: 20px; }
-
-  /* 테이블 */
-  .full-table { width: 100%; border-collapse: collapse; }
-  .full-table td { padding: 16px 12px; border-bottom: 1px solid var(--border); font-size: 14px; }
-  .t-dest { color: var(--primary); font-weight: 700; width: 110px; }
-  .t-times { color: var(--text-sub); line-height: 1.6; word-break: keep-all; }
-</style>
-</head>
-<body class="dark-mode">
-
-<div class="header">
-  <h1>버스 가이드</h1>
-  <div class="header-btns">
-    <button class="top-btn" id="viewToggle" onclick="toggleViewMode()">데스크톱 모드</button>
-    <button class="top-btn" id="darkToggle" onclick="toggleDarkMode()">라이트 모드</button>
-  </div>
-</div>
-
-<div class="nav">
-  <div class="nav-item active" onclick="setTab('inter', this)">시외버스</div>
-  <div class="nav-item" onclick="setTab('town', this)">시내버스</div>
-</div>
-
-<div class="main">
-  <div class="left-pane">
-    <div class="card">
-      <span class="label">조회 시간</span>
-      <div class="time-select-row">
-        <input type="time" id="searchTime" class="time-input">
-        <button class="now-btn" onclick="setToNow()">현재</button>
-      </div>
-      <div class="result-display" id="resArea">
-        <div style="text-align:center; color:var(--text-sub); font-size: 14px; padding:10px;">노선을 선택해 주세요.</div>
-      </div>
-    </div>
-
-    <div id="view-inter" class="section active">
-      <div class="card">
-        <span class="label">출발지</span>
-        <div class="grid">
-          <div class="chip active" onclick="setOrigin('jeonju', this)">전주터미널</div>
-          <div class="chip" onclick="setOrigin('buan', this)">부안터미널</div>
-        </div>
-      </div>
-      
-      <div id="jeonjuCats">
-        <div class="cat-title">수도권 (서울/인천/경기)</div>
-        <div class="grid" id="jeonju-cat-1"></div>
-        <div class="cat-title">충청 · 강원 · 경상</div>
-        <div class="grid" id="jeonju-cat-2"></div>
-        <div class="cat-title">전남 · 전북 권역</div>
-        <div class="grid" id="jeonju-cat-3"></div>
-      </div>
-
-      <div id="buanCats" style="display:none;">
-        <div class="cat-title">부안발 시외노선</div>
-        <div class="grid" id="buan-grid"></div>
-      </div>
-    </div>
-
-    <div id="view-town" class="section">
-      <div class="cat-title">격포 · 변산 · 내소사</div>
-      <div class="grid" id="town-cat-1"></div>
-      <div class="cat-title">줄포 · 곰소 · 흥덕 · 주산</div>
-      <div class="grid" id="town-cat-2"></div>
-      <div class="cat-title">정읍 · 백산 · 영원 · 화호</div>
-      <div class="grid" id="town-cat-3"></div>
-      <div class="cat-title">계화 · 돈지 · 조포 · 의복</div>
-      <div class="grid" id="town-cat-4"></div>
-    </div>
-  </div>
-
-  <div class="right-pane">
-    <div class="card" style="height: calc(100vh - 150px); overflow-y: auto; position: sticky; top: 100px;">
+    <div class="card desktop-table-card">
       <div class="cat-title" id="desktopTableTitle" style="margin-top:0">전체 시간표</div>
       <div id="desktopTableBody"></div>
     </div>
   </div>
 </div>
 
-<button class="footer-btn" onclick="openMobileModal()">전체 시간표 보기</button>
+<button class="footer-btn" onclick="openMobileModal()">전체 시간표 한눈에 보기</button>
 
 <div class="modal" id="mobileModal">
   <div class="modal-head">
-    <div id="mTitle" style="font-weight:700; font-size:18px;">전체 시간표</div>
+    <div id="mTitle" style="font-weight:700; font-size:16px;">전체 시간표</div>
     <button onclick="closeMobileModal()" style="background:none; border:none; color:var(--text-main); font-size:24px;">✕</button>
   </div>
   <div class="modal-body" id="mBody"></div>
 </div>
 
 <script>
+// 데이터 구조 유지
 const busData = {
   inter: {
     jeonju: [
-      // 수도권 (7425, 7426)
-      { cat: 1, name: "서울남부(우)", times: ["05:45","06:25","06:45","07:05","07:35","08:05","08:45","09:05","09:25","10:05","10:25","10:55","11:25","11:45","12:15","12:45","13:15","13:45","14:15","14:45","15:15","15:45","16:15","16:45","17:15","17:45","18:15","18:45","19:15","19:45","20:15","20:45","21:15"] },
-      { cat: 1, name: "서울남부(일)", times: ["06:05","08:25","09:45","10:45","11:05","12:15","13:35","15:05","16:05","17:25","19:05","20:25"] },
-      { cat: 1, name: "인천공항", times: ["03:10","03:30","04:00","04:30","05:00","06:00","07:00","08:00","09:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00"] },
-      { cat: 1, name: "수원(우)", times: ["08:20","10:00","11:40","13:20","14:50","16:20","18:10"] },
-      { cat: 1, name: "안산(우)", times: ["08:30","10:35","12:40","14:35","16:30","18:30"] },
-      { cat: 1, name: "인천·부천", times: ["08:05","09:05","10:05","11:05","12:05","13:10","14:10","15:05","16:00","17:10","18:20"] },
-      { cat: 1, name: "시화·고양", times: ["07:50","09:50","11:50","13:50","15:50"] },
-
-      // 충청/강원/경상 (7427, 7428, 7429, 7430)
-      { cat: 2, name: "대전복합(직)", times: ["06:30","07:40","08:50","10:00","11:10","12:20","13:30","14:40","15:50","17:00","18:10","19:20"] },
-      { cat: 2, name: "유성·청주", times: ["07:05","08:00","08:40","09:45","10:30","11:20","12:25","13:10","14:10","15:20","16:10","17:10","18:00","19:10"] },
-      { cat: 2, name: "천안·평택", times: ["06:40","07:40","08:40","09:30","10:20","11:10","12:00","12:50","13:40","14:30","15:20","16:10","17:00","17:50","18:45","19:30"] },
-      { cat: 2, name: "강릉·원주", times: ["09:05","11:05","14:20","16:40"] },
-      { cat: 2, name: "부산(사상)", times: ["07:00","08:10","09:20","10:30","11:40","12:50","14:00","15:10","16:20","17:30","18:40","19:50"] },
-      { cat: 2, name: "대구(서부)", times: ["06:35","08:05","09:25","10:45","12:05","13:25","14:45","16:05","17:25","18:45"] },
-      { cat: 2, name: "진주·마산", times: ["09:10","11:20","13:10","15:20","17:30","19:00"] },
-
-      // 전남/전북 (7431, 7432)
-      { cat: 3, name: "광주(직통)", times: ["06:40","07:30","08:20","09:20","10:20","11:20","12:20","13:20","14:20","15:20","16:20","17:20","18:20","19:45"] },
-      { cat: 3, name: "부안(직통)", times: ["07:10","08:00","08:40","09:20","10:00","10:25","11:00","11:35","12:20","12:40","13:15","13:50","14:40","15:00","15:45","16:00","16:30","17:15","18:10","18:50","19:40"] },
-      { cat: 3, name: "정읍(직통)", times: ["06:30","07:10","08:20","09:30","10:30","11:20","12:20","13:20","14:50","16:20","17:40","18:10","19:10","20:00","21:40"] },
-      { cat: 3, name: "김제", times: ["06:45","07:20","08:00","08:50","10:20","11:00","12:40","14:10","15:25","17:20","18:40","20:00","22:00"] },
-      { cat: 3, name: "군산(직)", times: ["06:00","07:00","08:15","09:10","10:00","11:05","12:15","13:20","14:30","15:40","16:50","18:00","19:30","21:00"] },
-      { cat: 3, name: "고창(직)", times: ["06:05","07:23","09:26","11:04","11:53","13:06","13:55","15:09","16:44","18:21","20:02"] }
+      { cat: "수도권", name: "서울남부(우)", times: ["05:45","06:25","06:45","07:05","07:35","08:05","08:45","09:05","09:25","10:05","10:25","10:55","11:25","11:45","12:15","12:45","13:15","13:45","14:15","14:45","15:15","15:45","16:15","16:45","17:15","17:45","18:15","18:45","19:15","19:45","20:15","20:45","21:15"] },
+      { cat: "수도권", name: "인천공항", times: ["03:10","03:30","04:00","04:30","05:00","06:00","07:00","08:00","09:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00"] },
+      { cat: "수도권", name: "인천/부천", times: ["08:05","09:05","10:05","11:05","12:05","13:10","14:10","15:05","16:00","17:10","18:20"] },
+      { cat: "충청/경상", name: "대전복합", times: ["06:30","07:40","08:50","10:00","11:10","12:20","13:30","14:40","15:50","17:00","18:10","19:20"] },
+      { cat: "충청/경상", name: "부산(사상)", times: ["07:00","08:10","09:20","10:30","11:40","12:50","14:00","15:10","16:20","17:30","18:40","19:50"] },
+      { cat: "전라권", name: "광주(직통)", times: ["06:40","07:30","08:20","09:20","10:20","11:20","12:20","13:20","14:20","15:20","16:20","17:20","18:20","19:45"] },
+      { cat: "전라권", name: "부안(직통)", times: ["07:10","09:20","10:00","10:25","11:35","12:20","12:40","13:50","15:00","16:00","16:30","17:15","18:10","18:50","19:40"] },
+      { cat: "전라권", name: "정읍(직통)", times: ["06:30","07:10","08:20","09:30","10:30","11:20","12:20","13:20","14:50","16:20","17:40","18:10","19:10","20:00","21:40"] },
+      { cat: "전라권", name: "군산(무정차)", times: ["06:00","06:20","06:35","07:00","07:25","07:40","08:15","08:30","08:40","21:00","21:30","22:00","22:50"] }
     ],
     buan: [
-      { name: "전주(직통)", times: ["07:10","08:00","08:40","09:40","10:50","11:55","12:50","13:15","13:50","14:40","15:45","16:40","17:40","18:40","19:30"] },
-      { name: "서울(강남)", times: ["07:00","08:00","09:00","10:30","12:30","13:40","14:50","16:10","17:50","19:30"] },
-      { name: "광주(직)", times: ["10:30","14:40","18:20"] },
-      { name: "정읍", times: ["07:55","12:30","15:30","18:45"] },
-      { name: "인천·안산", times: ["09:40","18:20"] }
+      { cat: "수도권", name: "서울(강남)", times: ["07:00","08:00","09:00","10:30","12:30","13:40","14:50","16:10","17:50","19:30"] },
+      { cat: "전라권", name: "전주(직통)", times: ["07:10","08:00","08:40","09:40","10:50","11:55","12:50","13:15","13:50","14:40","15:45","16:40","17:40","18:40","19:30"] },
+      { cat: "전라권", name: "광주", times: ["10:30","14:40","18:20"] },
+      { cat: "전라권", name: "정읍", times: ["07:55","12:30","15:30","18:45"] }
+    ],
+    gimje: [
+      { cat: "수도권", name: "서울(강남)", times: ["06:40","10:00","11:40","17:30","18:40","19:10"] },
+      { cat: "전북권", name: "부안", times: ["07:20","07:35","07:55","08:15","08:30","08:55","09:45","10:00","10:05","10:40","11:00","11:15","11:45","11:55","12:15","12:55","13:35","14:05","14:50","14:55","15:30","15:35","16:05","16:20","17:05","17:25","17:45","18:15","18:55","19:35","20:10","20:55","21:25","22:00","22:45"] },
+      { cat: "전북권", name: "군산", times: ["06:50","08:05","08:30","10:20","11:20","14:20","15:10","16:30","17:30","19:40"] }
+    ],
+    gunsan: [
+      { cat: "수도권", name: "서울(고속)", times: ["05:40","06:00","06:30","07:00","07:30","08:00","08:30","09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","21:00","22:00"] },
+      { cat: "전라권", name: "전주", times: ["06:30","07:00","07:20","07:40","08:00","08:20","08:45","09:05","09:25","09:45","10:05","10:25","10:50","11:15","11:35","11:50","12:10","12:35","12:50","13:05","13:20","13:35","13:55","14:15","14:40","15:10","15:40","16:10","16:40","17:10","17:35","18:00","18:20","18:40","19:00","19:20","19:35","19:50","20:05","20:20","20:30","20:45","21:00","21:10","21:35","21:50","22:00","22:50"] },
+      { cat: "전라권", name: "익산", times: ["06:05","06:30","07:05","07:35","08:25","09:00","09:55","10:20","11:00","11:40","12:00","12:40","13:10","13:45","14:20","14:55","15:25","16:15","16:55","17:35","18:05","18:35","19:05","19:40","20:10","20:40","21:20","22:00","22:50"] }
     ]
   },
   town: [
-    { cat: 1, name: "격포(마실)", times: ["06:40","07:30","08:40","09:10","10:00","11:00","11:50","12:20","13:30","14:30","15:30","16:30","17:55"] },
-    { cat: 1, name: "내소사(상서)", times: ["06:00","06:40","07:10","08:10","09:10","10:40","12:10","13:30","15:10","16:30","18:10"] },
-    { cat: 2, name: "줄포·흥덕", times: ["06:20","07:30","08:50","10:30","12:10","14:10","15:50","17:30","19:10"] },
-    { cat: 2, name: "곰소", times: ["06:30","08:20","10:00","12:10","14:10","16:10","18:10"] },
-    { cat: 3, name: "정읍(시내)", times: ["07:10","08:30","09:10","11:00","13:30","15:40","18:10"] },
-    { cat: 3, name: "백산·화호", times: ["07:15","08:45","11:50","15:15","18:40"] },
-    { cat: 4, name: "계화·거화", times: ["06:30","07:50","09:30","11:30","13:30","15:30","17:30","18:25"] },
-    { cat: 4, name: "돈지·창북", times: ["06:25","08:30","11:30","14:40","17:20"] }
+    { cat: "격포/내소사", name: "격포(마실)", times: ["06:40","07:30","08:40","09:10","10:00","11:00","11:50","12:20","13:30","14:30","15:30","16:30","17:55"] },
+    { cat: "격포/내소사", name: "내소사", times: ["06:00","06:40","07:10","08:10","09:10","10:40","12:10","13:30","15:10","16:30","18:10"] },
+    { cat: "줄포/곰소", name: "줄포", times: ["06:20","07:30","08:50","10:30","12:10","14:10","15:50","17:30","19:10"] },
+    { cat: "줄포/곰소", name: "곰소", times: ["06:30","08:20","10:00","12:10","14:10","16:10","18:10"] },
+    { cat: "정읍/백산", name: "정읍(시내)", times: ["07:10","08:30","09:10","11:00","13:30","15:40","18:10"] },
+    { cat: "계화/돈지", name: "계화/거화", times: ["06:30","07:50","09:30","11:30","13:30","15:30","17:30","18:25"] }
   ]
 };
 
-let curMode = 'inter', curOrigin = 'jeonju';
+// 기능 제어 변수
+let curMode = 'inter', curOrigin = 'jeonju', selectedBusName = null;
+let isManualTime = false, refreshInterval = null;
+let favorites = JSON.parse(localStorage.getItem('busFavorites') || '[]');
+
+// 공통 햅틱 로직
+function vibe() { if(navigator.vibrate) navigator.vibrate(50); }
+
+// 토스트 메시지 출력
+function showToast(msg) {
+  const container = document.getElementById('toastContainer');
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.innerText = msg;
+  container.appendChild(toast);
+  setTimeout(() => { toast.remove(); }, 2500);
+}
 
 function timeToMin(t) { if(!t) return 0; const [h,m] = t.split(':').map(Number); return h*60+m; }
 
 function setToNow() {
-  const now = new Date();
-  document.getElementById('searchTime').value = now.getHours().toString().padStart(2,'0') + ":" + now.getMinutes().toString().padStart(2,'0');
-  clearRes();
+  vibe();
+  isManualTime = false;
+  updateTimeToNow();
+  if(!refreshInterval) refreshInterval = setInterval(() => { if(!isManualTime) { updateTimeToNow(); } }, 60000);
 }
 
+function updateTimeToNow() {
+  const now = new Date();
+  document.getElementById('searchTime').value = now.getHours().toString().padStart(2,'0') + ":" + now.getMinutes().toString().padStart(2,'0');
+  refreshUI();
+}
+
+function manualTimeChange() { isManualTime = true; clearInterval(refreshInterval); refreshInterval = null; refreshUI(); }
+
 function toggleDarkMode() {
+  vibe();
   const isDark = document.body.classList.toggle('dark-mode');
   document.getElementById('darkToggle').innerText = isDark ? '라이트 모드' : '다크 모드';
 }
 
 function toggleViewMode() {
+  vibe();
   const isDesktop = document.body.classList.toggle('desktop-mode');
-  document.getElementById('viewToggle').innerText = isDesktop ? '휴대폰 모드' : '데스크톱 모드';
-  if(isDesktop) updateDesktopTable();
+  document.getElementById('viewToggle').innerText = isDesktop ? '모바일 화면' : 'PC 화면';
+  if(isDesktop) updateTablesUnconditionally();
 }
 
 function setTab(mode, el) {
-  curMode = mode;
+  vibe();
+  curMode = mode; selectedBusName = null;
   document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
   el.classList.add('active');
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.getElementById('view-'+mode).classList.add('active');
-  clearRes();
-  if(document.body.classList.contains('desktop-mode')) updateDesktopTable();
+  document.getElementById('searchInput').value = '';
+  renderGrids(); clearRes(); updateTablesUnconditionally();
 }
 
 function setOrigin(o, el) {
-  curOrigin = o;
-  el.parentNode.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+  vibe();
+  curOrigin = o; selectedBusName = null;
+  document.querySelectorAll('.grid-origins .chip').forEach(c => c.classList.remove('active'));
   el.classList.add('active');
-  document.getElementById('jeonjuCats').style.display = o === 'jeonju' ? 'block' : 'none';
-  document.getElementById('buanCats').style.display = o === 'buan' ? 'block' : 'none';
-  clearRes();
-  if(document.body.classList.contains('desktop-mode')) updateDesktopTable();
+  document.getElementById('searchInput').value = '';
+  renderGrids(); clearRes(); updateTablesUnconditionally();
+}
+
+function searchBus() { const query = document.getElementById('searchInput').value.trim(); renderGrids(query); }
+
+function renderGrids(query = "") {
+  const renderArea = (dataList, containerId) => {
+    const container = document.getElementById(containerId);
+    let html = '';
+    const cats = [...new Set(dataList.map(b => b.cat))];
+    
+    cats.forEach(cat => {
+      const buses = dataList.filter(b => b.cat === cat && b.name.includes(query));
+      if(buses.length > 0) {
+        html += `<div class="cat-title">${cat}</div><div class="grid">`;
+        buses.forEach(b => {
+          const isFav = favorites.includes(b.name);
+          html += `<div class="chip ${isFav?'favorite':''}" onclick="calcBus('${b.name}', this)">
+                     ${b.name} <span class="fav-star" onclick="toggleFav(event, '${b.name}')">★</span>
+                   </div>`;
+        });
+        html += `</div>`;
+      }
+    });
+    container.innerHTML = html;
+  };
+
+  if(curMode === 'inter') renderArea(busData.inter[curOrigin], 'cats-inter');
+  else renderArea(busData.town, 'cats-town');
+  
+  renderFavorites();
+}
+
+function toggleFav(e, name) {
+  e.stopPropagation(); vibe();
+  if(favorites.includes(name)) {
+    favorites = favorites.filter(f => f !== name);
+    showToast(`'${name}' 즐겨찾기 해제`);
+  } else {
+    favorites.push(name);
+    showToast(`'${name}' 즐겨찾기 등록 완료`);
+  }
+  localStorage.setItem('busFavorites', JSON.stringify(favorites));
+  renderGrids(document.getElementById('searchInput').value);
+}
+
+function renderFavorites() {
+  const favSection = document.getElementById('favSection');
+  const favGrid = document.getElementById('favGrid');
+  if(favorites.length === 0) { favSection.style.display = 'none'; return; }
+  
+  favSection.style.display = 'block';
+  favGrid.innerHTML = favorites.map(f => `<div class="chip favorite" onclick="calcBus('${f}', this)">${f} <span class="fav-star" onclick="toggleFav(event, '${f}')">★</span></div>`).join('');
 }
 
 function clearRes() {
-  document.getElementById('resArea').innerHTML = '<div style="text-align:center; color:var(--text-sub); font-size: 14px; padding:10px;">노선을 선택해 주세요.</div>';
-  document.querySelectorAll('.chip').forEach(c => { if(!c.getAttribute('onclick').includes('setOrigin')) c.classList.remove('active'); });
+  document.getElementById('resArea').innerHTML = '<div style="text-align:center; color:var(--text-sub); font-size: 13px; padding:10px;">노선을 선택하거나 검색하십시오.<br>(별표를 눌러 즐겨찾기 가능)</div>';
+  document.querySelectorAll('.chip').forEach(c => { if(!c.innerText.includes('발')) c.classList.remove('active'); });
 }
 
-function calcBus(mode, name, el) {
-  document.querySelectorAll('.section.active .chip').forEach(c => { if(!c.getAttribute('onclick').includes('setOrigin')) c.classList.remove('active'); });
-  el.classList.add('active');
+function calcBus(name, el) {
+  vibe();
+  selectedBusName = name;
+  document.querySelectorAll('.chip:not(.grid-origins .chip)').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.chip').forEach(c => { if(c.innerText.includes(name)) c.classList.add('active'); });
+  
+  let busList = curMode === 'inter' ? busData.inter[curOrigin] : busData.town;
+  let bus = busList.find(b => b.name === name) || busData.inter.jeonju.find(b=>b.name===name) || busData.inter.buan.find(b=>b.name===name) || busData.inter.gimje.find(b=>b.name===name) || busData.inter.gunsan.find(b=>b.name===name) || busData.town.find(b=>b.name===name);
+  
+  if(!bus) return;
+
   const refTime = timeToMin(document.getElementById('searchTime').value);
-  const bus = (mode === 'inter' ? busData.inter[curOrigin] : busData.town).find(b => b.name === name);
   const valid = bus.times.filter(t => timeToMin(t) >= refTime).slice(0, 2);
   const resArea = document.getElementById('resArea');
   
@@ -602,43 +346,109 @@ function calcBus(mode, name, el) {
   } else {
     resArea.innerHTML = valid.map((t, idx) => `
       <div class="bus-row">
-        <div class="bus-time">${t} ${idx===0?'<span style="font-size:12px; color:var(--text-sub); font-weight:400;">(가장 빠름)</span>':''}</div>
-        <div class="bus-wait">${timeToMin(t)-refTime}분 후</div>
+        <div class="bus-time">${t} <span style="font-size:12px; color:var(--text-sub);">(${idx===0?'가장 빠름':'다음 배차'})</span></div>
+        <div>
+          <span class="bus-wait" style="margin-bottom:6px;">${timeToMin(t)-refTime}분 후</span>
+          <button class="share-btn" onclick="shareBusInfo('${name}', '${t}')">공유</button>
+        </div>
       </div>`).join('');
   }
 }
 
-function updateDesktopTable() {
-  const list = (curMode === 'inter' ? busData.inter[curOrigin] : busData.town);
+function startVoiceSearch() {
+  vibe();
+  if (!('webkitSpeechRecognition' in window)) { showToast('지원하지 않는 브라우저입니다.'); return; }
+  const recognition = new webkitSpeechRecognition();
+  recognition.lang = 'ko-KR';
+  recognition.onstart = function() { showToast('음성 입력을 시작합니다...'); document.getElementById('voiceBtn').style.color = 'var(--warning)'; };
+  recognition.onresult = function(event) {
+    const transcript = event.results[0][0].transcript.replace(/\s/g, ''); 
+    document.getElementById('searchInput').value = transcript;
+    document.getElementById('voiceBtn').style.color = '';
+    searchBus();
+    showToast(`'${transcript}' 검색 완료`);
+  };
+  recognition.onerror = function() { document.getElementById('voiceBtn').style.color = ''; showToast('음성 인식 오류'); };
+  recognition.start();
+}
+
+function shareBusInfo(busName, time) {
+  vibe();
+  const text = `[버스 정보]\n${busName}행 다음 버스는 ${time} 입니다.`;
+  if (navigator.share) { navigator.share({ title: '버스 시간표', text: text }); } 
+  else { showToast('기기가 공유하기를 지원하지 않습니다.'); }
+}
+
+const terminalCoords = { jeonju: { lat: 35.834, lon: 127.132 }, buan: { lat: 35.731, lon: 126.733 }, gimje: { lat: 35.803, lon: 126.888 }, gunsan: { lat: 35.977, lon: 126.721 } };
+function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
+  const R = 6371; const dLat = (lat2-lat1) * (Math.PI/180), dLon = (lon2-lon1) * (Math.PI/180);
+  const a = Math.sin(dLat/2)*Math.sin(dLat/2) + Math.cos(lat1*(Math.PI/180))*Math.cos(lat2*(Math.PI/180))*Math.sin(dLon/2)*Math.sin(dLon/2);
+  return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)));
+}
+
+function findNearestTerminal() {
+  vibe();
+  if (navigator.geolocation) {
+    showToast("위치 정보 확인 중...");
+    navigator.geolocation.getCurrentPosition((pos) => {
+      let minDist = Infinity, closest = 'jeonju';
+      for(let t in terminalCoords) {
+        const dist = getDistanceFromLatLonInKm(pos.coords.latitude, pos.coords.longitude, terminalCoords[t].lat, terminalCoords[t].lon);
+        if(dist < minDist) { minDist = dist; closest = t; }
+      }
+      setTab('inter', document.querySelectorAll('.nav-item')[0]);
+      const chipMap = { 'jeonju':0, 'buan':1, 'gimje':2, 'gunsan':3 };
+      setOrigin(closest, document.querySelectorAll('.grid-origins .chip')[chipMap[closest]]);
+      showToast("주변 터미널 설정 완료");
+    }, () => { showToast("위치 권한을 허용해주십시오."); });
+  } else { showToast("위치 기능을 지원하지 않습니다."); }
+}
+
+function refreshUI() { if(selectedBusName) calcBus(selectedBusName, document.querySelector(`.chip.active:not(.grid-origins .chip)`)); updateTablesUnconditionally(); }
+
+function generateTableHTML() {
+  const list = curMode === 'inter' ? busData.inter[curOrigin] : busData.town;
+  const refTime = timeToMin(document.getElementById('searchTime').value);
   let h = '<table class="full-table">';
-  list.forEach(r => h += `<tr><td class="t-dest">${r.name}</td><td class="t-times">${r.times.join(' · ')}</td></tr>`);
-  document.getElementById('desktopTableTitle').innerText = curMode==='inter'?(curOrigin==='jeonju'?'전주발 전체':'부안발 전체'):'부안 시내 전체';
-  document.getElementById('desktopTableBody').innerHTML = h + '</table>';
+  list.forEach(r => {
+    let nextFound = false;
+    let timesHTML = r.times.map((t) => {
+      if (timeToMin(t) < refTime) return `<span class="time-past">${t}</span>`;
+      if (!nextFound) { nextFound = true; return `<span class="time-next">${t}<span class="badge-next">다음</span></span>`; }
+      return `<span class="time-future">${t}</span>`;
+    }).join(' <span style="color:var(--border);">·</span> ');
+    h += `<tr><td class="t-dest">${r.name}</td><td class="t-times">${timesHTML}</td></tr>`;
+  });
+  return h + '</table>';
 }
 
-function openMobileModal() {
-  const list = (curMode === 'inter' ? busData.inter[curOrigin] : busData.town);
-  let h = '<table class="full-table">';
-  list.forEach(r => h += `<tr><td class="t-dest">${r.name}</td><td class="t-times">${r.times.join(' · ')}</td></tr>`);
-  document.getElementById('mTitle').innerText = curMode==='inter'?(curOrigin==='jeonju'?'전주발 전체':'부안발 전체'):'부안 시내 전체';
-  document.getElementById('mBody').innerHTML = h + '</table>';
-  document.getElementById('mobileModal').style.display = 'flex';
+function updateTablesUnconditionally() {
+  const names = {jeonju: '전주발', buan: '부안발', gimje: '김제발', gunsan: '군산발'};
+  const titleText = curMode==='inter' ? `${names[curOrigin]} 전체 노선` : '부안 시내 전체 노선';
+  const tableHTML = generateTableHTML();
+  
+  const dTitle = document.getElementById('desktopTableTitle'); if(dTitle) dTitle.innerText = titleText;
+  const dBody = document.getElementById('desktopTableBody'); if(dBody) dBody.innerHTML = tableHTML;
+  const mTitle = document.getElementById('mTitle'); if(mTitle) mTitle.innerText = titleText;
+  const mBody = document.getElementById('mBody'); if(mBody) mBody.innerHTML = tableHTML;
 }
 
-function closeMobileModal() { document.getElementById('mobileModal').style.display = 'none'; }
-
-function renderGrids() {
-  for(let i=1; i<=3; i++) {
-    document.getElementById('jeonju-cat-'+i).innerHTML = busData.inter.jeonju.filter(b => b.cat === i).map(b => `<div class="chip" onclick="calcBus('inter', '${b.name}', this)">${b.name}</div>`).join('');
-  }
-  document.getElementById('buan-grid').innerHTML = busData.inter.buan.map(b => `<div class="chip" onclick="calcBus('inter', '${b.name}', this)">${b.name}</div>`).join('');
-  for(let i=1; i<=4; i++) {
-    document.getElementById('town-cat-'+i).innerHTML = busData.town.filter(b => b.cat === i).map(b => `<div class="chip" onclick="calcBus('town', '${b.name}', this)">${b.name}</div>`).join('');
-  }
+function openMobileModal() { 
+  vibe();
+  updateTablesUnconditionally(); 
+  document.getElementById('mobileModal').style.display = 'flex'; 
+  
+  // 모달 자동 스크롤 로직 구현
+  setTimeout(() => {
+    const nextEl = document.querySelector('#mBody .time-next');
+    if(nextEl) {
+      nextEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, 100);
 }
+function closeMobileModal() { vibe(); document.getElementById('mobileModal').style.display = 'none'; }
 
-setToNow();
-renderGrids();
+setToNow(); renderGrids();
 </script>
 </body>
 </html>
