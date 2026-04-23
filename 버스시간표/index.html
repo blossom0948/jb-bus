@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>스마트 버스 가이드</title>
 <style>
+  /* 컬러 시스템 */
   :root {
     --bg: #f2f4f6; --card: #ffffff; --text-main: #191f28; --text-sub: #4e5968;
     --primary: #3182f6; --accent: #00d564; --warning: #f04452; --border: rgba(0,0,0,0.05); --chip-bg: #eff1f3;
@@ -16,16 +17,21 @@
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
   body { background: var(--bg); font-family: -apple-system, sans-serif; color: var(--text-main); overflow-x: hidden; transition: background 0.3s ease; }
   
+  /* 헤더 */
   .header { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; background: var(--card); border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 10px; }
   .header h1 { font-size: 18px; font-weight: 700; margin: 0; }
   .header-btns { display: flex; gap: 6px; }
   .top-btn { background: var(--chip-bg); border: none; padding: 6px 10px; border-radius: 8px; color: var(--text-sub); font-size: 12px; font-weight: 600; cursor: pointer; transition: 0.2s; }
-  .top-btn.gps { color: var(--primary); background: rgba(49,130,246,0.1); }
   
+  /* 날씨 배너 */
+  .weather-banner { background: rgba(49,130,246,0.05); padding: 12px 20px; font-size: 13px; font-weight: 600; color: var(--primary); border-bottom: 1px solid var(--border); line-height: 1.4; word-break: keep-all; }
+  
+  /* 내비게이션 */
   .nav { display: flex; background: var(--card); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
   .nav-item { flex: 1; padding: 16px; text-align: center; font-weight: 600; font-size: 15px; color: var(--text-sub); cursor: pointer; }
   .nav-item.active { color: var(--primary); border-bottom: 3px solid var(--primary); }
 
+  /* 메인 레이아웃 */
   .main { padding: 16px; max-width: 600px; margin: 0 auto; padding-bottom: 120px; }
   body.desktop-mode .main { max-width: 1200px; display: flex; gap: 24px; padding-bottom: 40px; }
   .left-pane, .right-pane { flex: 1; min-width: 0; }
@@ -38,16 +44,30 @@
   .card { background: var(--card); border-radius: 24px; padding: 20px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
   .label { font-size: 12px; color: var(--text-sub); margin-bottom: 12px; display: block; font-weight: 600; }
   
-  .search-row { display: flex; gap: 8px; margin-bottom: 12px; }
-  .search-input { flex: 1; background: var(--chip-bg); border: none; border-radius: 12px; padding: 12px 14px; font-size: 14px; color: var(--text-main); font-weight: 600; outline: none; }
-  .time-input { width: 110px; background: var(--chip-bg); border: none; border-radius: 12px; padding: 12px; font-size: 15px; font-weight: 700; color: var(--text-main); outline: none; color-scheme: dark; }
+  /* 터미널 가이드 */
+  .terminal-info { font-size: 12px; color: var(--text-sub); background: var(--chip-bg); padding: 10px 14px; border-radius: 12px; margin-top: 12px; line-height: 1.4; display: none; }
 
-  .result-display { border-top: 1px solid var(--border); margin-top: 15px; padding-top: 15px; }
+  /* 컨트롤 그룹 (검색 & 시간) */
+  .time-control-group { background: var(--bg); padding: 12px; border-radius: 16px; margin-bottom: 15px; border: 1px solid var(--border); }
+  .search-row { display: flex; gap: 8px; margin-bottom: 10px; }
+  .search-input { flex: 1; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 12px; font-size: 14px; color: var(--text-main); font-weight: 600; outline: none; }
+  .time-input { width: 120px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 12px; font-size: 16px; font-weight: 700; color: var(--text-main); outline: none; color-scheme: dark; text-align: center; }
+  
+  /* 빠른 시간 조작 버튼 */
+  .quick-time-btns { display: flex; gap: 6px; }
+  .q-btn { flex: 1; background: var(--card); border: 1px solid var(--border); color: var(--text-sub); font-size: 12px; font-weight: 600; padding: 8px 0; border-radius: 8px; cursor: pointer; }
+  .q-btn.now { background: var(--primary); color: #fff; border: none; }
+
+  .result-display { border-top: 1px solid var(--border); margin-top: 15px; padding-top: 10px; }
+  .route-desc { font-size: 12px; color: var(--primary); background: rgba(49,130,246,0.1); padding: 6px 10px; border-radius: 6px; margin-bottom: 10px; display: inline-block; font-weight: 600; }
+  
   .bus-row { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--border); }
   .bus-row:last-child { border: none; }
-  .bus-time { font-size: 22px; font-weight: 700; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
-  .bus-wait { font-size: 14px; color: var(--primary); font-weight: 700; }
-  .share-btn { background: var(--chip-bg); border: none; padding: 6px 10px; border-radius: 8px; font-size: 12px; cursor: pointer; color: var(--text-main); font-weight: 600; }
+  .bus-time-wrap { display: flex; flex-direction: column; }
+  .bus-time { font-size: 22px; font-weight: 700; color: var(--text-main); display: flex; align-items: center; gap: 6px; }
+  .bus-eta { font-size: 12px; color: var(--text-sub); margin-top: 4px; }
+  .bus-wait { font-size: 14px; color: var(--primary); font-weight: 700; text-align: right; }
+  .last-bus-badge { background: var(--warning); color: white; font-size: 10px; padding: 3px 6px; border-radius: 4px; font-weight: 800; }
   
   .grid-origins { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 8px; }
@@ -81,7 +101,6 @@
   .time-next { color: var(--primary); font-weight: 800; }
   .badge-next { background: var(--primary); color: #fff; font-size: 10px; padding: 2px 5px; border-radius: 4px; margin-left: 4px; vertical-align: middle; }
 
-  /* 토스트 알림 UI */
   .toast-container { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); z-index: 2000; display: flex; flex-direction: column; gap: 10px; align-items: center; pointer-events: none; }
   .toast { background: rgba(33, 37, 41, 0.9); color: white; padding: 12px 20px; border-radius: 20px; font-size: 13px; font-weight: 600; box-shadow: 0 4px 12px rgba(0,0,0,0.15); animation: toastFadeInOut 2.5s forwards; }
   @keyframes toastFadeInOut { 0% { opacity: 0; transform: translateY(20px); } 10% { opacity: 1; transform: translateY(0); } 90% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-10px); } }
@@ -92,13 +111,16 @@
 <div class="toast-container" id="toastContainer"></div>
 
 <div class="header">
-  <h1>버스 가이드</h1>
+  <h1>스마트 버스</h1>
   <div class="header-btns">
-    <button class="top-btn gps" onclick="findNearestTerminal()">위치 찾기</button>
-    <button class="top-btn" id="voiceBtn" onclick="startVoiceSearch()">음성 검색</button>
-    <button class="top-btn" id="viewToggle" onclick="toggleViewMode()">PC 모드</button>
-    <button class="top-btn" id="darkToggle" onclick="toggleDarkMode()">라이트 모드</button>
+    <button class="top-btn" id="voiceBtn" onclick="startVoiceSearch()">음성검색</button>
+    <button class="top-btn" id="viewToggle" onclick="toggleViewMode()">PC모드</button>
+    <button class="top-btn" id="darkToggle" onclick="toggleDarkMode()">라이트</button>
   </div>
+</div>
+
+<div class="weather-banner" id="weatherBanner">
+  현재 터미널 날씨를 불러오는 중입니다.
 </div>
 
 <div class="nav">
@@ -109,12 +131,21 @@
 <div class="main">
   <div class="left-pane">
     <div class="card">
-      <div class="search-row">
-        <input type="text" id="searchInput" class="search-input" placeholder="목적지 검색 (입력 및 음성)" onkeyup="searchBus()">
-        <input type="time" id="searchTime" class="time-input" onchange="manualTimeChange()">
+      <span class="label">조회 설정</span>
+      <div class="time-control-group">
+        <div class="search-row">
+          <input type="text" id="searchInput" class="search-input" placeholder="목적지 검색" onkeyup="searchBus()">
+          <input type="time" id="searchTime" class="time-input" onchange="manualTimeChange()">
+        </div>
+        <div class="quick-time-btns">
+          <button class="q-btn now" onclick="setToNow()">현재</button>
+          <button class="q-btn" onclick="adjustTime(10)">+10분</button>
+          <button class="q-btn" onclick="adjustTime(30)">+30분</button>
+          <button class="q-btn" onclick="adjustTime(60)">+1시간</button>
+        </div>
       </div>
       <div class="result-display" id="resArea">
-        <div style="text-align:center; color:var(--text-sub); font-size: 13px; padding:10px;">노선을 선택하거나 검색하십시오.<br>(우측 상단 별표를 눌러 즐겨찾기)</div>
+        <div style="text-align:center; color:var(--text-sub); font-size: 13px; padding:10px;">노선을 선택하거나 검색하십시오.</div>
       </div>
     </div>
 
@@ -132,6 +163,7 @@
           <div class="chip" onclick="setOrigin('gimje', this)">김제발</div>
           <div class="chip" onclick="setOrigin('gunsan', this)">군산발</div>
         </div>
+        <div class="terminal-info" id="termInfo"></div>
       </div>
       <div id="cats-inter"></div>
     </div>
@@ -160,11 +192,11 @@
 </div>
 
 <script>
-// 데이터 구조 유지
 const busData = {
   inter: {
     jeonju: [
       { cat: "수도권", name: "서울남부(우)", times: ["05:45","06:25","06:45","07:05","07:35","08:05","08:45","09:05","09:25","10:05","10:25","10:55","11:25","11:45","12:15","12:45","13:15","13:45","14:15","14:45","15:15","15:45","16:15","16:45","17:15","17:45","18:15","18:45","19:15","19:45","20:15","20:45","21:15"] },
+      { cat: "수도권", name: "서울남부(일)", times: ["06:05","08:25","09:45","10:45","11:05","12:15","13:35","15:05","16:05","17:25","19:05","20:25"] },
       { cat: "수도권", name: "인천공항", times: ["03:10","03:30","04:00","04:30","05:00","06:00","07:00","08:00","09:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00"] },
       { cat: "수도권", name: "인천/부천", times: ["08:05","09:05","10:05","11:05","12:05","13:10","14:10","15:05","16:00","17:10","18:20"] },
       { cat: "충청/경상", name: "대전복합", times: ["06:30","07:40","08:50","10:00","11:10","12:20","13:30","14:40","15:50","17:00","18:10","19:20"] },
@@ -201,31 +233,55 @@ const busData = {
   ]
 };
 
-// 기능 제어 변수
+const routeInfo = {
+  "서울(강남)": { eta: 170, desc: "정안알밤휴게소 15분 정차" },
+  "서울남부(우)": { eta: 160, desc: "우등고속 28인승" },
+  "부안(직통)": { eta: 60, desc: "김제 무정차 직통" },
+  "전주(직통)": { eta: 60, desc: "완산동 경유 전주터미널행" },
+  "인천공항": { eta: 200, desc: "T1 경유 후 T2 도착" },
+  "격포(마실)": { eta: 45, desc: "마실길 관광객 추천 노선" }
+};
+
+const termGuides = {
+  jeonju: "전주 시외버스 공용터미널 | ATM 1층, 무인발권기 운영",
+  buan: "부안 시외버스터미널 | 매표소 옆 승차장 대기",
+  gimje: "김제 공용버스터미널 | 역전 방향 노선 확인 요망",
+  gunsan: "군산 시외버스터미널 | 1~5번 홈 전주/익산 방면"
+};
+
+const terminalCoords = { 
+  jeonju: {lat: 35.82, lon: 127.14}, 
+  buan: {lat: 35.73, lon: 126.73}, 
+  gimje: {lat: 35.80, lon: 126.88}, 
+  gunsan: {lat: 35.97, lon: 126.73} 
+};
+
 let curMode = 'inter', curOrigin = 'jeonju', selectedBusName = null;
 let isManualTime = false, refreshInterval = null;
+let weatherDataCache = null;
 let favorites = JSON.parse(localStorage.getItem('busFavorites') || '[]');
 
-// 공통 햅틱 로직
-function vibe() { if(navigator.vibrate) navigator.vibrate(50); }
-
-// 토스트 메시지 출력
 function showToast(msg) {
   const container = document.getElementById('toastContainer');
   const toast = document.createElement('div');
-  toast.className = 'toast';
-  toast.innerText = msg;
-  container.appendChild(toast);
-  setTimeout(() => { toast.remove(); }, 2500);
+  toast.className = 'toast'; toast.innerText = msg;
+  container.appendChild(toast); setTimeout(() => { toast.remove(); }, 2500);
 }
 
 function timeToMin(t) { if(!t) return 0; const [h,m] = t.split(':').map(Number); return h*60+m; }
 
 function setToNow() {
-  vibe();
-  isManualTime = false;
-  updateTimeToNow();
+  isManualTime = false; updateTimeToNow();
   if(!refreshInterval) refreshInterval = setInterval(() => { if(!isManualTime) { updateTimeToNow(); } }, 60000);
+}
+
+function adjustTime(mins) {
+  const timeInput = document.getElementById('searchTime');
+  let [h, m] = timeInput.value.split(':').map(Number);
+  let date = new Date();
+  date.setHours(h); date.setMinutes(m + mins);
+  timeInput.value = String(date.getHours()).padStart(2, '0') + ':' + String(date.getMinutes()).padStart(2, '0');
+  manualTimeChange();
 }
 
 function updateTimeToNow() {
@@ -234,38 +290,39 @@ function updateTimeToNow() {
   refreshUI();
 }
 
-function manualTimeChange() { isManualTime = true; clearInterval(refreshInterval); refreshInterval = null; refreshUI(); }
+function manualTimeChange() { 
+  isManualTime = true; 
+  clearInterval(refreshInterval); refreshInterval = null; 
+  refreshUI(); 
+}
 
 function toggleDarkMode() {
-  vibe();
   const isDark = document.body.classList.toggle('dark-mode');
   document.getElementById('darkToggle').innerText = isDark ? '라이트 모드' : '다크 모드';
 }
 
 function toggleViewMode() {
-  vibe();
   const isDesktop = document.body.classList.toggle('desktop-mode');
   document.getElementById('viewToggle').innerText = isDesktop ? '모바일 화면' : 'PC 화면';
   if(isDesktop) updateTablesUnconditionally();
 }
 
 function setTab(mode, el) {
-  vibe();
   curMode = mode; selectedBusName = null;
-  document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-  el.classList.add('active');
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.getElementById('view-'+mode).classList.add('active');
-  document.getElementById('searchInput').value = '';
-  renderGrids(); clearRes(); updateTablesUnconditionally();
+  document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active')); el.classList.add('active');
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active')); document.getElementById('view-'+mode).classList.add('active');
+  document.getElementById('searchInput').value = ''; renderGrids(); clearRes(); updateTablesUnconditionally();
 }
 
 function setOrigin(o, el) {
-  vibe();
   curOrigin = o; selectedBusName = null;
-  document.querySelectorAll('.grid-origins .chip').forEach(c => c.classList.remove('active'));
-  el.classList.add('active');
+  document.querySelectorAll('.grid-origins .chip').forEach(c => c.classList.remove('active')); el.classList.add('active');
   document.getElementById('searchInput').value = '';
+  
+  const info = document.getElementById('termInfo');
+  info.innerText = termGuides[o]; info.style.display = 'block';
+  
+  fetchWeather(o); 
   renderGrids(); clearRes(); updateTablesUnconditionally();
 }
 
@@ -273,10 +330,8 @@ function searchBus() { const query = document.getElementById('searchInput').valu
 
 function renderGrids(query = "") {
   const renderArea = (dataList, containerId) => {
-    const container = document.getElementById(containerId);
-    let html = '';
+    const container = document.getElementById(containerId); let html = '';
     const cats = [...new Set(dataList.map(b => b.cat))];
-    
     cats.forEach(cat => {
       const buses = dataList.filter(b => b.cat === cat && b.name.includes(query));
       if(buses.length > 0) {
@@ -292,119 +347,137 @@ function renderGrids(query = "") {
     });
     container.innerHTML = html;
   };
-
   if(curMode === 'inter') renderArea(busData.inter[curOrigin], 'cats-inter');
   else renderArea(busData.town, 'cats-town');
-  
   renderFavorites();
 }
 
 function toggleFav(e, name) {
-  e.stopPropagation(); vibe();
-  if(favorites.includes(name)) {
-    favorites = favorites.filter(f => f !== name);
-    showToast(`'${name}' 즐겨찾기 해제`);
-  } else {
-    favorites.push(name);
-    showToast(`'${name}' 즐겨찾기 등록 완료`);
-  }
-  localStorage.setItem('busFavorites', JSON.stringify(favorites));
-  renderGrids(document.getElementById('searchInput').value);
+  e.stopPropagation();
+  if(favorites.includes(name)) { favorites = favorites.filter(f => f !== name); showToast(`'${name}' 즐겨찾기 해제`); } 
+  else { favorites.push(name); showToast(`'${name}' 즐겨찾기 등록 완료`); }
+  localStorage.setItem('busFavorites', JSON.stringify(favorites)); renderGrids(document.getElementById('searchInput').value);
 }
 
 function renderFavorites() {
-  const favSection = document.getElementById('favSection');
-  const favGrid = document.getElementById('favGrid');
+  const favSection = document.getElementById('favSection'); const favGrid = document.getElementById('favGrid');
   if(favorites.length === 0) { favSection.style.display = 'none'; return; }
-  
   favSection.style.display = 'block';
   favGrid.innerHTML = favorites.map(f => `<div class="chip favorite" onclick="calcBus('${f}', this)">${f} <span class="fav-star" onclick="toggleFav(event, '${f}')">★</span></div>`).join('');
 }
 
 function clearRes() {
-  document.getElementById('resArea').innerHTML = '<div style="text-align:center; color:var(--text-sub); font-size: 13px; padding:10px;">노선을 선택하거나 검색하십시오.<br>(별표를 눌러 즐겨찾기 가능)</div>';
+  document.getElementById('resArea').innerHTML = '<div style="text-align:center; color:var(--text-sub); font-size: 13px; padding:10px;">노선을 선택하거나 검색하십시오.</div>';
   document.querySelectorAll('.chip').forEach(c => { if(!c.innerText.includes('발')) c.classList.remove('active'); });
 }
 
+function formatETA(baseTimeStr, addMins) {
+  let min = timeToMin(baseTimeStr) + addMins;
+  let h = Math.floor(min / 60) % 24;
+  let m = min % 60;
+  return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
+}
+
 function calcBus(name, el) {
-  vibe();
   selectedBusName = name;
   document.querySelectorAll('.chip:not(.grid-origins .chip)').forEach(c => c.classList.remove('active'));
   document.querySelectorAll('.chip').forEach(c => { if(c.innerText.includes(name)) c.classList.add('active'); });
   
   let busList = curMode === 'inter' ? busData.inter[curOrigin] : busData.town;
   let bus = busList.find(b => b.name === name) || busData.inter.jeonju.find(b=>b.name===name) || busData.inter.buan.find(b=>b.name===name) || busData.inter.gimje.find(b=>b.name===name) || busData.inter.gunsan.find(b=>b.name===name) || busData.town.find(b=>b.name===name);
-  
   if(!bus) return;
 
   const refTime = timeToMin(document.getElementById('searchTime').value);
   const valid = bus.times.filter(t => timeToMin(t) >= refTime).slice(0, 2);
   const resArea = document.getElementById('resArea');
   
+  const info = routeInfo[name];
+  let descHtml = info ? `<div class="route-desc">${info.desc}</div>` : '';
+
   if(!valid.length) {
-    resArea.innerHTML = `<div style="text-align:center; color:var(--warning); padding:10px; font-weight:700;">금일 운행 종료</div>`;
+    resArea.innerHTML = `${descHtml}<div style="text-align:center; color:var(--warning); padding:10px; font-weight:700;">금일 운행이 종료되었습니다.</div>`;
   } else {
-    resArea.innerHTML = valid.map((t, idx) => `
+    resArea.innerHTML = descHtml + valid.map((t, idx) => {
+      const isLast = (t === bus.times[bus.times.length - 1]);
+      let lastBadge = isLast ? `<span class="last-bus-badge">[막차]</span>` : '';
+      
+      let etaHtml = '';
+      if(info && info.eta) {
+        etaHtml = `<div class="bus-eta">${formatETA(t, info.eta)} 도착 예정 (${Math.floor(info.eta/60)>0 ? Math.floor(info.eta/60)+'시간 ' : ''}${info.eta%60}분 소요)</div>`;
+      }
+      
+      return `
       <div class="bus-row">
-        <div class="bus-time">${t} <span style="font-size:12px; color:var(--text-sub);">(${idx===0?'가장 빠름':'다음 배차'})</span></div>
-        <div>
-          <span class="bus-wait" style="margin-bottom:6px;">${timeToMin(t)-refTime}분 후</span>
-          <button class="share-btn" onclick="shareBusInfo('${name}', '${t}')">공유</button>
+        <div class="bus-time-wrap">
+          <div class="bus-time">${t} ${lastBadge} <span style="font-size:12px; color:var(--text-sub); font-weight:400; margin-left:4px;">(${idx===0?'가장 빠름':'다음 배차'})</span></div>
+          ${etaHtml}
         </div>
-      </div>`).join('');
+        <div>
+          <span class="bus-wait" style="margin-bottom:6px; display:block; text-align:right;">${timeToMin(t)-refTime}분 후</span>
+        </div>
+      </div>`;
+    }).join('');
   }
 }
 
 function startVoiceSearch() {
-  vibe();
   if (!('webkitSpeechRecognition' in window)) { showToast('지원하지 않는 브라우저입니다.'); return; }
-  const recognition = new webkitSpeechRecognition();
-  recognition.lang = 'ko-KR';
-  recognition.onstart = function() { showToast('음성 입력을 시작합니다...'); document.getElementById('voiceBtn').style.color = 'var(--warning)'; };
+  const recognition = new webkitSpeechRecognition(); recognition.lang = 'ko-KR';
+  recognition.onstart = function() { showToast('음성 입력을 시작합니다...'); };
   recognition.onresult = function(event) {
     const transcript = event.results[0][0].transcript.replace(/\s/g, ''); 
-    document.getElementById('searchInput').value = transcript;
-    document.getElementById('voiceBtn').style.color = '';
-    searchBus();
-    showToast(`'${transcript}' 검색 완료`);
+    document.getElementById('searchInput').value = transcript; searchBus(); showToast(`'${transcript}' 검색 완료`);
   };
-  recognition.onerror = function() { document.getElementById('voiceBtn').style.color = ''; showToast('음성 인식 오류'); };
   recognition.start();
 }
 
-function shareBusInfo(busName, time) {
-  vibe();
-  const text = `[버스 정보]\n${busName}행 다음 버스는 ${time} 입니다.`;
-  if (navigator.share) { navigator.share({ title: '버스 시간표', text: text }); } 
-  else { showToast('기기가 공유하기를 지원하지 않습니다.'); }
+async function fetchWeather(originKey) {
+  const banner = document.getElementById('weatherBanner');
+  try {
+    const coords = terminalCoords[originKey];
+    const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${coords.lat}&longitude=${coords.lon}&current_weather=true&hourly=temperature_2m,weathercode&timezone=Asia/Seoul`);
+    weatherDataCache = await res.json();
+    updateWeatherDisplay();
+  } catch(e) {
+    banner.style.display = 'none';
+  }
 }
 
-const terminalCoords = { jeonju: { lat: 35.834, lon: 127.132 }, buan: { lat: 35.731, lon: 126.733 }, gimje: { lat: 35.803, lon: 126.888 }, gunsan: { lat: 35.977, lon: 126.721 } };
-function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
-  const R = 6371; const dLat = (lat2-lat1) * (Math.PI/180), dLon = (lon2-lon1) * (Math.PI/180);
-  const a = Math.sin(dLat/2)*Math.sin(dLat/2) + Math.cos(lat1*(Math.PI/180))*Math.cos(lat2*(Math.PI/180))*Math.sin(dLon/2)*Math.sin(dLon/2);
-  return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)));
+function updateWeatherDisplay() {
+  const banner = document.getElementById('weatherBanner');
+  if(!weatherDataCache) return;
+  
+  const currentTemp = weatherDataCache.current_weather.temperature;
+  const names = {jeonju: '전주', buan: '부안', gimje: '김제', gunsan: '군산'};
+
+  const timeStr = document.getElementById('searchTime').value;
+  const hour = parseInt(timeStr.split(':')[0], 10);
+  
+  const forecastTemp = Math.round(weatherDataCache.hourly.temperature_2m[hour]);
+  const forecastCode = weatherDataCache.hourly.weathercode[hour];
+  const weatherText = getWeatherText(forecastCode);
+
+  banner.innerHTML = `[${names[curOrigin]} 날씨] 현재: ${Math.round(currentTemp)}°C | 선택 시간(${hour}시) 예상: ${forecastTemp}°C, ${weatherText}`;
+  banner.style.display = 'block';
 }
 
-function findNearestTerminal() {
-  vibe();
-  if (navigator.geolocation) {
-    showToast("위치 정보 확인 중...");
-    navigator.geolocation.getCurrentPosition((pos) => {
-      let minDist = Infinity, closest = 'jeonju';
-      for(let t in terminalCoords) {
-        const dist = getDistanceFromLatLonInKm(pos.coords.latitude, pos.coords.longitude, terminalCoords[t].lat, terminalCoords[t].lon);
-        if(dist < minDist) { minDist = dist; closest = t; }
-      }
-      setTab('inter', document.querySelectorAll('.nav-item')[0]);
-      const chipMap = { 'jeonju':0, 'buan':1, 'gimje':2, 'gunsan':3 };
-      setOrigin(closest, document.querySelectorAll('.grid-origins .chip')[chipMap[closest]]);
-      showToast("주변 터미널 설정 완료");
-    }, () => { showToast("위치 권한을 허용해주십시오."); });
-  } else { showToast("위치 기능을 지원하지 않습니다."); }
+function getWeatherText(code) {
+  if(code === 0) return '맑음';
+  if(code <= 3) return '구름/흐림';
+  if(code <= 48) return '안개';
+  if(code <= 67) return '비';
+  if(code <= 77) return '눈';
+  if(code <= 82) return '소나기';
+  if(code <= 86) return '눈보라';
+  if(code >= 95) return '뇌우';
+  return '알 수 없음';
 }
 
-function refreshUI() { if(selectedBusName) calcBus(selectedBusName, document.querySelector(`.chip.active:not(.grid-origins .chip)`)); updateTablesUnconditionally(); }
+function refreshUI() { 
+  if(selectedBusName) calcBus(selectedBusName, document.querySelector(`.chip.active:not(.grid-origins .chip)`)); 
+  updateTablesUnconditionally(); 
+  updateWeatherDisplay();
+}
 
 function generateTableHTML() {
   const list = curMode === 'inter' ? busData.inter[curOrigin] : busData.town;
@@ -434,21 +507,12 @@ function updateTablesUnconditionally() {
 }
 
 function openMobileModal() { 
-  vibe();
-  updateTablesUnconditionally(); 
-  document.getElementById('mobileModal').style.display = 'flex'; 
-  
-  // 모달 자동 스크롤 로직 구현
-  setTimeout(() => {
-    const nextEl = document.querySelector('#mBody .time-next');
-    if(nextEl) {
-      nextEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-  }, 100);
+  updateTablesUnconditionally(); document.getElementById('mobileModal').style.display = 'flex'; 
+  setTimeout(() => { const nextEl = document.querySelector('#mBody .time-next'); if(nextEl) nextEl.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 100);
 }
-function closeMobileModal() { vibe(); document.getElementById('mobileModal').style.display = 'none'; }
+function closeMobileModal() { document.getElementById('mobileModal').style.display = 'none'; }
 
-setToNow(); renderGrids();
+setToNow(); setOrigin('jeonju', document.querySelector('.grid-origins .chip'));
 </script>
 </body>
 </html>
