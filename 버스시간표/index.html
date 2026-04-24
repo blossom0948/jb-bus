@@ -6,9 +6,6 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>스마트버스 Pro</title>
-
-<link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogInNtYXJ0YnVzIFBybyIsCiAgInNob3J0X25hbWUiOiAic21hcnRidXMiLAogICJzdGFydF91cmwiOiAiLiIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgImJhY2tncm91bmRfY29sb3IiOiAiIzFjMWMxZSIsCiAgInRoZW1lX2NvbG9yIjogIzFjMWMxZSIKfQ==">
-
 <style>
   @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
 
@@ -54,7 +51,7 @@
     font-family: 'Pretendard', -apple-system, sans-serif;
     color: var(--text-main); 
     overflow-x: hidden; 
-    transition: background 0.4s ease; 
+    transition: background 0.4s ease, color 0.4s ease; 
     padding-top: 80px; 
     padding-bottom: 110px; 
     min-height: 100vh;
@@ -74,7 +71,6 @@
   .top-navbar .nav-actions { display: flex; gap: 10px; }
   .top-btn { background: var(--btn-bg); border: 1px solid var(--glass-border); padding: 8px 14px; border-radius: 12px; color: var(--text-main); font-size: 13px; font-weight: 800; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
   .top-btn:active { transform: scale(0.95); }
-  .top-btn.login-btn { color: var(--primary); }
 
   .glass-card {
     background: var(--glass-bg);
@@ -108,14 +104,15 @@
   
   .time-picker-wrapper { display: flex; gap: 12px; }
   .time-input { flex: 1.5; background: var(--input-bg); border: 1px solid var(--glass-border); border-radius: 20px; padding: 16px; font-size: 18px; font-weight: 800; color: var(--text-main); outline: none; text-align: center; color-scheme: dark; box-shadow: inset 0 2px 6px rgba(0,0,0,0.05); }
-  .now-btn { flex: 1; background: #007aff; color: #ffffff; border: none; border-radius: 20px; font-size: 15px; font-weight: 800; cursor: pointer; transition: 0.2s; box-shadow: 0 8px 20px rgba(0, 122, 255, 0.35); padding: 0 10px; }
+  .now-btn { flex: 1; background: #007aff; color: #ffffff; border: none; border-radius: 20px; font-size: 15px; font-weight: 800; cursor: pointer; transition: 0.2s; box-shadow: 0 8px 20px rgba(0, 122, 255, 0.35), inset 0 2px 2px rgba(255,255,255,0.3); padding: 0 10px; }
   .now-btn:active { transform: scale(0.95); }
 
   .grid-origins, .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(105px, 1fr)); gap: 12px; }
   .grid-origins { margin-bottom: 16px; }
   
-  .chip { background: var(--btn-bg); border: 1px solid var(--glass-border); border-radius: 20px; padding: 18px 8px; font-size: 15px; font-weight: 800; color: var(--text-main); text-align: center; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.04); }
-  .chip.active { background: var(--primary); color: #ffffff; border-color: var(--primary); box-shadow: 0 12px 30px rgba(0, 122, 255, 0.4); transform: translateY(-2px); }
+  .chip { background: var(--btn-bg); border: 1px solid var(--glass-border); border-radius: 20px; padding: 18px 8px; font-size: 15px; font-weight: 800; color: var(--text-main); text-align: center; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.04); position: relative; overflow: hidden; }
+  .chip:active { transform: scale(0.95); }
+  .chip.active { background: var(--primary); color: #ffffff; border-color: var(--primary); box-shadow: 0 12px 30px rgba(0, 122, 255, 0.4), inset 0 2px 2px rgba(255,255,255,0.3); transform: translateY(-2px); }
   
   .cat-title { font-size: 19px; color: var(--text-main); margin: 40px 0 20px; font-weight: 900; display: flex; align-items: center; gap: 10px; letter-spacing: -0.5px; }
   .cat-title::before { content: ''; width: 8px; height: 20px; background: var(--primary); border-radius: 4px; }
@@ -126,25 +123,30 @@
   .ticket-gate { font-size: 15px; color: var(--text-main); font-weight: 900; display: flex; align-items: center; gap: 8px; }
   .fare-toggle-btn { font-size: 13px; background: var(--accent); color: white; padding: 8px 14px; border-radius: 14px; cursor: pointer; font-weight: 900; border: none; }
   
-  .bus-row { background: var(--btn-bg); border: 1px solid var(--glass-border); border-radius: 24px; margin-bottom: 20px; cursor: pointer; transition: 0.3s; box-shadow: 0 8px 25px rgba(0,0,0,0.04); }
-  .bus-row.selected { border-color: var(--primary); box-shadow: 0 20px 40px rgba(0, 122, 255, 0.25); transform: scale(1.02); }
+  .bus-row { background: var(--btn-bg); border: 1px solid var(--glass-border); border-radius: 24px; margin-bottom: 20px; cursor: pointer; transition: 0.3s; box-shadow: 0 8px 25px rgba(0,0,0,0.04); position: relative; overflow: hidden; }
   .bus-row-body { padding: 24px; }
+  .bus-row.selected { border-color: var(--primary); box-shadow: 0 20px 40px rgba(0, 122, 255, 0.25); transform: scale(1.02); }
   
   .bus-row-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
   .bus-time { font-size: 40px; font-weight: 900; color: var(--text-main); display: flex; align-items: center; gap: 12px; letter-spacing: -1.5px; }
   
   .time-past { opacity: 0.35; text-decoration: line-through; color: #8e8e93 !important; font-weight: 500 !important; }
+  .time-future { font-weight: 700; color: var(--text-main); }
   
   .time-badge { font-size: 13px; padding: 6px 12px; border-radius: 12px; font-weight: 900; }
   .badge-fast { background: rgba(0, 122, 255, 0.15); color: var(--primary); }
   .badge-next { background: var(--input-bg); color: var(--text-sub); }
   
+  .bus-eta-info { font-size: 15px; color: var(--text-sub); font-weight: 800; margin-bottom: 16px; }
+  .info-tag { background: var(--input-bg); padding: 6px 12px; border-radius: 10px; font-size: 13px; color: var(--text-main); font-weight: 800; border: 1px solid var(--glass-border); margin-right: 8px; }
+
   .bus-wait { font-size: 20px; color: var(--primary); font-weight: 900; text-align: right; background: rgba(0, 122, 255, 0.1); padding: 12px 18px; border-radius: 16px; }
   .bus-wait.past-wait { background: rgba(142, 142, 147, 0.15); color: var(--text-sub); }
   
   .action-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--glass-border); display: none; }
   .bus-row.selected .action-grid { display: grid; }
   .act-btn { padding: 14px 0; border-radius: 16px; font-size: 14px; font-weight: 900; border: none; cursor: pointer; transition: 0.2s; text-align: center; }
+  .act-btn:active { transform: scale(0.95); }
   .act-btn.share { background: #ff9500; color: #ffffff; }
   .act-btn.fav { background: rgba(0, 122, 255, 0.1); color: var(--primary); }
   .act-btn.map { background: var(--text-main); color: var(--btn-bg); }
@@ -152,29 +154,31 @@
 
   .bottom-tab-bar {
     position: fixed; bottom: 0; left: 0; width: 100%; height: 90px;
-    background: var(--nav-bg); backdrop-filter: blur(40px) saturate(250%);
+    background: var(--nav-bg); backdrop-filter: blur(40px) saturate(250%); -webkit-backdrop-filter: blur(40px) saturate(250%);
     border-top: 1px solid var(--glass-border); display: flex; justify-content: space-around; align-items: center;
     padding-bottom: 15px; z-index: 2000; box-shadow: 0 -10px 30px rgba(0,0,0,0.05);
   }
-  .tab-btn { display: flex; flex-direction: column; align-items: center; gap: 6px; color: var(--text-sub); cursor: pointer; flex: 1; }
-  .tab-btn.active { color: var(--primary); }
-  .tab-btn span { font-size: 11px; font-weight: 900; letter-spacing: -0.3px; }
+  .tab-btn { display: flex; flex-direction: column; align-items: center; gap: 6px; color: var(--text-sub); cursor: pointer; transition: 0.3s; flex: 1; }
   .tab-btn svg { width: 26px; height: 26px; fill: currentColor; }
+  .tab-btn span { font-size: 12px; font-weight: 900; letter-spacing: -0.3px; }
+  .tab-btn.active { color: var(--primary); }
   
   .tab-center { position: relative; top: -15px; }
   .tab-center .circle-bg { width: 60px; height: 60px; background: var(--primary); border-radius: 30px; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 25px rgba(0, 122, 255, 0.4); color: white; border: 4px solid var(--bg-gradient); transition: 0.3s; }
   .tab-center svg { fill: white; width: 28px; height: 28px; }
 
-  /* 모달 & 토스트 */
-  .schedule-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-gradient); z-index: 3000; display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.4s ease; }
+  .schedule-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-gradient); z-index: 4000; display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.4s ease; }
   .schedule-modal.active { transform: translateY(0); }
-  .sm-head { padding: 20px 24px; display: flex; justify-content: space-between; align-items: center; background: var(--nav-bg); border-bottom: 1px solid var(--glass-border); padding-top: calc(20px + env(safe-area-inset-top)); }
+  .sm-head { padding: 20px 24px; display: flex; justify-content: space-between; align-items: center; background: var(--nav-bg); backdrop-filter: blur(40px); border-bottom: 1px solid var(--glass-border); padding-top: calc(20px + env(safe-area-inset-top)); }
   .sm-body { flex: 1; overflow-y: auto; padding: 24px; padding-bottom: 100px; }
   
   .full-table { width: 100%; border-collapse: separate; border-spacing: 0 16px; }
   .full-table td { padding: 20px 18px; background: var(--btn-bg); font-size: 16px; border: 1px solid var(--glass-border); border-radius: 16px; font-weight: 700; line-height: 1.8; }
   .full-table td:first-child { width: 110px; font-weight: 900; color: var(--primary); vertical-align: top; }
   
+  .t-times span { display: inline-block; margin-right: 12px; }
+  .t-times .time-next { color: var(--primary); font-weight: 900; font-size: 20px; background: rgba(0, 122, 255, 0.15); padding: 4px 10px; border-radius: 8px; }
+
   .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(20px); z-index: 5000; display: none; align-items: center; justify-content: center; opacity: 0; transition: 0.3s ease; }
   .modal-overlay.active { display: flex; opacity: 1; }
   .login-card { width: 90%; max-width: 420px; text-align: left; padding: 40px 30px; border-radius: 32px; position: relative; }
@@ -197,7 +201,7 @@
   <div class="logo-title">스마트버스 Pro</div>
   <div class="nav-actions">
     <button class="top-btn" onclick="toggleDarkMode()">테마 변경</button>
-    <button class="top-btn login-btn" id="topAuthBtn" onclick="handleMyTab()">로그인</button>
+    <button class="top-btn" onclick="openReportModal()" style="color:var(--primary);">시간표 제보</button>
   </div>
 </div>
 
@@ -205,13 +209,13 @@
   <div class="left-pane">
     <div class="weather-banner">
       <div id="userGreeting">게스트 접속 중</div>
-      <div id="weatherInfo">날씨 정보를 불러오는 중입니다...</div>
+      <div id="weatherInfo">날씨 동기화 중...</div>
     </div>
 
     <div class="glass-card" style="padding-bottom: 30px;">
       <div class="control-group">
         <span class="label">어디로 가시나요?</span>
-        <input type="text" id="searchInput" class="input-field" placeholder="목적지 검색 (예: 서울, 격포)" onkeyup="searchBus()">
+        <input type="text" id="searchInput" class="input-field" placeholder="도착지 검색 (예: 서울, 격포)" onkeyup="searchBus()">
       </div>
       <div class="control-group" style="margin-bottom:0;">
         <span class="label">출발 기준 시간</span>
@@ -249,14 +253,14 @@
     
     <div class="result-display" id="resArea">
       <div class="glass-card" style="text-align:center; color:var(--text-sub); font-weight:800; padding:60px 20px;">
-        상단에서 노선을 탭하여 탑승 정보를 확인하십시오.
+        상단에서 원하시는 노선을 선택하십시오.
       </div>
     </div>
   </div>
   
   <div class="right-pane">
     <div class="glass-card desktop-table-card">
-      <div class="cat-title" id="desktopTableTitle" style="margin-top:0">전체 시간표 안내</div>
+      <div class="cat-title" style="margin-top:0;">전체 시간표 안내</div>
       <div id="desktopTableBody"></div>
     </div>
   </div>
@@ -277,16 +281,16 @@
     </div>
     <span>전체시간표</span>
   </div>
-  <div class="tab-btn" onclick="openReportModal()">
-    <svg viewBox="0 0 24 24"><path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H3V5h18v14zm-10-7h2v6h-2zm0-4h2v2h-2z"/></svg>
-    <span>시간표제보</span>
+  <div class="tab-btn" id="tab-my" onclick="handleMyTab()">
+    <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+    <span id="tabMyText">로그인</span>
   </div>
 </div>
 
 <div class="schedule-modal" id="scheduleModal">
   <div class="sm-head">
-    <div id="mTitle" style="font-weight:900; font-size:20px; letter-spacing:-0.5px;">전체 노선 시간표</div>
-    <button onclick="closeScheduleModal()" style="background:var(--btn-bg); border:1px solid var(--glass-border); color:var(--text-main); font-size:15px; font-weight:800; padding:10px 16px; border-radius:14px; cursor:pointer;">닫기</button>
+    <div id="mTitle" style="font-weight:900; font-size:20px; color:var(--text-main);">전체 노선 시간표</div>
+    <button onclick="closeScheduleModal()" style="padding:8px 16px; border-radius:12px; border:1px solid var(--glass-border); background:var(--btn-bg); color:var(--text-main); font-weight:800; cursor:pointer;">닫기</button>
   </div>
   <div class="sm-body" id="mBody"></div>
 </div>
@@ -296,7 +300,6 @@
     <button class="login-close-btn" onclick="closeReportModal()">✕</button>
     <div class="login-title">시간표 변경 제보</div>
     <div style="font-size:14px; color:var(--text-sub); margin-bottom:20px; font-weight:700;">변경된 시간표가 있다면 익명으로 알려주세요.<br>빠르게 확인하여 반영하겠습니다.</div>
-    
     <form action="https://formspree.io/f/xwvayvqn" method="POST" enctype="multipart/form-data">
       <select name="출발_터미널" class="input-field" style="margin-bottom:12px;" required>
         <option value="" disabled selected>출발 터미널 선택</option>
@@ -306,12 +309,10 @@
       </select>
       <input type="text" name="도착지_노선" class="input-field" placeholder="도착지 노선명 (예: 서울 강남)" style="margin-bottom:12px;" required>
       <textarea name="변경_내용" class="input-field" placeholder="변경된 시간표 내용이나 특이사항을 적어주세요." style="margin-bottom:12px; height:100px; resize:none;" required></textarea>
-      
       <div style="text-align:left; font-size:14px; margin-bottom:16px; font-weight:700;">
         <label style="display:block; margin-bottom:6px;">사진 첨부 (선택)</label>
         <input type="file" name="attachment" accept="image/*" style="font-size:14px; color:var(--text-main);">
       </div>
-      
       <button type="submit" class="now-btn" style="width:100%; padding:18px; border-radius:20px;">익명으로 제보 전송</button>
     </form>
   </div>
@@ -321,10 +322,10 @@
   <div class="glass-card login-card">
     <button class="login-close-btn" onclick="closeLoginModal()">✕</button>
     <div class="login-title">계정 연동</div>
-    <div style="font-size:14px; color:var(--text-sub); margin-bottom:24px; font-weight:700;">나의 노선을 모든 기기에서 안전하게 확인하세요.</div>
+    <div style="font-size:14px; color:var(--text-sub); margin-bottom:24px; font-weight:700;">나의 노선을 기기 간 안전하게 동기화하세요.</div>
     <button class="social-login-btn google" style="background:#fff; color:#000;" onclick="processLogin('google')">Google 로그인</button>
     <button class="social-login-btn apple" style="background:#000; color:#fff;" onclick="processLogin('apple')">Apple 로그인</button>
-    <button class="social-login-btn" style="background:#24292e; color:#fff;" onclick="processLogin('github')">GitHub 로그인</button>
+    <button class="social-login-btn github" style="background:#24292e; color:#fff;" onclick="processLogin('github')">GitHub 로그인</button>
   </div>
 </div>
 
@@ -333,7 +334,6 @@
 <script>
 window.currentUser = null; window.favorites = []; window.isTeenager = false;
 
-// 1. 2026 최신 데이터베이스
 const busData = {
   inter: {
     jeonju: [
@@ -392,14 +392,17 @@ const busData = {
     ]
   },
   town: [
-    { cat: "격포/변산", name: "격포", times: ["06:40","07:30","08:40","09:10","10:00","11:00","11:50","13:10","14:30","15:30","16:30","17:10","18:00","19:00","19:55","20:40"] },
-    { cat: "격포/변산", name: "내소사", times: ["06:00","06:40","07:10","08:10","09:10","10:40","12:10","13:30","15:10","16:30","18:10"] },
-    { cat: "줄포/곰소", name: "줄포", times: ["06:30","07:40","08:30","09:10","10:00","11:00","11:50","12:30","13:30","14:30","15:50","16:30","17:30","18:10","19:10","19:55","20:30"] },
-    { cat: "줄포/곰소", name: "곰소", times: ["06:30","08:20","10:00","12:10","14:10","16:10","18:10"] },
-    { cat: "정읍/백산", name: "정읍(시내)", times: ["07:10","08:30","09:10","11:00","13:30","15:40","18:10"] },
-    { cat: "정읍/백산", name: "백산/화호", times: ["07:15","08:45","11:50","15:15","18:40"] },
-    { cat: "계화/돈지", name: "청호/돈지", times: ["06:30","06:40","07:00","08:00","09:20","10:50","12:40","14:10","15:40","17:20","18:50","20:00"] },
-    { cat: "계화/돈지", name: "계화", times: ["06:30","06:50","07:50","08:50","09:30","10:30","11:30","12:30","13:30","14:30","15:30","16:30","17:30","18:20","19:10","19:35","20:25"] }
+    { cat: "격포/변산 방면", name: "모항", times: ["06:40","07:30","08:40","09:10","10:00","11:00","11:50","13:10","14:30","15:30","16:30","17:10","18:00","19:00","19:55","20:40"] },
+    { cat: "격포/변산 방면", name: "격포", times: ["06:40","07:30","08:40","09:10","10:00","11:00","11:50","13:10","14:30","15:30","16:30","17:10","18:00","19:00","19:55","20:40"] },
+    { cat: "격포/변산 방면", name: "내소사", times: ["06:00","06:40","07:10","08:10","09:10","10:40","12:10","13:30","15:10","16:30","18:10"] },
+    { cat: "줄포/곰소 방면", name: "줄포", times: ["06:30","07:40","08:30","09:10","10:00","11:00","11:50","12:30","13:30","14:30","15:50","16:30","17:30","18:10","19:10","19:55","20:30"] },
+    { cat: "줄포/곰소 방면", name: "곰소", times: ["06:30","08:20","10:00","12:10","14:10","16:10","18:10"] },
+    { cat: "정읍/백산 방면", name: "정읍(시내)", times: ["07:10","08:30","09:10","11:00","13:30","15:40","18:10"] },
+    { cat: "정읍/백산 방면", name: "백산", times: ["07:15","08:45","11:50","15:15","18:40"] },
+    { cat: "정읍/백산 방면", name: "화호", times: ["07:15","08:45","11:50","15:15","18:40"] },
+    { cat: "계화/돈지 방면", name: "청호", times: ["06:30","06:40","07:00","08:00","09:20","10:50","12:40","14:10","15:40","17:20","18:50","20:00"] },
+    { cat: "계화/돈지 방면", name: "돈지", times: ["06:30","06:40","07:00","08:00","09:20","10:50","12:40","14:10","15:40","17:20","18:50","20:00"] },
+    { cat: "계화/돈지 방면", name: "계화", times: ["06:30","06:50","07:50","08:50","09:30","10:30","11:30","12:30","13:30","14:30","15:30","16:30","17:30","18:20","19:10","19:35","20:25"] }
   ]
 };
 
@@ -419,7 +422,7 @@ window.showToast = function(msg) {
   container.appendChild(toast); setTimeout(() => { toast.remove(); }, 3000);
 }
 
-// 👑 출발 알림 로직
+// 알림 권한 및 전송
 window.requestNoti = function(busName, time, diff) {
   if (Notification.permission !== "granted") {
     Notification.requestPermission().then(p => {
@@ -443,7 +446,6 @@ window.requestNoti = function(busName, time, diff) {
   }
 }
 
-// 유틸리티
 let curMode = 'inter', curOrigin = 'jeonju', selectedBusName = null;
 let isManualTime = false, refreshInterval = null;
 let selectedRouteTime = null, selectedRouteDiff = 0;
@@ -465,7 +467,7 @@ window.setToNow = function() {
   if(!refreshInterval) refreshInterval = setInterval(() => { if(!isManualTime) window.setToNow(); }, 60000);
 }
 window.manualTimeChange = function() { isManualTime = true; clearInterval(refreshInterval); refreshInterval = null; window.refreshUI(); }
-window.toggleDarkMode = function() { document.body.classList.toggle('dark-mode'); window.showToast("테마가 변경되었습니다."); }
+window.toggleDarkMode = function() { document.body.classList.toggle('dark-mode'); }
 
 window.switchMainTab = function(mode) {
   curMode = mode; selectedBusName = null; selectedRouteTime = null;
@@ -519,13 +521,12 @@ window.renderGrids = function(query = "") {
   } else { favSection.style.display = 'none'; }
 }
 
-// 👑 스마트 배차 뷰 (메인화면: 지나간 버스 1대 + 올 버스 3대)
 window.calcBus = function(name) {
   const bus = curMode === 'town' ? busData.town.find(b => b.name === name) : busData.inter[curOrigin]?.find(b => b.name === name);
   if (!bus) return;
   selectedBusName = name;
   const nowMin = window.timeToMin(document.getElementById('searchTime').value);
-  const info = routeInfo[name] || { gate: "-", fare: 0 };
+  const info = routeInfo[name] || { gate: "확인불가", fare: 0 };
   
   let html = `<div class="ticket-header"><div class="ticket-gate"><span>승차홈 ${info.gate}</span> 2026 최신 배차</div>
               ${info.fare ? `<button class="fare-toggle-btn" onclick="window.toggleFare(event)">${window.isTeenager ? '청소년' : '일반'} ${window.formatFare(info.fare)} ↻</button>` : ''}</div>`;
@@ -536,16 +537,11 @@ window.calcBus = function(name) {
   bus.times.forEach(t => {
     let diff = window.timeToMin(t) - nowMin;
     if (diff < -720) diff += 1440; 
-    
-    if (diff < 0 && diff > -720) {
-      pastBus = { t, diff, isPast: true };
-    } else if (diff >= 0) {
-      futureBuses.push({ t, diff, isPast: false });
-    }
+    if (diff < 0) { pastBus = { t, diff, isPast: true }; } 
+    else { futureBuses.push({ t, diff, isPast: false }); }
   });
 
-  futureBuses = futureBuses.sort((a,b) => a.diff - b.diff).slice(0, 3); // 앞으로 올 버스 최대 3대만
-  
+  futureBuses = futureBuses.sort((a,b) => a.diff - b.diff).slice(0, 3);
   let renderList = [];
   if (pastBus) renderList.push(pastBus);
   renderList = renderList.concat(futureBuses);
@@ -553,19 +549,17 @@ window.calcBus = function(name) {
   if(renderList.length === 0) {
     html += `<div class="bus-row"><div class="bus-row-body" style="text-align:center; color:var(--warning); font-weight:900; font-size:18px;">배차 운행이 모두 종료되었습니다.</div></div>`;
   } else {
-    // 자동 선택 로직
     if(selectedRouteTime === null && futureBuses.length > 0) {
       selectedRouteTime = futureBuses[0].t;
       selectedRouteDiff = futureBuses[0].diff;
     }
 
-    html += renderList.map((item) => {
+    html += renderList.map((item, idx) => {
       const isSelected = (selectedRouteTime === item.t && !item.isPast);
       
-      // 지나간 시간 처리
       if(item.isPast) {
         return `
-        <div class="bus-row" style="opacity: 0.6; pointer-events: none;">
+        <div class="bus-row" style="opacity: 0.6; pointer-events: none; margin-bottom: 10px;">
           <div class="bus-row-body" style="padding: 16px 24px;">
             <div class="bus-row-top" style="margin-bottom:0;">
               <div class="bus-time time-past">${item.t} <span class="time-badge" style="background:transparent; color:inherit;">지나간 배차</span></div>
@@ -579,7 +573,7 @@ window.calcBus = function(name) {
       <div class="bus-row ${isSelected ? 'selected' : ''}" onclick="window.selectTimeRow('${item.t}', ${item.diff}, this)">
         <div class="bus-row-body">
           <div class="bus-row-top">
-            <div class="bus-time">${item.t}</div>
+            <div class="bus-time time-future">${item.t}</div>
             <div class="bus-wait">${item.diff}분 대기</div>
           </div>
           <div class="action-grid">
@@ -602,7 +596,7 @@ window.selectTimeRow = function(t, d, el) {
   el.classList.add('selected');
 }
 
-// 👑 기상청 듀얼 날씨 (현재 + 선택 시간대)
+// 듀얼 기상 시스템 (현재 날씨 + 예상 날씨)
 window.fetchWeather = async function() {
   try {
     const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=35.731&longitude=126.733&current_weather=true&hourly=temperature_2m,weathercode&timezone=Asia/Seoul`);
@@ -624,10 +618,10 @@ window.updateWeatherDisplay = function() {
     const hour = parseInt(timeStr.split(':')[0], 10);
     const forecastTemp = Math.round(window.weatherDataCache.hourly.temperature_2m[hour]);
     const forecastCode = window.weatherDataCache.hourly.weathercode[hour];
-    forecastStr = ` | 출발 시(${hour}시): ${forecastTemp}°C (${window.getWeatherText(forecastCode)})`;
+    forecastStr = ` | 선택시간(${hour}시): ${forecastTemp}°C (${window.getWeatherText(forecastCode)})`;
   }
   
-  document.getElementById('weatherInfo').innerText = `부안 현재: ${currentTemp}°C (${window.getWeatherText(currentCode)})${forecastStr}`;
+  document.getElementById('weatherInfo').innerText = `현재 부안: ${currentTemp}°C (${window.getWeatherText(currentCode)})${forecastStr}`;
 }
 
 window.getWeatherText = function(code) {
@@ -639,12 +633,12 @@ window.getWeatherText = function(code) {
 window.searchBus = function() { window.renderGrids(document.getElementById('searchInput').value); }
 window.refreshUI = function() { if(selectedBusName) window.calcBus(selectedBusName); window.updateTablesUnconditionally(); window.updateWeatherDisplay(); }
 
-// 전체 시간표 모달 로직 (모달 내에서 지나간 시간 회색 처리 적용)
 window.openScheduleModal = function() { window.updateTablesUnconditionally(); document.getElementById('scheduleModal').classList.add('active'); }
 window.closeScheduleModal = function() { document.getElementById('scheduleModal').classList.remove('active'); }
 window.openReportModal = function() { document.getElementById('reportModal').classList.add('active'); }
 window.closeReportModal = function() { document.getElementById('reportModal').classList.remove('active'); }
 
+// 전체 시간표 모달
 window.updateTablesUnconditionally = function() {
   const list = curMode === 'inter' ? busData.inter[curOrigin] : busData.town;
   const nowMin = window.timeToMin(document.getElementById('searchTime').value);
@@ -663,17 +657,14 @@ window.updateTablesUnconditionally = function() {
   const targetId = document.body.classList.contains('desktop-mode') || window.innerWidth >= 800 ? 'desktopTableBody' : 'mBody';
   const el = document.getElementById(targetId);
   if(el) el.innerHTML = html + '</table>';
-  
-  // 모달용 mBody도 항상 채워두기
   document.getElementById('mBody').innerHTML = html + '</table>';
 }
 
 window.shareRoute = function(busName, time) {
   if(!selectedRouteTime) return;
-  const originName = curOrigin === 'jeonju' ? '전주' : (curOrigin === 'buan' ? '부안' : (curOrigin === 'gimje' ? '김제' : '군산'));
-  const text = `[스마트 승차권]\n출발: ${originName}\n도착: ${busName}\n탑승 시간: ${time}`;
-  if (navigator.share) { navigator.share({ title: '스마트 탑승권', text: text }).catch(console.error); } 
-  else { navigator.clipboard.writeText(text).then(() => { window.showToast("승차권 정보가 클립보드에 복사되었습니다."); }); }
+  const text = `[스마트 승차권]\n출발: 부안터미널 등\n도착: ${busName}\n탑승 시간: ${time}`;
+  if (navigator.share) { navigator.share({ title: '스마트 승차권', text: text }).catch(console.error); } 
+  else { navigator.clipboard.writeText(text).then(() => { window.showToast("승차권 정보가 복사되었습니다."); }); }
 }
 
 window.openNaverMapRoute = function(destName) {
@@ -698,8 +689,6 @@ window.onload = function() {
   window.setToNow(); 
   window.fetchWeather(); 
   window.setOrigin('jeonju', document.querySelector('.grid-origins .chip')); 
-  
-  // 브라우저 리사이징 시 레이아웃 대응
   window.addEventListener('resize', () => { window.updateTablesUnconditionally(); });
 }
 </script>
@@ -708,7 +697,6 @@ window.onload = function() {
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
   import { getAuth, signInWithPopup, GoogleAuthProvider, OAuthProvider, GithubAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
-  // 👑 우성님께서 남겨주신 API 키 (그대로 적용)
   const firebaseConfig = {
     apiKey: "AIzaSyDIEq5_K5J1R8EipOfRopsM7CODQFv-EsQ",
     authDomain: "smartbus-pro.firebaseapp.com",
@@ -719,32 +707,16 @@ window.onload = function() {
   };
 
   let auth;
-  try {
-    const app = initializeApp(firebaseConfig);
-    auth = getAuth(app);
-  } catch(e) {
-    console.error("Firebase 초기화 에러:", e);
-  }
+  try { const app = initializeApp(firebaseConfig); auth = getAuth(app); } catch(e) {}
 
-  // 👑 에러 탐지기 내장 (키가 틀리면 화면에 에러 코드 출력)
   window.processLogin = function(type) {
-    if(!auth) {
-      alert("파이어베이스 서버 연결이 끊겨 로그인 창을 띄울 수 없습니다. API 키를 다시 확인해주세요.");
-      return;
-    }
-    
-    let provider;
-    if(type === 'google') provider = new GoogleAuthProvider();
-    else if(type === 'apple') provider = new OAuthProvider('apple.com');
-    else provider = new GithubAuthProvider(); // 깃허브 복구 완료!
-
+    if(!auth) return;
+    let provider = type === 'google' ? new GoogleAuthProvider() : (type === 'apple' ? new OAuthProvider('apple.com') : new GithubAuthProvider());
     signInWithPopup(auth, provider).then(res => {
-      window.showToast("환영합니다!");
-      window.closeLoginModal();
+      window.showToast("환영합니다!"); window.closeLoginModal();
     }).catch(e => {
-      // 오류 원인을 친절하게 모바일 화면에 띄워줌
-      alert("로그인 중 에러 발생: " + e.code);
-      console.error("상세 에러:", e);
+      if (e.code === 'auth/popup-closed-by-user') return;
+      window.showToast("로그인이 취소되었거나 지연되었습니다.");
     });
   }
 
@@ -752,22 +724,14 @@ window.onload = function() {
     onAuthStateChanged(auth, user => {
       if (user) {
         window.currentUser = user;
-        document.getElementById('userGreeting').innerText = `${user.displayName || 'Pro 회원'}님`;
+        document.getElementById('userGreeting').innerText = `${user.displayName}님 환영합니다.`;
         document.getElementById('tabMyText').innerText = "로그아웃";
-        
-        // 헤더 우측 로그인 버튼 숨기기
-        const topAuthBtn = document.getElementById('topAuthBtn');
-        if(topAuthBtn) topAuthBtn.style.display = 'none';
-
         window.favorites = JSON.parse(localStorage.getItem(`busFav_${user.uid}`) || '[]');
         window.refreshUI();
       } else {
         window.currentUser = null;
         document.getElementById('userGreeting').innerText = "게스트 모드 접속 중";
         document.getElementById('tabMyText').innerText = "MY설정";
-        
-        const topAuthBtn = document.getElementById('topAuthBtn');
-        if(topAuthBtn) topAuthBtn.style.display = 'inline-block';
       }
     });
   }
