@@ -154,7 +154,8 @@
   .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 1000; display: none; align-items: center; justify-content: center; opacity: 0; transition: 0.3s; }
   .modal-overlay.active { display: flex; opacity: 1; }
   
-  .login-card { width: 90%; max-width: 400px; text-align: center; padding: 48px 32px; animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+  .login-card { width: 90%; max-width: 400px; text-align: center; padding: 48px 32px; animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); position: relative; }
+  .login-close-btn { position: absolute; top: 16px; right: 20px; background: none; border: none; font-size: 24px; color: var(--text-sub); cursor: pointer; font-weight: bold; }
   .login-title { font-size: 26px; font-weight: 900; margin-bottom: 12px; color: var(--text-main); letter-spacing: -0.5px; }
   .login-desc { font-size: 15px; color: var(--text-sub); margin-bottom: 32px; font-weight: 600; line-height: 1.5; }
   
@@ -184,6 +185,7 @@
 
 <div class="modal-overlay" id="loginModal">
   <div class="glass-card login-card">
+    <button class="login-close-btn" onclick="closeLoginModal()">✕</button>
     <div class="login-title">스마트 버스 로그인</div>
     <div class="login-desc">설정된 관심 노선 및 환경 정보를<br>안전하게 동기화합니다.</div>
     <button class="google-login-btn" onclick="processLogin()">
@@ -198,12 +200,12 @@
 <div class="header">
   <div class="header-left">
     <h1 class="header-title">스마트 버스</h1>
-    <div class="header-greeting" id="userGreeting">환영합니다. 로그인해 주십시오.</div>
+    <div class="header-greeting" id="userGreeting">비로그인 상태 (게스트 모드)</div>
   </div>
   <div class="header-btns">
     <button class="top-btn" onclick="toggleViewMode()" id="viewToggle">PC 화면</button>
     <button class="top-btn" onclick="toggleDarkMode()" id="darkToggle">라이트</button>
-    <button class="top-btn" onclick="logout()" style="color:var(--warning)">로그아웃</button>
+    <button class="top-btn" id="authBtn" style="color:var(--primary)">로그인</button>
   </div>
 </div>
 
@@ -389,8 +391,6 @@ let isManualTime = false, refreshInterval = null;
 let weatherDataCache = null;
 let selectedRouteTime = null, selectedRouteDiff = 0;
 
-if ("Notification" in window) { Notification.requestPermission(); }
-
 window.showToast = function(msg) {
   const container = document.getElementById('toastContainer');
   const toast = document.createElement('div');
@@ -497,6 +497,12 @@ window.renderGrids = function(query = "") {
 }
 
 window.toggleFavGlobal = function(name) {
+  if (!window.currentUser) {
+    window.showToast("관심 노선 등록 기능은 로그인이 필요합니다.");
+    window.showLoginModal();
+    return;
+  }
+  
   if(window.favorites.includes(name)) { 
     window.favorites = window.favorites.filter(f => f !== name); 
     showToast(`지정하신 항목이 관심 노선에서 제외되었습니다.`); 
@@ -795,14 +801,19 @@ window.showRecentSearches = function(e) {
   dd.style.display = 'block';
 }
 
+window.showLoginModal = function() {
+  document.getElementById('loginModal').classList.add('active');
+}
+
+window.closeLoginModal = function() {
+  document.getElementById('loginModal').classList.remove('active');
+}
 </script>
 
 <script type="module">
-  // Firebase 10.8.1 모듈 불러오기
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
   import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
-  // 우성님의 Firebase 인증 설정
   const firebaseConfig = {
     apiKey: "AIzaSyDlEq5_K5JlR8EipOfRopsM7CODQFv-EsQ",
     authDomain: "smartbus-pro.firebaseapp.com",
@@ -812,46 +823,41 @@ window.showRecentSearches = function(e) {
     appId: "1:908746765212:web:07f1e402870af621208e59"
   };
 
-  // Firebase 초기화
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const provider = new GoogleAuthProvider();
 
-  // 구글 로그인 실행 함수
   window.processLogin = function() {
     signInWithPopup(auth, provider)
       .then((result) => {
         const user = result.user;
-        window.showToast(`${user.displayName}님, 구글 로그인 완료!`);
-        document.getElementById('loginModal').classList.remove('active');
+        window.showToast(`${user.displayName}님, 성공적으로 로그인되었습니다.`);
+        window.closeLoginModal();
       }).catch((error) => {
-        window.showToast("로그인 중 오류가 발생했습니다.");
+        window.showToast("보안 정책에 의해 로그인이 차단되었습니다.");
         console.error(error);
       });
   }
 
-  // 로그아웃 실행 함수
   window.logout = function() {
     signOut(auth).then(() => {
       window.showToast("안전하게 로그아웃 되었습니다.");
       window.favorites = [];
       setTimeout(() => { location.reload(); }, 1000);
     }).catch((error) => {
-      window.showToast("로그아웃 오류 발생");
+      window.showToast("로그아웃 시스템에 일시적인 오류가 발생했습니다.");
     });
   }
 
-  // 로그인 상태 변화 감지 및 UI 변경
   onAuthStateChanged(auth, (user) => {
+    const authBtn = document.getElementById('authBtn');
     if (user) {
       window.currentUser = user;
-      document.getElementById('loginModal').classList.remove('active');
+      window.closeLoginModal();
       
-      // 유저 고유 ID를 이용해 데이터 로드
       const storageKey = `busFav_${user.uid}`;
       window.favorites = JSON.parse(localStorage.getItem(storageKey) || '[]');
       
-      // 인사말 업데이트
       const hour = new Date().getHours();
       let timeMsg = "반갑습니다";
       if (hour >= 5 && hour < 11) timeMsg = "활기찬 아침입니다";
@@ -860,18 +866,28 @@ window.showRecentSearches = function(e) {
       else timeMsg = "평온한 밤 되십시오";
       document.getElementById('userGreeting').innerText = `${timeMsg}, ${user.displayName}님.`;
       
-      // 초기 UI 로딩
+      authBtn.innerText = "로그아웃";
+      authBtn.style.color = "var(--warning)";
+      authBtn.onclick = window.logout;
+      
       window.setToNow(); 
       window.setOrigin('jeonju', document.querySelector('.grid-origins .chip'));
     } else {
       window.currentUser = null;
-      document.getElementById('loginModal').classList.add('active');
-      document.getElementById('userNameInput').style.display = 'none'; // 모의 이름 입력칸 영구 숨김
-      document.getElementById('userGreeting').innerText = "환영합니다. 시스템 로그인을 진행해 주십시오.";
+      window.favorites = [];
+      window.closeLoginModal();
+      
+      document.getElementById('userGreeting').innerText = "비로그인 상태 (게스트 모드)";
+      
+      authBtn.innerText = "로그인";
+      authBtn.style.color = "var(--primary)";
+      authBtn.onclick = window.showLoginModal;
+      
+      window.setToNow(); 
+      window.setOrigin('jeonju', document.querySelector('.grid-origins .chip'));
     }
   });
 
-  // 데이터 저장 함수 업데이트 (Firebase User ID 활용)
   window.saveUserData = function() {
     if(!window.currentUser) return;
     const storageKey = `busFav_${window.currentUser.uid}`;
