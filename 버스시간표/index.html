@@ -9,7 +9,6 @@
 <style>
   @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
 
-  /* Apple Liquid Glass 컬러 시스템 개선 (시인성 확보) */
   :root {
     --bg-gradient: radial-gradient(circle at 10% 20%, #e0eafc 0%, #cfdef3 100%);
     --glass-bg: rgba(255, 255, 255, 0.7);
@@ -91,14 +90,12 @@
   .label { font-size: 14px; color: var(--text-main); margin-bottom: 12px; display: block; font-weight: 800; letter-spacing: -0.3px; }
   
   .control-group { margin-bottom: 20px; position: relative; }
-  /* 입력창 및 시간 설정 UI (텍스트 색상 강제 지정) */
   .input-field { width: 100%; background: var(--input-bg); border: 1px solid var(--glass-border); border-radius: 16px; padding: 16px; font-size: 16px; color: var(--text-main); font-weight: 600; outline: none; transition: 0.3s; }
   .input-field::placeholder { color: var(--text-sub); opacity: 0.8; }
   .input-field:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.2); }
   
   .time-picker-wrapper { display: flex; gap: 12px; align-items: stretch; }
   .time-input { flex: 1.5; background: var(--input-bg); border: 1px solid var(--glass-border); border-radius: 16px; padding: 16px; font-size: 18px; font-weight: 800; color: var(--text-main); outline: none; text-align: center; color-scheme: dark; }
-  /* 버튼 강제 컬러 지정으로 하얗게 묻히는 현상 방지 */
   .now-btn { flex: 1; background: #007aff !important; color: #ffffff !important; border: none; border-radius: 16px; font-size: 14px; font-weight: 800; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 10px rgba(0, 122, 255, 0.3); word-break: keep-all; padding: 0 10px; }
   .now-btn:active { transform: translateY(2px); box-shadow: 0 2px 5px rgba(0, 122, 255, 0.3); }
 
@@ -151,7 +148,6 @@
   body.desktop-mode .fab .text-mob { display: none; }
   body.desktop-mode .fab .text-pc { display: inline; }
 
-  /* 모달 & 로그인 스타일 */
   .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 1000; display: none; align-items: center; justify-content: center; opacity: 0; transition: 0.3s; }
   .modal-overlay.active { display: flex; opacity: 1; }
   
@@ -176,7 +172,6 @@
   .time-past { opacity: 0.3; text-decoration: line-through; font-weight: 400; }
   .time-next { color: var(--primary); font-weight: 900; font-size: 18px; background: rgba(0, 122, 255, 0.1); padding: 4px 8px; border-radius: 8px; }
 
-  /* 토스트 */
   .toast-container { position: fixed; bottom: 120px; left: 50%; transform: translateX(-50%); z-index: 2000; display: flex; flex-direction: column; gap: 10px; align-items: center; pointer-events: none; width: 90%; max-width: 360px; }
   .toast { width: 100%; text-align: center; background: rgba(28, 28, 30, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); color: #ffffff; padding: 16px 20px; border-radius: 16px; font-size: 14px; font-weight: 700; box-shadow: 0 10px 30px rgba(0,0,0,0.2); animation: toastAnim 3s forwards; }
   @keyframes toastAnim { 0% { opacity: 0; transform: translateY(20px) scale(0.9); } 10% { opacity: 1; transform: translateY(0) scale(1); } 90% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-10px); } }
@@ -821,7 +816,7 @@ window.closeLoginModal = function() {
   import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
   const firebaseConfig = {
-    apiKey: "AIzaSyDiEq5_K5J1R8EipOfRopsM7CODQFv-EsQ",
+    apiKey: "AIzaSyDIEq5_K5J1R8EipOfRopsM7CODQFv-EsQ",
     authDomain: "smartbus-pro.firebaseapp.com",
     projectId: "smartbus-pro",
     storageBucket: "smartbus-pro.firebasestorage.app",
