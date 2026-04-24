@@ -9,35 +9,33 @@
 <style>
   @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
 
-  /* Apple Liquid Glass 컬러 시스템 */
+  /* Apple Liquid Glass 컬러 시스템 개선 (시인성 확보) */
   :root {
     --bg-gradient: radial-gradient(circle at 10% 20%, #e0eafc 0%, #cfdef3 100%);
-    --glass-bg: rgba(255, 255, 255, 0.65);
-    --glass-border: rgba(255, 255, 255, 0.4);
-    --glass-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.5);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
     --text-main: #1c1c1e;
-    --text-sub: #8e8e93;
+    --text-sub: #636366;
     --primary: #007aff;
     --accent: #34c759;
     --warning: #ff3b30;
-    --btn-bg: rgba(255, 255, 255, 0.8);
-    --input-bg: rgba(255, 255, 255, 0.5);
-    --input-text: #1c1c1e;
+    --btn-bg: rgba(255, 255, 255, 0.85);
+    --input-bg: rgba(255, 255, 255, 0.6);
   }
 
   body.dark-mode {
     --bg-gradient: radial-gradient(circle at 10% 20%, #1c1c1e 0%, #000000 100%);
     --glass-bg: rgba(44, 44, 46, 0.65);
-    --glass-border: rgba(255, 255, 255, 0.1);
-    --glass-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    --glass-border: rgba(255, 255, 255, 0.15);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
     --text-main: #ffffff;
     --text-sub: #ebebf5;
     --primary: #0a84ff;
     --accent: #30d158;
     --warning: #ff453a;
     --btn-bg: rgba(99, 99, 102, 0.5);
-    --input-bg: rgba(0, 0, 0, 0.3);
-    --input-text: #ffffff;
+    --input-bg: rgba(0, 0, 0, 0.4);
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -77,7 +75,7 @@
 
   .nav { display: flex; margin: 20px; background: var(--input-bg); border-radius: 14px; padding: 4px; border: 1px solid var(--glass-border); }
   .nav-item { flex: 1; padding: 10px; text-align: center; font-weight: 700; font-size: 15px; color: var(--text-sub); cursor: pointer; border-radius: 10px; transition: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); }
-  .nav-item.active { background: var(--card); color: #1c1c1e; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+  .nav-item.active { background: var(--card, #ffffff); color: #1c1c1e; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
   body.dark-mode .nav-item.active { background: #48484a; color: #ffffff; }
 
   .main { padding: 0 20px 120px; max-width: 600px; margin: 0 auto; }
@@ -93,13 +91,15 @@
   .label { font-size: 14px; color: var(--text-main); margin-bottom: 12px; display: block; font-weight: 800; letter-spacing: -0.3px; }
   
   .control-group { margin-bottom: 20px; position: relative; }
-  .input-field { width: 100%; background: var(--input-bg); border: 1px solid var(--glass-border); border-radius: 16px; padding: 16px; font-size: 16px; color: var(--input-text); font-weight: 600; outline: none; transition: 0.3s; }
-  .input-field::placeholder { color: var(--text-sub); opacity: 0.7; }
+  /* 입력창 및 시간 설정 UI (텍스트 색상 강제 지정) */
+  .input-field { width: 100%; background: var(--input-bg); border: 1px solid var(--glass-border); border-radius: 16px; padding: 16px; font-size: 16px; color: var(--text-main); font-weight: 600; outline: none; transition: 0.3s; }
+  .input-field::placeholder { color: var(--text-sub); opacity: 0.8; }
   .input-field:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.2); }
   
-  .time-picker-wrapper { display: flex; gap: 12px; }
-  .time-input { flex: 1.5; background: var(--input-bg); border: 1px solid var(--glass-border); border-radius: 16px; padding: 16px; font-size: 18px; font-weight: 800; color: var(--input-text); outline: none; text-align: center; color-scheme: dark; }
-  .now-btn { flex: 1; background: var(--primary); color: white; border: none; border-radius: 16px; font-size: 15px; font-weight: 800; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 10px rgba(0, 122, 255, 0.3); }
+  .time-picker-wrapper { display: flex; gap: 12px; align-items: stretch; }
+  .time-input { flex: 1.5; background: var(--input-bg); border: 1px solid var(--glass-border); border-radius: 16px; padding: 16px; font-size: 18px; font-weight: 800; color: var(--text-main); outline: none; text-align: center; color-scheme: dark; }
+  /* 버튼 강제 컬러 지정으로 하얗게 묻히는 현상 방지 */
+  .now-btn { flex: 1; background: #007aff !important; color: #ffffff !important; border: none; border-radius: 16px; font-size: 14px; font-weight: 800; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 10px rgba(0, 122, 255, 0.3); word-break: keep-all; padding: 0 10px; }
   .now-btn:active { transform: translateY(2px); box-shadow: 0 2px 5px rgba(0, 122, 255, 0.3); }
 
   .grid-origins, .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; }
@@ -107,19 +107,20 @@
   
   .chip { background: var(--btn-bg); border: 1px solid var(--glass-border); border-radius: 16px; padding: 16px 8px; font-size: 14px; font-weight: 700; color: var(--text-main); text-align: center; cursor: pointer; transition: all 0.2s ease; position: relative; }
   .chip:active { transform: scale(0.96); }
-  .chip.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 6px 15px rgba(0, 122, 255, 0.3); }
+  .chip.active { background: var(--primary); color: #ffffff; border-color: var(--primary); box-shadow: 0 6px 15px rgba(0, 122, 255, 0.3); }
   
   .fav-indicator { position: absolute; top: 6px; right: 8px; font-size: 10px; font-weight: 800; opacity: 0; transition: 0.2s; }
   .chip.favorite { border-color: var(--primary); }
   .chip.favorite .fav-indicator { opacity: 1; color: var(--primary); }
-  .chip.active.favorite .fav-indicator { color: white; }
+  .chip.active.favorite .fav-indicator { color: #ffffff; }
 
   .terminal-info { font-size: 13px; color: var(--text-main); background: var(--btn-bg); padding: 16px; border-radius: 16px; line-height: 1.5; font-weight: 600; display: none; margin-top: 16px; border: 1px solid var(--glass-border); }
   
   .cat-title { font-size: 17px; color: var(--text-main); margin: 32px 0 16px; font-weight: 800; display: flex; align-items: center; gap: 8px; letter-spacing: -0.5px; }
 
   .result-display { margin-top: 24px; }
-  .route-desc { font-size: 13px; color: var(--text-main); background: rgba(52, 199, 89, 0.1); padding: 12px 16px; border-radius: 12px; margin-bottom: 16px; display: inline-block; font-weight: 700; border: 1px solid rgba(52, 199, 89, 0.3); }
+  .route-desc { font-size: 13px; color: #1c1c1e; background: rgba(52, 199, 89, 0.8); padding: 12px 16px; border-radius: 12px; margin-bottom: 16px; display: inline-block; font-weight: 700; }
+  body.dark-mode .route-desc { color: #ffffff; background: rgba(52, 199, 89, 0.3); border: 1px solid rgba(52, 199, 89, 0.5); }
   
   .bus-row { background: var(--btn-bg); border: 1px solid var(--glass-border); border-radius: 24px; padding: 24px; margin-bottom: 16px; cursor: pointer; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
   .bus-row.selected { border-color: var(--primary); box-shadow: 0 8px 25px rgba(0, 122, 255, 0.2); transform: translateY(-2px); }
@@ -131,19 +132,19 @@
   .time-badge { font-size: 12px; padding: 4px 8px; border-radius: 8px; font-weight: 800; }
   .badge-fast { background: rgba(0, 122, 255, 0.1); color: var(--primary); }
   .badge-next { background: var(--input-bg); color: var(--text-sub); border: 1px solid var(--glass-border); }
-  .badge-last { background: var(--warning); color: white; }
+  .badge-last { background: var(--warning); color: #ffffff; }
   
   .bus-eta { font-size: 14px; color: var(--text-sub); font-weight: 600; }
   .bus-wait { font-size: 18px; color: var(--primary); font-weight: 900; text-align: right; background: rgba(0, 122, 255, 0.08); padding: 8px 14px; border-radius: 12px; }
   
   .action-bar { display: flex; gap: 12px; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--glass-border); max-height: 0; overflow: hidden; opacity: 0; transition: 0.3s ease; padding-bottom: 0; margin-bottom: 0; }
   .bus-row.selected .action-bar { max-height: 100px; opacity: 1; padding-bottom: 4px; }
-  .act-btn { flex: 1; padding: 14px 0; border-radius: 14px; font-size: 14px; font-weight: 800; border: none; cursor: pointer; transition: 0.2s; text-align: center; }
+  .act-btn { flex: 1; padding: 14px 0; border-radius: 14px; font-size: 14px; font-weight: 800; border: none; cursor: pointer; transition: 0.2s; text-align: center; word-break: keep-all; }
   .act-btn.map { background: var(--text-main); color: var(--bg-gradient); }
   .act-btn.noti { background: rgba(52, 199, 89, 0.1); color: var(--accent); }
   .act-btn.fav { background: rgba(0, 122, 255, 0.1); color: var(--primary); }
 
-  .fab { position: fixed; bottom: 32px; right: 24px; background: var(--primary); color: white; border: none; width: 64px; height: 64px; border-radius: 32px; font-weight: 800; font-size: 14px; z-index: 100; cursor: pointer; box-shadow: 0 10px 25px rgba(0, 122, 255, 0.4); display: flex; align-items: center; justify-content: center; text-align: center; line-height: 1.2; transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+  .fab { position: fixed; bottom: 32px; right: 24px; background: #007aff; color: #ffffff; border: none; width: 64px; height: 64px; border-radius: 32px; font-weight: 800; font-size: 14px; z-index: 100; cursor: pointer; box-shadow: 0 10px 25px rgba(0, 122, 255, 0.4); display: flex; align-items: center; justify-content: center; text-align: center; line-height: 1.2; transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
   .fab:active { transform: scale(0.9); }
   .fab .text-pc { display: none; }
   body.desktop-mode .fab { width: auto; height: auto; padding: 20px 32px; font-size: 16px; border-radius: 20px; }
@@ -159,7 +160,7 @@
   .login-title { font-size: 26px; font-weight: 900; margin-bottom: 12px; color: var(--text-main); letter-spacing: -0.5px; }
   .login-desc { font-size: 15px; color: var(--text-sub); margin-bottom: 32px; font-weight: 600; line-height: 1.5; }
   
-  .google-login-btn { display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%; padding: 16px; border-radius: 16px; background: var(--card); color: #1c1c1e; font-size: 16px; font-weight: 700; border: 1px solid var(--glass-border); cursor: pointer; margin-top: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); transition: 0.2s; }
+  .google-login-btn { display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%; padding: 16px; border-radius: 16px; background: #ffffff; color: #1c1c1e; font-size: 16px; font-weight: 700; border: 1px solid #d1d1d6; cursor: pointer; margin-top: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); transition: 0.2s; }
   .google-login-btn:active { transform: scale(0.98); }
   
   .schedule-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-gradient); z-index: 900; display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
@@ -177,11 +178,16 @@
 
   /* 토스트 */
   .toast-container { position: fixed; bottom: 120px; left: 50%; transform: translateX(-50%); z-index: 2000; display: flex; flex-direction: column; gap: 10px; align-items: center; pointer-events: none; width: 90%; max-width: 360px; }
-  .toast { width: 100%; text-align: center; background: rgba(28, 28, 30, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); color: white; padding: 16px 20px; border-radius: 16px; font-size: 14px; font-weight: 700; box-shadow: 0 10px 30px rgba(0,0,0,0.2); animation: toastAnim 3s forwards; }
+  .toast { width: 100%; text-align: center; background: rgba(28, 28, 30, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); color: #ffffff; padding: 16px 20px; border-radius: 16px; font-size: 14px; font-weight: 700; box-shadow: 0 10px 30px rgba(0,0,0,0.2); animation: toastAnim 3s forwards; }
   @keyframes toastAnim { 0% { opacity: 0; transform: translateY(20px) scale(0.9); } 10% { opacity: 1; transform: translateY(0) scale(1); } 90% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-10px); } }
+  
+  .recent-search-dropdown { display: none; position: absolute; top: 75px; left: 0; right: 0; background: var(--card, #ffffff); border: 1px solid var(--glass-border); border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); z-index: 50; padding: 8px; }
+  body.dark-mode .recent-search-dropdown { background: #2c2c2e; }
+  .recent-item { padding: 12px; font-size: 14px; font-weight: 600; color: var(--text-main); border-bottom: 1px solid var(--glass-border); cursor: pointer; }
+  .recent-item:last-child { border: none; }
 </style>
 </head>
-<body class="dark-mode">
+<body class="dark-mode" onclick="closeDropdowns()">
 
 <div class="modal-overlay" id="loginModal">
   <div class="glass-card login-card">
@@ -205,7 +211,7 @@
   <div class="header-btns">
     <button class="top-btn" onclick="toggleViewMode()" id="viewToggle">PC 화면</button>
     <button class="top-btn" onclick="toggleDarkMode()" id="darkToggle">라이트</button>
-    <button class="top-btn" id="authBtn" style="color:var(--primary)">로그인</button>
+    <button class="top-btn" id="authBtn" style="color:#0a84ff; font-weight:800;">로그인</button>
   </div>
 </div>
 
@@ -221,7 +227,8 @@
     <div class="glass-card">
       <div class="control-group">
         <span class="label">목적지 빠른 검색</span>
-        <input type="text" id="searchInput" class="input-field" placeholder="원하시는 목적지를 입력해 주십시오." onkeyup="searchBus()">
+        <input type="text" id="searchInput" class="input-field" placeholder="원하시는 목적지를 입력해 주십시오." onkeyup="searchBus()" onclick="showRecentSearches(event)">
+        <div id="recentDropdown" class="recent-search-dropdown"></div>
       </div>
       <div class="control-group">
         <span class="label">출발 기준 시간 설정</span>
@@ -286,7 +293,6 @@
   </div>
   <div class="sm-body" id="mBody"></div>
 </div>
-
 
 <script>
 window.currentUser = null;
@@ -815,7 +821,7 @@ window.closeLoginModal = function() {
   import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
   const firebaseConfig = {
-    apiKey: "AIzaSyDlEq5_K5JlR8EipOfRopsM7CODQFv-EsQ",
+    apiKey: "AIzaSyDiEq5_K5J1R8EipOfRopsM7CODQFv-EsQ",
     authDomain: "smartbus-pro.firebaseapp.com",
     projectId: "smartbus-pro",
     storageBucket: "smartbus-pro.firebasestorage.app",
