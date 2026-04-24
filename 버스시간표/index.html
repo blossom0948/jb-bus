@@ -13,7 +13,6 @@
 <style>
   @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
 
-  /* Apple Liquid Glass 컬러 시스템 */
   :root {
     --bg-gradient: radial-gradient(circle at 50% 0%, #f4f5f8 0%, #dbe2ef 100%);
     --nav-bg: rgba(255, 255, 255, 0.85);
@@ -65,7 +64,6 @@
     min-height: 100vh;
   }
 
-  /* 최상단 고정 네비게이션 */
   .top-navbar {
     position: fixed; top: 0; left: 0; width: 100%; height: 70px;
     display: flex; justify-content: space-between; align-items: center;
@@ -91,7 +89,7 @@
   .weather-banner { background: rgba(0, 122, 255, 0.08); padding: 16px 24px; font-size: 14px; font-weight: 700; color: var(--text-main); text-align: center; border-radius: 16px; margin-bottom: 20px; backdrop-filter: blur(20px); border: 1px solid rgba(0, 122, 255, 0.2); display: flex; flex-direction: column; gap: 6px; }
   #userGreeting { color: var(--primary); font-size: 14px; font-weight: 900; }
 
-  /* 화면 비율에 따른 자동 레이아웃 전환 (반응형) */
+  /* 1단/2단 자동 반응형 적용 */
   .main { padding: 0 20px; max-width: 600px; margin: 0 auto; transition: 0.4s ease; }
   .right-pane { display: none; }
   
@@ -178,7 +176,7 @@
   .tab-center .circle-bg { width: 60px; height: 60px; background: var(--primary); border-radius: 30px; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 25px rgba(0, 122, 255, 0.4); color: white; border: 4px solid var(--bg-gradient); transition: 0.3s; }
   .tab-center svg { fill: white; width: 28px; height: 28px; }
 
-  /* 전체 시간표 테이블 (모달 & 데스크톱 뷰 겸용) */
+  /* 전체 시간표 테이블 (모달 & 데스크톱 뷰) */
   .schedule-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-gradient); z-index: 4000; display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.4s ease; }
   .schedule-modal.active { transform: translateY(0); }
   .sm-head { padding: 20px 24px; display: flex; justify-content: space-between; align-items: center; background: var(--nav-bg); backdrop-filter: blur(40px); border-bottom: 1px solid var(--glass-border); padding-top: calc(20px + env(safe-area-inset-top)); }
@@ -206,6 +204,7 @@
   .toast { width: 100%; text-align: center; background: rgba(30, 30, 30, 0.9); backdrop-filter: blur(30px); color: #ffffff; padding: 16px 20px; border-radius: 20px; font-size: 15px; font-weight: 800; box-shadow: 0 10px 30px rgba(0,0,0,0.3); animation: toastAnim 3s forwards; }
   @keyframes toastAnim { 0% { opacity: 0; transform: translateY(20px); } 10% { opacity: 1; transform: translateY(0); } 90% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-20px); } }
 
+  /* 폼 콤보박스 디자인 */
   select.input-field { appearance: none; background-image: url('data:image/svg+xml;utf8,<svg fill="black" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>'); background-repeat: no-repeat; background-position-x: 95%; background-position-y: center; }
   body.dark-mode select.input-field { background-image: url('data:image/svg+xml;utf8,<svg fill="white" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>'); }
 </style>
@@ -239,11 +238,6 @@
           <button class="now-btn" onclick="setToNow()">현재 시간 적용</button>
         </div>
       </div>
-    </div>
-
-    <div class="glass-card" id="favSection" style="display:none; border-color:var(--primary); background: rgba(0, 122, 255, 0.05);">
-      <span class="label" style="color:var(--primary);">내 관심 노선</span>
-      <div class="grid" id="favGrid"></div>
     </div>
 
     <div id="view-inter" class="section active">
@@ -283,28 +277,28 @@
 
 <div class="bottom-tab-bar">
   <div class="tab-btn active" id="tab-inter" onclick="switchMainTab('inter')">
-    <svg viewBox="0 0 24 24"><path d="M4 16c0 .88.39 1.67 1 2.22V20c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h8v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1.78c.61-.55 1-1.34 1-2.22V6c0-3.5-3.58-4-8-4s-8 .5-8 4v10z"/></svg>
+    <svg viewBox="0 0 24 24"><path d="M4 16c0 .88.39 1.67 1 2.22V20c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h8v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1.78c.61-.55 1-1.34 1-2.22V6c0-3.5-3.58-4-8-4s-8 .5-8 4v10zm3.5 1c-.83 0-1.5-.67-1.5-1.5S6.67 14 7.5 14s1.5.67 1.5 1.5S8.33 17 7.5 17zm9 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm-10-7V6h11v4H6.5z"/></svg>
     <span>시외고속</span>
   </div>
   <div class="tab-btn" id="tab-town" onclick="switchMainTab('town')">
-    <svg viewBox="0 0 24 24"><path d="M12 2c-4 0-8 .5-8 4v9.5C4 17.43 5.57 19 7.5 19L6 20.5v.5h12v-.5L16.5 19c1.93 0 3.5-1.57 3.5-3.5V6c0-3.5-4-4-8-4z"/></svg>
+    <svg viewBox="0 0 24 24"><path d="M12 2c-4 0-8 .5-8 4v9.5C4 17.43 5.57 19 7.5 19L6 20.5v.5h12v-.5L16.5 19c1.93 0 3.5-1.57 3.5-3.5V6c0-3.5-4-4-8-4zm0 2c3.5 0 5.6.35 5.8 1H6.2C6.4 4.35 8.5 4 12 4zm-4 12c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm8 0c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zM5 10V7h14v3H5z"/></svg>
     <span>시내버스</span>
   </div>
   <div class="tab-btn tab-center" onclick="openScheduleModal()">
     <div class="circle-bg">
-      <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
     </div>
     <span>전체시간표</span>
   </div>
   <div class="tab-btn" id="tab-my" onclick="handleMyTab()">
-    <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z"/></svg>
+    <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
     <span id="tabMyText">로그인</span>
   </div>
 </div>
 
 <div class="schedule-modal" id="scheduleModal">
   <div class="sm-head">
-    <div style="font-weight:900; font-size:20px; color:var(--text-main);">전체 노선 시간표</div>
+    <div id="mTitle" style="font-weight:900; font-size:20px; color:var(--text-main);">전체 노선 시간표</div>
     <button onclick="closeScheduleModal()" style="padding:8px 16px; border-radius:12px; border:1px solid var(--glass-border); background:var(--btn-bg); color:var(--text-main); font-weight:800; cursor:pointer;">닫기</button>
   </div>
   <div class="sm-body" id="mBody"></div>
@@ -352,35 +346,86 @@
 <script>
 window.currentUser = null; window.favorites = []; window.isTeenager = false;
 
+// 1. 전체 데이터베이스 완전 복구본
 const busData = {
   inter: {
     jeonju: [
-      { cat: "수도권", name: "서울남부(우)", times: ["05:45","06:25","06:45","07:05","07:35","08:05","08:45","09:05","09:25","10:05","10:25","10:55","11:25","11:45","12:15","12:45","13:15","13:45","14:15","14:45","15:15","15:45","16:15","16:45","17:15","17:45","18:15","18:45","19:15","19:45","20:15","20:45","21:15"] },
-      { cat: "전라권", name: "부안(직통)", times: ["07:10","09:20","10:00","10:25","11:35","12:20","12:40","13:50","15:00","16:00","16:30","17:15","18:10","18:50","19:40"] },
+      { cat: "수도권 방면", name: "서울남부(우)", times: ["05:45","06:25","06:45","07:05","07:35","08:05","08:45","09:05","09:25","10:05","10:25","10:55","11:25","11:45","12:15","12:45","13:15","13:45","14:15","14:45","15:15","15:45","16:15","16:45","17:15","17:45","18:15","18:45","19:15","19:45","20:15","20:45","21:15"] },
+      { cat: "수도권 방면", name: "서울남부(일)", times: ["06:05","08:25","09:45","10:45","11:05","12:15","13:35","15:05","16:05","17:25","19:05","20:25"] },
+      { cat: "수도권 방면", name: "인천공항", times: ["03:10","03:30","04:00","04:30","05:00","06:00","07:00","08:00","09:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00"] },
+      { cat: "수도권 방면", name: "수원", times: ["08:20","10:00","11:40","13:20","14:50","16:20","18:10"] },
+      { cat: "수도권 방면", name: "안산", times: ["08:30","10:35","12:40","14:35","16:30","18:30"] },
+      { cat: "수도권 방면", name: "인천", times: ["08:05","09:05","10:05","11:05","12:05","13:10","14:10","15:05","16:00","17:10","18:20"] },
+      { cat: "수도권 방면", name: "부천", times: ["08:05","09:05","10:05","11:05","12:05","13:10","14:10","15:05","16:00","17:10","18:20"] },
+      { cat: "수도권 방면", name: "시화", times: ["07:50","09:50","11:50","13:50","15:50"] },
+      { cat: "수도권 방면", name: "고양", times: ["07:50","09:50","11:50","13:50","15:50"] },
+      { cat: "충청 및 경상 방면", name: "대전복합", times: ["06:30","07:40","08:50","10:00","11:10","12:20","13:30","14:40","15:50","17:00","18:10","19:20"] },
+      { cat: "충청 및 경상 방면", name: "유성", times: ["07:05","08:00","08:40","09:45","10:30","11:20","12:25","13:10","14:10","15:20","16:10","17:10","18:00","19:10"] },
+      { cat: "충청 및 경상 방면", name: "청주", times: ["07:05","08:00","08:40","09:45","10:30","11:20","12:25","13:10","14:10","15:20","16:10","17:10","18:00","19:10"] },
+      { cat: "충청 및 경상 방면", name: "천안", times: ["06:40","07:40","08:40","09:30","10:20","11:10","12:00","12:50","13:40","14:30","15:20","16:10","17:00","17:50","18:45","19:30"] },
+      { cat: "충청 및 경상 방면", name: "평택", times: ["06:40","07:40","08:40","09:30","10:20","11:10","12:00","12:50","13:40","14:30","15:20","16:10","17:00","17:50","18:45","19:30"] },
+      { cat: "충청 및 경상 방면", name: "강릉", times: ["09:05","11:05","14:20","16:40"] },
+      { cat: "충청 및 경상 방면", name: "원주", times: ["09:05","11:05","14:20","16:40"] },
+      { cat: "충청 및 경상 방면", name: "부산 사상", times: ["07:00","08:10","09:20","10:30","11:40","12:50","14:00","15:10","16:20","17:30","18:40","19:50"] },
+      { cat: "충청 및 경상 방면", name: "대구 서부", times: ["06:35","08:05","09:25","10:45","12:05","13:25","14:45","16:05","17:25","18:45"] },
+      { cat: "충청 및 경상 방면", name: "진주", times: ["09:10","11:20","13:10","15:20","17:30","19:00"] },
+      { cat: "충청 및 경상 방면", name: "마산", times: ["09:10","11:20","13:10","15:20","17:30","19:00"] },
+      { cat: "전라권 방면", name: "광주(직통)", times: ["06:40","07:30","08:20","09:20","10:20","11:20","12:20","13:20","14:20","15:20","16:20","17:20","18:20","19:45"] },
+      { cat: "전라권 방면", name: "부안(직통)", times: ["07:10","09:20","10:00","10:25","11:35","12:20","12:40","13:50","15:00","16:00","16:30","17:15","18:10","18:50","19:40"] },
+      { cat: "전라권 방면", name: "정읍(직통)", times: ["06:30","07:10","08:20","09:30","10:30","11:20","12:20","13:20","14:50","16:20","17:40","18:10","19:10","20:00","21:40"] },
+      { cat: "전라권 방면", name: "김제", times: ["06:45","07:20","08:00","08:50","10:20","11:00","12:40","14:10","15:25","17:20","18:40","20:00","22:00"] },
+      { cat: "전라권 방면", name: "군산(무정차)", times: ["06:00","06:20","06:35","07:00","07:25","07:40","08:15","08:30","08:40","21:00","21:30","22:00","22:50"] },
+      { cat: "전라권 방면", name: "익산", times: ["05:50","06:15","06:30","06:35","06:50","07:00","07:15","07:16","07:25","16:25","16:50","17:15","17:30","17:55","18:15","18:40","19:05","19:35"] },
+      { cat: "전라권 방면", name: "고창(직통)", times: ["06:05","07:23","09:26","11:04","11:53","13:06","13:55","14:20","15:09","16:44","17:32","18:21","19:10","20:02","20:30"] }
     ],
     buan: [
-      { cat: "수도권", name: "서울 강남(우등)", times: ["07:00","08:40","10:20","13:40","16:10","17:50","19:30"] },
-      { cat: "수도권", name: "서울 강남(일반)", times: ["07:50","09:30","11:10","12:00","17:00"] },
-      { cat: "전라권", name: "전주(직통)", times: ["06:50","07:30","08:00","08:40","09:40","10:50","11:55","12:50","13:15","13:50","14:40","15:45","16:40","17:40","18:40","19:30"] },
-      { cat: "전라권", name: "광주", times: ["10:30","14:40","18:20"] },
-      { cat: "전라권", name: "정읍", times: ["07:55","12:30","15:30","18:45"] },
-      { cat: "전라권", name: "익산/군산", times: ["08:10", "19:50"] }
+      { cat: "수도권 방면", name: "서울 강남(우등)", times: ["07:00","08:40","10:20","13:40","16:10","17:50","19:30"] },
+      { cat: "수도권 방면", name: "서울 강남(일반)", times: ["07:50","09:30","11:10","12:00","17:00"] },
+      { cat: "수도권 방면", name: "인천", times: ["09:40","18:20"] },
+      { cat: "수도권 방면", name: "안산", times: ["09:40","18:20"] },
+      { cat: "전라권 방면", name: "전주(직통)", times: ["06:50","07:30","08:00","08:40","09:40","10:50","11:55","12:50","13:15","13:50","14:40","15:45","16:40","17:40","18:40","19:30"] },
+      { cat: "전라권 방면", name: "광주", times: ["10:30","14:40","18:20"] },
+      { cat: "전라권 방면", name: "정읍", times: ["07:55","12:30","15:30","18:45"] },
+      { cat: "전라권 방면", name: "익산/군산", times: ["08:10", "19:50"] }
     ],
-    gimje: [{ cat: "전북", name: "부안", times: ["07:20","08:15","09:45","10:40","11:45","12:55","14:05","15:30","16:20","17:45","18:55","20:10","22:00"] }],
-    gunsan: [{ cat: "전라권", name: "전주", times: ["06:30","07:00","07:40","08:20","09:05","09:45","10:25","11:15","11:50","12:35","13:20","13:55","14:40","15:40","16:40","17:35","18:20","19:00","19:50","20:45","21:50","22:50"] }]
+    gimje: [
+      { cat: "수도권 방면", name: "서울 강남", times: ["06:40","10:00","11:40","17:30","18:40","19:10"] },
+      { cat: "수도권 방면", name: "동서울", times: ["09:30","14:30","19:30"] },
+      { cat: "수도권 방면", name: "인천공항", times: ["01:10","11:10"] },
+      { cat: "수도권 방면", name: "인천", times: ["10:10"] },
+      { cat: "전북 권역", name: "부안", times: ["07:20","08:15","09:45","10:40","11:45","12:55","14:05","15:30","16:20","17:45","18:55","20:10","22:00"] },
+      { cat: "전북 권역", name: "군산", times: ["06:50","08:05","08:30","10:20","11:20","14:20","15:10","16:30","17:30","19:40"] },
+      { cat: "전북 권역", name: "익산", times: ["07:10","08:40","09:25","10:20","11:30","12:40","13:30","14:05","14:50","15:50","17:30","18:35","20:20","21:00"] },
+      { cat: "전북 권역", name: "고창", times: ["10:40","14:50"] }
+    ],
+    gunsan: [
+      { cat: "수도권 방면", name: "서울(고속)", times: ["06:00","07:00","08:00","09:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"] },
+      { cat: "전라권 방면", name: "전주", times: ["06:30","07:00","07:40","08:20","09:05","09:45","10:25","11:15","11:50","12:35","13:20","13:55","14:40","15:40","16:40","17:35","18:20","19:00","19:50","20:45","21:50","22:50"] },
+      { cat: "전라권 방면", name: "익산", times: ["06:05","06:30","07:05","07:35","08:25","09:00","09:55","10:20","11:00","11:40","12:00","12:40","13:10","13:45","14:20","14:55","15:25","16:15","16:55","17:35","18:05","18:35","19:05","19:40","20:10","20:40","21:20","22:00","22:50"] }
+    ]
   },
   town: [
+    { cat: "격포/변산", name: "모항", times: ["06:40","07:30","08:40","09:10","10:00","11:00","11:50","13:10","14:30","15:30","16:30","17:10","18:00","19:00","19:55","20:40"] },
     { cat: "격포/변산", name: "격포", times: ["06:40","07:30","08:40","09:10","10:00","11:00","11:50","13:10","14:30","15:30","16:30","17:10","18:00","19:00","19:55","20:40"] },
-    { cat: "줄포/곰소", name: "곰소", times: ["06:30","08:20","10:00","12:10","14:10","16:10","18:10"] }
+    { cat: "격포/변산", name: "내소사", times: ["06:00","06:40","07:10","08:10","09:10","10:40","12:10","13:30","15:10","16:30","18:10"] },
+    { cat: "줄포/곰소", name: "줄포", times: ["06:30","07:40","08:30","09:10","10:00","11:00","11:50","12:30","13:30","14:30","15:50","16:30","17:30","18:10","19:10","19:55","20:30"] },
+    { cat: "줄포/곰소", name: "곰소", times: ["06:30","08:20","10:00","12:10","14:10","16:10","18:10"] },
+    { cat: "정읍/백산", name: "정읍(시내)", times: ["07:10","08:30","09:10","11:00","13:30","15:40","18:10"] },
+    { cat: "정읍/백산", name: "백산", times: ["07:15","08:45","11:50","15:15","18:40"] },
+    { cat: "정읍/백산", name: "화호", times: ["07:15","08:45","11:50","15:15","18:40"] },
+    { cat: "계화/돈지", name: "청호", times: ["06:30","06:40","07:00","08:00","09:20","10:50","12:40","14:10","15:40","17:20","18:50","20:00"] },
+    { cat: "계화/돈지", name: "돈지", times: ["06:30","06:40","07:00","08:00","09:20","10:50","12:40","14:10","15:40","17:20","18:50","20:00"] },
+    { cat: "계화/돈지", name: "계화", times: ["06:30","06:50","07:50","08:50","09:30","10:30","11:30","12:30","13:30","14:30","15:30","16:30","17:30","18:20","19:10","19:35","20:25"] }
   ]
 };
 
 const routeInfo = {
   "서울 강남(우등)": { fare: 23100, gate: "1번" }, "서울 강남(일반)": { fare: 15300, gate: "1번" },
-  "서울남부(우)": { fare: 23100, gate: "1번" }, "부안(직통)": { fare: 5200, gate: "2번" },
-  "전주(직통)": { fare: 5200, gate: "2번" }, "광주": { fare: 9400, gate: "3번" },
-  "정읍": { fare: 3700, gate: "5번" }, "격포": { fare: 4500, gate: "시내버스장" },
-  "곰소": { fare: 3300, gate: "시내버스장" }
+  "서울남부(우)": { fare: 23100, gate: "1번" }, "서울남부(일)": { fare: 15300, gate: "1번" },
+  "부안(직통)": { fare: 5200, gate: "2번" }, "전주(직통)": { fare: 5200, gate: "2번" },
+  "광주": { fare: 9400, gate: "3번" }, "익산/군산": { fare: 6500, gate: "4번" },
+  "김제": { fare: 2800, gate: "4번" }, "정읍": { fare: 3700, gate: "5번" },
+  "격포": { fare: 4500, gate: "시내버스장" }, "곰소": { fare: 3300, gate: "시내버스장" }
 };
 
 window.showToast = function(msg) {
@@ -431,7 +476,9 @@ window.formatFare = function(fare) {
   const finalFare = window.isTeenager ? Math.floor(fare * 0.8) : fare;
   return finalFare.toLocaleString('ko-KR') + "원";
 }
-window.toggleFare = function(e) { e.stopPropagation(); window.isTeenager = !window.isTeenager; window.refreshUI(); }
+window.toggleFare = function(e) {
+  e.stopPropagation(); window.isTeenager = !window.isTeenager; window.refreshUI();
+}
 window.toggleDarkMode = function() { document.body.classList.toggle('dark-mode'); window.showToast("테마가 변경되었습니다."); }
 
 window.switchMainTab = function(mode) {
@@ -445,8 +492,9 @@ window.switchMainTab = function(mode) {
 }
 
 window.handleMyTab = function() {
-  if(window.currentUser) { if(confirm("스마트버스에서 로그아웃 하시겠습니까?")) window.logout(); } 
-  else { window.showLoginModal(); }
+  if(window.currentUser) {
+    if(confirm("스마트버스에서 로그아웃 하시겠습니까?")) window.logout();
+  } else { window.showLoginModal(); }
 }
 
 window.setOrigin = function(o, el) {
@@ -462,7 +510,6 @@ window.renderGrids = function(query = "") {
   const dataList = curMode === 'inter' ? busData.inter[curOrigin] : busData.town;
   const container = document.getElementById(`cats-${curMode === 'town' ? 'town' : curOrigin}`);
   if(!container) return;
-  const nowMin = window.timeToMin(document.getElementById('searchTime').value);
   
   let html = '';
   const cats = [...new Set(dataList.map(b => b.cat))];
@@ -477,15 +524,9 @@ window.renderGrids = function(query = "") {
     }
   });
   container.innerHTML = html;
-  
-  const favSection = document.getElementById('favSection');
-  if(window.favorites.length > 0) {
-    favSection.style.display = 'block';
-    document.getElementById('favGrid').innerHTML = window.favorites.map(f => `<div class="chip active favorite" onclick="window.calcBus('${f}')">${f}</div>`).join('');
-  } else { favSection.style.display = 'none'; }
 }
 
-// 스마트 배차 뷰 (지나간 버스 회색 처리 및 터치 잠금)
+// 👑 스마트 배차 뷰 (지나간 버스 완벽 회색 처리 + 터치 비활성화)
 window.calcBus = function(name) {
   const bus = curMode === 'town' ? busData.town.find(b => b.name === name) : busData.inter[curOrigin]?.find(b => b.name === name);
   if (!bus) return;
@@ -493,10 +534,8 @@ window.calcBus = function(name) {
   const nowMin = window.timeToMin(document.getElementById('searchTime').value);
   const info = routeInfo[name] || { gate: "확인불가", fare: 0 };
   
-  let html = `<div class="ticket-header">
-                <div class="ticket-gate"><span>승차홈 ${info.gate}</span> 스마트 배차</div>
-                ${info.fare ? `<button class="fare-toggle-btn" onclick="window.toggleFare(event)">${window.isTeenager ? '청소년' : '일반'} ${window.formatFare(info.fare)} ↻</button>` : ''}
-              </div>`;
+  let html = `<div class="ticket-header"><div class="ticket-gate"><span>승차홈 ${info.gate}</span> 스마트 배차</div>
+              ${info.fare ? `<button class="fare-toggle-btn" onclick="window.toggleFare(event)">${window.isTeenager ? '청소년' : '일반'} ${window.formatFare(info.fare)} ↻</button>` : ''}</div>`;
   
   let pastBus = null;
   let futureBuses = [];
@@ -512,15 +551,14 @@ window.calcBus = function(name) {
     }
   });
 
-  futureBuses = futureBuses.sort((a,b) => a.diff - b.diff).slice(0, 3);
+  futureBuses = futureBuses.sort((a,b) => a.diff - b.diff).slice(0, 3); // 다가올 버스 3대
   let renderList = [];
-  if (pastBus) renderList.push(pastBus);
+  if (pastBus) renderList.push(pastBus); // 지나간 버스 가장 최근 1대
   renderList = renderList.concat(futureBuses);
 
   if(renderList.length === 0) {
     html += `<div class="bus-row"><div class="bus-row-body" style="text-align:center; color:var(--warning); font-weight:900; font-size:18px;">배차 운행이 모두 종료되었습니다.</div></div>`;
   } else {
-    // 다가올 버스 중 첫 번째 자동 선택
     if(selectedRouteTime === null && futureBuses.length > 0) {
       selectedRouteTime = futureBuses[0].t;
       selectedRouteDiff = futureBuses[0].diff;
@@ -529,13 +567,13 @@ window.calcBus = function(name) {
     html += renderList.map((item, idx) => {
       const isSelected = (selectedRouteTime === item.t && !item.isPast);
       
-      // 지나간 버스는 완벽하게 회색 및 터치 불가 처리
+      // 지나간 버스는 회색 및 취소선, 터치 불가 처리
       if(item.isPast) {
         return `
         <div class="bus-row past-bus">
           <div class="bus-row-body" style="padding: 16px 24px;">
             <div class="bus-row-top" style="margin-bottom:0;">
-              <div class="bus-time">${item.t} <span class="time-badge" style="background:transparent; color:inherit;">지나간 배차</span></div>
+              <div class="bus-time time-past">${item.t} <span class="time-badge" style="background:transparent; color:inherit;">지나간 배차</span></div>
               <div class="bus-wait past-wait" style="font-size:15px; padding:6px 12px; background:transparent;">출발 완료</div>
             </div>
           </div>
@@ -569,30 +607,32 @@ window.selectTimeRow = function(t, d, el) {
   el.classList.add('selected');
 }
 
-// 기상청 듀얼 날씨 시스템 (현재 + 선택 시간)
+// 👑 기상청 듀얼 날씨 (현재 + 선택 시간대)
 window.fetchWeather = async function() {
   try {
     const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=35.731&longitude=126.733&current_weather=true&hourly=temperature_2m,weathercode&timezone=Asia/Seoul`);
     const data = await res.json();
     window.weatherDataCache = data;
     window.updateWeatherDisplay();
-  } catch(e) { document.getElementById('weatherInfo').innerText = "날씨 연동 대기"; }
+  } catch(e) { document.getElementById('weatherInfo').innerText = "날씨 연동 대기 중"; }
 }
 
 window.updateWeatherDisplay = function() {
   if(!window.weatherDataCache) return;
-  const current = Math.round(window.weatherDataCache.current_weather.temperature);
+  const currentTemp = Math.round(window.weatherDataCache.current_weather.temperature);
   const currentCode = window.weatherDataCache.current_weather.weathercode;
-  const timeStr = document.getElementById('searchTime').value;
   
-  let forecast = "";
+  const timeStr = document.getElementById('searchTime').value;
+  let forecastStr = "";
+  
   if(timeStr) {
     const hour = parseInt(timeStr.split(':')[0], 10);
-    const fTemp = Math.round(window.weatherDataCache.hourly.temperature_2m[hour]);
-    const fCode = window.weatherDataCache.hourly.weathercode[hour];
-    forecast = ` | 선택시간(${hour}시): ${fTemp}°C (${window.getWeatherText(fCode)})`;
+    const forecastTemp = Math.round(window.weatherDataCache.hourly.temperature_2m[hour]);
+    const forecastCode = window.weatherDataCache.hourly.weathercode[hour];
+    forecastStr = ` | 선택시간(${hour}시): ${forecastTemp}°C (${window.getWeatherText(forecastCode)})`;
   }
-  document.getElementById('weatherInfo').innerText = `현재 부안: ${current}°C (${window.getWeatherText(currentCode)})${forecast}`;
+  
+  document.getElementById('weatherInfo').innerText = `부안 현재: ${currentTemp}°C (${window.getWeatherText(currentCode)})${forecastStr}`;
 }
 
 window.getWeatherText = function(code) {
@@ -604,12 +644,12 @@ window.getWeatherText = function(code) {
 window.searchBus = function() { window.renderGrids(document.getElementById('searchInput').value); }
 window.refreshUI = function() { if(selectedBusName) window.calcBus(selectedBusName); window.updateTablesUnconditionally(); window.updateWeatherDisplay(); }
 
+// 전체 시간표 모달 & 데스크톱 뷰 (지나간 시간 회색 처리 적용)
 window.openScheduleModal = function() { window.updateTablesUnconditionally(); document.getElementById('scheduleModal').classList.add('active'); }
 window.closeScheduleModal = function() { document.getElementById('scheduleModal').classList.remove('active'); }
 window.openReportModal = function() { document.getElementById('reportModal').classList.add('active'); }
 window.closeReportModal = function() { document.getElementById('reportModal').classList.remove('active'); }
 
-// 전체 시간표 모달 및 PC뷰 테이블 렌더링 (지나간 시간 회색 처리 적용)
 window.updateTablesUnconditionally = function() {
   const list = curMode === 'inter' ? busData.inter[curOrigin] : busData.town;
   if(!list) return;
@@ -620,25 +660,26 @@ window.updateTablesUnconditionally = function() {
     let timesHTML = r.times.map(t => {
       let diff = window.timeToMin(t) - nowMin;
       if (diff < -720) diff += 1440;
-      if (diff < 0) return `<span class="time-item is-past">${t}</span>`; // 지나간 시간용 별도 클래스 적용
+      if (diff < 0) return `<span class="time-item is-past">${t}</span>`; // 취소선 스타일
       return `<span class="time-item is-future">${t}</span>`;
     }).join('');
     html += `<tr><td>${r.name}</td><td class="t-times">${timesHTML}</td></tr>`;
   });
   
-  const targetId = document.body.classList.contains('desktop-mode') || window.innerWidth >= 850 ? 'desktopTableBody' : 'mBody';
+  // PC 뷰와 모달 뷰 모두 동시 적용
+  const targetId = document.body.classList.contains('desktop-mode') || window.innerWidth >= 900 ? 'desktopTableBody' : 'mBody';
   const el = document.getElementById(targetId);
   if(el) el.innerHTML = html + '</table>';
   
-  // 모달 안쪽도 항상 업데이트
   document.getElementById('mBody').innerHTML = html + '</table>';
 }
 
 window.shareRoute = function(busName, time) {
   if(!selectedRouteTime) return;
-  const text = `[스마트 승차권]\n출발: 부안터미널 등\n도착: ${busName}\n탑승 시간: ${time}`;
+  const originName = curOrigin === 'jeonju' ? '전주' : (curOrigin === 'buan' ? '부안' : (curOrigin === 'gimje' ? '김제' : '군산'));
+  const text = `[스마트 승차권]\n출발: ${originName}\n도착: ${busName}\n탑승 시간: ${time}`;
   if (navigator.share) { navigator.share({ title: '스마트 승차권', text: text }).catch(console.error); } 
-  else { navigator.clipboard.writeText(text).then(() => { window.showToast("승차권 정보가 복사되었습니다."); }); }
+  else { navigator.clipboard.writeText(text).then(() => { window.showToast("승차권 정보가 클립보드에 복사되었습니다."); }); }
 }
 
 window.openNaverMapRoute = function(destName) {
@@ -691,7 +732,7 @@ window.onload = function() {
       window.showToast("환영합니다!"); window.closeLoginModal();
     }).catch(e => {
       if (e.code === 'auth/popup-closed-by-user') return;
-      alert(`로그인 오류: ${e.code}`); // 오류 탐지기 탑재
+      alert(`로그인 오류: ${e.code}`);
     });
   }
 
