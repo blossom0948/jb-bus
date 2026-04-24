@@ -52,7 +52,6 @@
     min-height: 100vh;
   }
 
-  /* Liquid Glass 핵심 효과 */
   .glass-card {
     background: var(--glass-bg);
     backdrop-filter: blur(25px) saturate(200%);
@@ -65,7 +64,6 @@
     transition: all 0.3s ease;
   }
 
-  /* 헤더 영역 */
   .header { display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; position: sticky; top: 0; z-index: 100; background: var(--glass-bg); backdrop-filter: blur(30px) saturate(200%); -webkit-backdrop-filter: blur(30px) saturate(200%); border-bottom: 1px solid var(--glass-border); }
   .header-left { display: flex; flex-direction: column; gap: 4px; }
   .header-title { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; margin: 0; }
@@ -75,16 +73,13 @@
   .top-btn { background: var(--btn-bg); border: none; padding: 8px 14px; border-radius: 12px; color: var(--text-main); font-size: 13px; font-weight: 700; cursor: pointer; transition: 0.2s; }
   .top-btn:active { transform: scale(0.95); opacity: 0.8; }
 
-  /* 날씨 배너 */
   .weather-banner { background: rgba(0, 122, 255, 0.1); padding: 14px 24px; font-size: 13px; font-weight: 700; color: var(--primary); text-align: center; border-bottom: 1px solid var(--glass-border); backdrop-filter: blur(10px); }
 
-  /* 내비게이션 (iOS Segmented Control 스타일) */
   .nav { display: flex; margin: 20px; background: var(--input-bg); border-radius: 14px; padding: 4px; border: 1px solid var(--glass-border); }
   .nav-item { flex: 1; padding: 10px; text-align: center; font-weight: 700; font-size: 15px; color: var(--text-sub); cursor: pointer; border-radius: 10px; transition: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); }
   .nav-item.active { background: var(--card); color: #1c1c1e; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
   body.dark-mode .nav-item.active { background: #48484a; color: #ffffff; }
 
-  /* 메인 레이아웃 */
   .main { padding: 0 20px 120px; max-width: 600px; margin: 0 auto; }
   body.desktop-mode .main { max-width: 1400px; display: flex; gap: 32px; padding: 32px 40px 80px; }
   .left-pane, .right-pane { flex: 1; min-width: 0; }
@@ -97,7 +92,6 @@
 
   .label { font-size: 14px; color: var(--text-main); margin-bottom: 12px; display: block; font-weight: 800; letter-spacing: -0.3px; }
   
-  /* 컨트롤 요소 */
   .control-group { margin-bottom: 20px; position: relative; }
   .input-field { width: 100%; background: var(--input-bg); border: 1px solid var(--glass-border); border-radius: 16px; padding: 16px; font-size: 16px; color: var(--input-text); font-weight: 600; outline: none; transition: 0.3s; }
   .input-field::placeholder { color: var(--text-sub); opacity: 0.7; }
@@ -108,7 +102,6 @@
   .now-btn { flex: 1; background: var(--primary); color: white; border: none; border-radius: 16px; font-size: 15px; font-weight: 800; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 10px rgba(0, 122, 255, 0.3); }
   .now-btn:active { transform: translateY(2px); box-shadow: 0 2px 5px rgba(0, 122, 255, 0.3); }
 
-  /* 터미널 및 칩 UI */
   .grid-origins, .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; }
   .grid-origins { grid-template-columns: repeat(4, 1fr); margin-bottom: 16px; }
   
@@ -125,7 +118,6 @@
   
   .cat-title { font-size: 17px; color: var(--text-main); margin: 32px 0 16px; font-weight: 800; display: flex; align-items: center; gap: 8px; letter-spacing: -0.5px; }
 
-  /* 결과 디스플레이 */
   .result-display { margin-top: 24px; }
   .route-desc { font-size: 13px; color: var(--text-main); background: rgba(52, 199, 89, 0.1); padding: 12px 16px; border-radius: 12px; margin-bottom: 16px; display: inline-block; font-weight: 700; border: 1px solid rgba(52, 199, 89, 0.3); }
   
@@ -144,7 +136,6 @@
   .bus-eta { font-size: 14px; color: var(--text-sub); font-weight: 600; }
   .bus-wait { font-size: 18px; color: var(--primary); font-weight: 900; text-align: right; background: rgba(0, 122, 255, 0.08); padding: 8px 14px; border-radius: 12px; }
   
-  /* 액션 바 */
   .action-bar { display: flex; gap: 12px; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--glass-border); max-height: 0; overflow: hidden; opacity: 0; transition: 0.3s ease; padding-bottom: 0; margin-bottom: 0; }
   .bus-row.selected .action-bar { max-height: 100px; opacity: 1; padding-bottom: 4px; }
   .act-btn { flex: 1; padding: 14px 0; border-radius: 14px; font-size: 14px; font-weight: 800; border: none; cursor: pointer; transition: 0.2s; text-align: center; }
@@ -152,7 +143,6 @@
   .act-btn.noti { background: rgba(52, 199, 89, 0.1); color: var(--accent); }
   .act-btn.fav { background: rgba(0, 122, 255, 0.1); color: var(--primary); }
 
-  /* 플로팅 버튼 */
   .fab { position: fixed; bottom: 32px; right: 24px; background: var(--primary); color: white; border: none; width: 64px; height: 64px; border-radius: 32px; font-weight: 800; font-size: 14px; z-index: 100; cursor: pointer; box-shadow: 0 10px 25px rgba(0, 122, 255, 0.4); display: flex; align-items: center; justify-content: center; text-align: center; line-height: 1.2; transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
   .fab:active { transform: scale(0.9); }
   .fab .text-pc { display: none; }
@@ -160,7 +150,7 @@
   body.desktop-mode .fab .text-mob { display: none; }
   body.desktop-mode .fab .text-pc { display: inline; }
 
-  /* 로그인 및 모달 공통 */
+  /* 모달 & 로그인 스타일 */
   .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 1000; display: none; align-items: center; justify-content: center; opacity: 0; transition: 0.3s; }
   .modal-overlay.active { display: flex; opacity: 1; }
   
@@ -168,12 +158,9 @@
   .login-title { font-size: 26px; font-weight: 900; margin-bottom: 12px; color: var(--text-main); letter-spacing: -0.5px; }
   .login-desc { font-size: 15px; color: var(--text-sub); margin-bottom: 32px; font-weight: 600; line-height: 1.5; }
   
-  /* 구글 로그인 스타일 버튼 */
   .google-login-btn { display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%; padding: 16px; border-radius: 16px; background: var(--card); color: #1c1c1e; font-size: 16px; font-weight: 700; border: 1px solid var(--glass-border); cursor: pointer; margin-top: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); transition: 0.2s; }
   .google-login-btn:active { transform: scale(0.98); }
-  .google-login-btn img { width: 24px; height: 24px; }
-
-  /* 시간표 모달 */
+  
   .schedule-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-gradient); z-index: 900; display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
   .schedule-modal.active { transform: translateY(0); }
   .sm-head { padding: 20px; display: flex; justify-content: space-between; align-items: center; background: var(--glass-bg); backdrop-filter: blur(30px) saturate(200%); -webkit-backdrop-filter: blur(30px) saturate(200%); border-bottom: 1px solid var(--glass-border); padding-top: calc(20px + env(safe-area-inset-top)); }
@@ -199,12 +186,9 @@
   <div class="glass-card login-card">
     <div class="login-title">스마트 버스 로그인</div>
     <div class="login-desc">설정된 관심 노선 및 환경 정보를<br>안전하게 동기화합니다.</div>
-    <div class="control-group" style="margin-bottom:0;">
-      <input type="text" id="userNameInput" class="input-field" placeholder="성함 입력 (구글 연동 전 모의)" autocomplete="off" style="margin-bottom: 12px;">
-    </div>
     <button class="google-login-btn" onclick="processLogin()">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="24px" height="24px"><path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"/><path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"/><path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"/><path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"/></svg>
-      Google 계정으로 로그인
+      Google 계정으로 계속하기
     </button>
   </div>
 </div>
@@ -214,7 +198,7 @@
 <div class="header">
   <div class="header-left">
     <h1 class="header-title">스마트 버스</h1>
-    <div class="header-greeting" id="userGreeting">환영합니다.</div>
+    <div class="header-greeting" id="userGreeting">환영합니다. 로그인해 주십시오.</div>
   </div>
   <div class="header-btns">
     <button class="top-btn" onclick="toggleViewMode()" id="viewToggle">PC 화면</button>
@@ -301,81 +285,11 @@
   <div class="sm-body" id="mBody"></div>
 </div>
 
+
 <script>
-/*===================================================================
-  1. 모의 로그인 시스템
-===================================================================*/
-let currentUser = null;
-let favorites = [];
+window.currentUser = null;
+window.favorites = [];
 
-function initAuth() {
-  const sessionData = localStorage.getItem('smartBus_Auth');
-  if (sessionData) {
-    try {
-      currentUser = decodeURIComponent(atob(sessionData));
-      document.getElementById('loginModal').classList.remove('active');
-      loadUserData();
-      updateGreeting();
-    } catch(e) { showLoginModal(); }
-  } else {
-    showLoginModal();
-  }
-}
-
-function showLoginModal() {
-  document.getElementById('loginModal').classList.add('active');
-  document.getElementById('userNameInput').focus();
-}
-
-function processLogin() {
-  const input = document.getElementById('userNameInput').value.trim();
-  if (input.length < 2) { showToast("성함을 정확히 입력해 주십시오."); return; }
-  
-  currentUser = input;
-  const encodedData = btoa(encodeURIComponent(currentUser));
-  localStorage.setItem('smartBus_Auth', encodedData);
-  
-  document.getElementById('loginModal').classList.remove('active');
-  showToast(`${currentUser}님, Google 인증이 시뮬레이션 되었습니다.`);
-  
-  loadUserData();
-  updateGreeting();
-}
-
-function logout() {
-  localStorage.removeItem('smartBus_Auth');
-  currentUser = null;
-  favorites = [];
-  showToast("정상적으로 로그아웃 되었습니다.");
-  setTimeout(() => { location.reload(); }, 1000);
-}
-
-function updateGreeting() {
-  const hour = new Date().getHours();
-  let timeMsg = "반갑습니다";
-  if (hour >= 5 && hour < 11) timeMsg = "활기찬 아침입니다";
-  else if (hour >= 11 && hour < 17) timeMsg = "즐거운 오후입니다";
-  else if (hour >= 17 && hour < 21) timeMsg = "편안한 저녁입니다";
-  else timeMsg = "평온한 밤 되십시오";
-  
-  document.getElementById('userGreeting').innerText = `${timeMsg}, ${currentUser}님.`;
-}
-
-function loadUserData() {
-  const storageKey = `busFav_${btoa(encodeURIComponent(currentUser))}`;
-  favorites = JSON.parse(localStorage.getItem(storageKey) || '[]');
-  setToNow(); 
-  setOrigin('jeonju', document.querySelector('.grid-origins .chip'));
-}
-
-function saveUserData() {
-  const storageKey = `busFav_${btoa(encodeURIComponent(currentUser))}`;
-  localStorage.setItem(storageKey, JSON.stringify(favorites));
-}
-
-/*===================================================================
-  2. 코어 데이터 로직
-===================================================================*/
 const busData = {
   inter: {
     jeonju: [
@@ -384,15 +298,21 @@ const busData = {
       { cat: "수도권 방면", name: "인천공항", times: ["03:10","03:30","04:00","04:30","05:00","06:00","07:00","08:00","09:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00"] },
       { cat: "수도권 방면", name: "수원", times: ["08:20","10:00","11:40","13:20","14:50","16:20","18:10"] },
       { cat: "수도권 방면", name: "안산", times: ["08:30","10:35","12:40","14:35","16:30","18:30"] },
-      { cat: "수도권 방면", name: "인천 및 부천", times: ["08:05","09:05","10:05","11:05","12:05","13:10","14:10","15:05","16:00","17:10","18:20"] },
-      { cat: "수도권 방면", name: "시화 및 고양", times: ["07:50","09:50","11:50","13:50","15:50"] },
+      { cat: "수도권 방면", name: "인천", times: ["08:05","09:05","10:05","11:05","12:05","13:10","14:10","15:05","16:00","17:10","18:20"] },
+      { cat: "수도권 방면", name: "부천", times: ["08:05","09:05","10:05","11:05","12:05","13:10","14:10","15:05","16:00","17:10","18:20"] },
+      { cat: "수도권 방면", name: "시화", times: ["07:50","09:50","11:50","13:50","15:50"] },
+      { cat: "수도권 방면", name: "고양", times: ["07:50","09:50","11:50","13:50","15:50"] },
       { cat: "충청 및 경상 방면", name: "대전복합", times: ["06:30","07:40","08:50","10:00","11:10","12:20","13:30","14:40","15:50","17:00","18:10","19:20"] },
-      { cat: "충청 및 경상 방면", name: "유성 및 청주", times: ["07:05","08:00","08:40","09:45","10:30","11:20","12:25","13:10","14:10","15:20","16:10","17:10","18:00","19:10"] },
-      { cat: "충청 및 경상 방면", name: "천안 및 평택", times: ["06:40","07:40","08:40","09:30","10:20","11:10","12:00","12:50","13:40","14:30","15:20","16:10","17:00","17:50","18:45","19:30"] },
-      { cat: "충청 및 경상 방면", name: "강릉 및 원주", times: ["09:05","11:05","14:20","16:40"] },
+      { cat: "충청 및 경상 방면", name: "유성", times: ["07:05","08:00","08:40","09:45","10:30","11:20","12:25","13:10","14:10","15:20","16:10","17:10","18:00","19:10"] },
+      { cat: "충청 및 경상 방면", name: "청주", times: ["07:05","08:00","08:40","09:45","10:30","11:20","12:25","13:10","14:10","15:20","16:10","17:10","18:00","19:10"] },
+      { cat: "충청 및 경상 방면", name: "천안", times: ["06:40","07:40","08:40","09:30","10:20","11:10","12:00","12:50","13:40","14:30","15:20","16:10","17:00","17:50","18:45","19:30"] },
+      { cat: "충청 및 경상 방면", name: "평택", times: ["06:40","07:40","08:40","09:30","10:20","11:10","12:00","12:50","13:40","14:30","15:20","16:10","17:00","17:50","18:45","19:30"] },
+      { cat: "충청 및 경상 방면", name: "강릉", times: ["09:05","11:05","14:20","16:40"] },
+      { cat: "충청 및 경상 방면", name: "원주", times: ["09:05","11:05","14:20","16:40"] },
       { cat: "충청 및 경상 방면", name: "부산 사상", times: ["07:00","08:10","09:20","10:30","11:40","12:50","14:00","15:10","16:20","17:30","18:40","19:50"] },
       { cat: "충청 및 경상 방면", name: "대구 서부", times: ["06:35","08:05","09:25","10:45","12:05","13:25","14:45","16:05","17:25","18:45"] },
-      { cat: "충청 및 경상 방면", name: "진주 및 마산", times: ["09:10","11:20","13:10","15:20","17:30","19:00"] },
+      { cat: "충청 및 경상 방면", name: "진주", times: ["09:10","11:20","13:10","15:20","17:30","19:00"] },
+      { cat: "충청 및 경상 방면", name: "마산", times: ["09:10","11:20","13:10","15:20","17:30","19:00"] },
       { cat: "전라권 방면", name: "광주(직통)", times: ["06:40","07:30","08:20","09:20","10:20","11:20","12:20","13:20","14:20","15:20","16:20","17:20","18:20","19:45"] },
       { cat: "전라권 방면", name: "부안(직통)", times: ["07:10","09:20","10:00","10:25","11:35","12:20","12:40","13:50","15:00","16:00","16:30","17:15","18:10","18:50","19:40"] },
       { cat: "전라권 방면", name: "정읍(직통)", times: ["06:30","07:10","08:20","09:30","10:30","11:20","12:20","13:20","14:50","16:20","17:40","18:10","19:10","20:00","21:40"] },
@@ -403,7 +323,8 @@ const busData = {
     ],
     buan: [
       { cat: "수도권 방면", name: "서울 강남", times: ["07:00","08:00","09:00","10:30","12:30","13:40","14:50","16:10","17:50","19:30"] },
-      { cat: "수도권 방면", name: "인천 및 안산", times: ["09:40","18:20"] },
+      { cat: "수도권 방면", name: "인천", times: ["09:40","18:20"] },
+      { cat: "수도권 방면", name: "안산", times: ["09:40","18:20"] },
       { cat: "전라권 방면", name: "전주(직통)", times: ["07:10","08:00","08:40","09:40","10:50","11:55","12:50","13:15","13:50","14:40","15:45","16:40","17:40","18:40","19:30"] },
       { cat: "전라권 방면", name: "광주", times: ["10:30","14:40","18:20"] },
       { cat: "전라권 방면", name: "정읍", times: ["07:55","12:30","15:30","18:45"] }
@@ -416,7 +337,8 @@ const busData = {
       { cat: "전북 권역", name: "부안", times: ["07:20","07:35","07:55","08:15","08:30","08:55","09:45","10:00","10:05","10:40","11:00","11:15","11:45","11:55","12:15","12:55","13:35","14:05","14:50","14:55","15:30","15:35","16:05","16:20","17:05","17:25","17:45","18:15","18:55","19:35","20:10","20:55","21:25","22:00","22:45"] },
       { cat: "전북 권역", name: "군산", times: ["06:50","08:05","08:30","10:20","11:20","14:20","15:10","16:30","17:30","19:40"] },
       { cat: "전북 권역", name: "익산", times: ["07:10","08:40","09:25","10:20","11:30","12:40","13:30","14:05","14:50","15:50","17:30","18:35","20:20","21:00"] },
-      { cat: "전북 권역", name: "격포 및 곰소", times: ["09:45","10:05","14:05"] },
+      { cat: "전북 권역", name: "격포", times: ["09:45","10:05","14:05"] },
+      { cat: "전북 권역", name: "곰소", times: ["09:45","10:05","14:05"] },
       { cat: "전북 권역", name: "고창", times: ["10:40","14:50"] }
     ],
     gunsan: [
@@ -426,14 +348,17 @@ const busData = {
     ]
   },
   town: [
-    { cat: "격포 및 변산 방면", name: "모항 및 격포", times: ["06:40","07:30","08:40","09:10","10:00","11:00","11:50","13:10","14:30","15:30","16:30","17:10","18:00","19:00","19:55","20:40"] },
+    { cat: "격포 및 변산 방면", name: "모항", times: ["06:40","07:30","08:40","09:10","10:00","11:00","11:50","13:10","14:30","15:30","16:30","17:10","18:00","19:00","19:55","20:40"] },
+    { cat: "격포 및 변산 방면", name: "격포", times: ["06:40","07:30","08:40","09:10","10:00","11:00","11:50","13:10","14:30","15:30","16:30","17:10","18:00","19:00","19:55","20:40"] },
     { cat: "격포 및 변산 방면", name: "내소사", times: ["06:00","06:40","07:10","08:10","09:10","10:40","12:10","13:30","15:10","16:30","18:10"] },
     { cat: "줄포 및 곰소 방면", name: "줄포", times: ["06:30","06:40","07:10","07:40","08:30","09:10","10:00","11:00","11:50","12:30","13:10","13:30","14:30","15:10","15:50","16:30","17:30","18:10","19:10","19:55","20:30"] },
     { cat: "줄포 및 곰소 방면", name: "곰소", times: ["06:30","08:20","10:00","12:10","14:10","16:10","18:10"] },
     { cat: "정읍 및 백산 방면", name: "정읍(시내)", times: ["07:10","08:30","09:10","11:00","13:30","15:40","18:10"] },
-    { cat: "정읍 및 백산 방면", name: "백산 및 화호", times: ["07:15","08:45","11:50","15:15","18:40"] },
-    { cat: "계화 및 돈지 방면", name: "청호 및 돈지", times: ["06:30","06:40","07:00","08:00","09:20","10:50","12:40","14:10","15:40","17:20","18:50","20:00"] },
-    { cat: "계화 및 돈지 방면", name: "계화(하리)", times: ["06:30","06:50","07:50","08:50","09:30","10:30","11:30","12:30","13:30","14:30","15:30","16:30","17:30","18:20","19:10","19:35","20:25"] }
+    { cat: "정읍 및 백산 방면", name: "백산", times: ["07:15","08:45","11:50","15:15","18:40"] },
+    { cat: "정읍 및 백산 방면", name: "화호", times: ["07:15","08:45","11:50","15:15","18:40"] },
+    { cat: "계화 및 돈지 방면", name: "청호", times: ["06:30","06:40","07:00","08:00","09:20","10:50","12:40","14:10","15:40","17:20","18:50","20:00"] },
+    { cat: "계화 및 돈지 방면", name: "돈지", times: ["06:30","06:40","07:00","08:00","09:20","10:50","12:40","14:10","15:40","17:20","18:50","20:00"] },
+    { cat: "계화 및 돈지 방면", name: "계화", times: ["06:30","06:50","07:50","08:50","09:30","10:30","11:30","12:30","13:30","14:30","15:30","16:30","17:30","18:20","19:10","19:35","20:25"] }
   ]
 };
 
@@ -466,50 +391,50 @@ let selectedRouteTime = null, selectedRouteDiff = 0;
 
 if ("Notification" in window) { Notification.requestPermission(); }
 
-function showToast(msg) {
+window.showToast = function(msg) {
   const container = document.getElementById('toastContainer');
   const toast = document.createElement('div');
   toast.className = 'toast'; toast.innerText = msg;
   container.appendChild(toast); setTimeout(() => { toast.remove(); }, 3000);
 }
 
-function timeToMin(t) { if(!t) return 0; const [h,m] = t.split(':').map(Number); return h*60+m; }
-function formatETA(baseTimeStr, addMins) {
+window.timeToMin = function(t) { if(!t) return 0; const [h,m] = t.split(':').map(Number); return h*60+m; }
+window.formatETA = function(baseTimeStr, addMins) {
   let min = timeToMin(baseTimeStr) + addMins;
   let h = Math.floor(min / 60) % 24;
   let m = min % 60;
   return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
 }
 
-function setToNow() {
+window.setToNow = function() {
   isManualTime = false; updateTimeToNow();
   if(!refreshInterval) refreshInterval = setInterval(() => { if(!isManualTime) updateTimeToNow(); }, 60000);
 }
 
-function updateTimeToNow() {
+window.updateTimeToNow = function() {
   const now = new Date();
   document.getElementById('searchTime').value = now.getHours().toString().padStart(2,'0') + ":" + now.getMinutes().toString().padStart(2,'0');
   refreshUI();
 }
 
-function manualTimeChange() { 
+window.manualTimeChange = function() { 
   const tInput = document.getElementById('searchTime');
   if (!tInput.value) { showToast("입력된 시간이 없어 현재 시스템 시간으로 되돌립니다."); setToNow(); return; }
   isManualTime = true; clearInterval(refreshInterval); refreshInterval = null; refreshUI(); 
 }
 
-function toggleDarkMode() {
+window.toggleDarkMode = function() {
   const isDark = document.body.classList.toggle('dark-mode');
   document.getElementById('darkToggle').innerText = isDark ? '라이트' : '다크';
 }
 
-function toggleViewMode() {
+window.toggleViewMode = function() {
   const isDesktop = document.body.classList.toggle('desktop-mode');
   document.getElementById('viewToggle').innerText = isDesktop ? '모바일 화면' : 'PC 화면';
   if(isDesktop) updateTablesUnconditionally();
 }
 
-function setTab(mode, el) {
+window.setTab = function(mode, el) {
   curMode = mode; selectedBusName = null; selectedRouteTime = null;
   document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active')); el.classList.add('active');
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active')); document.getElementById('view-'+mode).classList.add('active');
@@ -519,7 +444,7 @@ function setTab(mode, el) {
   renderGrids(); clearRes(); updateTablesUnconditionally();
 }
 
-function setOrigin(o, el, fetchFlag = true) {
+window.setOrigin = function(o, el, fetchFlag = true) {
   curOrigin = o; selectedBusName = null; selectedRouteTime = null;
   document.querySelectorAll('.grid-origins .chip').forEach(c => c.classList.remove('active')); 
   if(el) el.classList.add('active');
@@ -537,7 +462,7 @@ function setOrigin(o, el, fetchFlag = true) {
   renderGrids(); clearRes(); updateTablesUnconditionally();
 }
 
-function renderGrids(query = "") {
+window.renderGrids = function(query = "") {
   const renderArea = (dataList, containerId) => {
     const container = document.getElementById(containerId); 
     if (!container || !dataList) return;
@@ -548,7 +473,7 @@ function renderGrids(query = "") {
       if(buses.length > 0) {
         html += `<div class="cat-title">${cat}</div><div class="grid">`;
         buses.forEach(b => {
-          const isFav = favorites.includes(b.name);
+          const isFav = window.favorites.includes(b.name);
           html += `<div class="chip ${isFav?'favorite':''}" onclick="calcBus('${b.name}', this)">
                      ${b.name}
                      <div class="fav-indicator">관심 항목</div>
@@ -571,31 +496,31 @@ function renderGrids(query = "") {
   renderFavorites();
 }
 
-function toggleFavGlobal(name) {
-  if(favorites.includes(name)) { 
-    favorites = favorites.filter(f => f !== name); 
+window.toggleFavGlobal = function(name) {
+  if(window.favorites.includes(name)) { 
+    window.favorites = window.favorites.filter(f => f !== name); 
     showToast(`지정하신 항목이 관심 노선에서 제외되었습니다.`); 
   } else { 
-    favorites.push(name); 
+    window.favorites.push(name); 
     showToast(`선택하신 항목이 관심 노선에 성공적으로 등록되었습니다.`); 
   }
-  saveUserData();
+  window.saveUserData();
   renderGrids(document.getElementById('searchInput').value);
   refreshUI();
 }
 
-function renderFavorites() {
+window.renderFavorites = function() {
   const favSection = document.getElementById('favSection'); const favGrid = document.getElementById('favGrid');
-  if(favorites.length === 0) { favSection.style.display = 'none'; return; }
+  if(window.favorites.length === 0) { favSection.style.display = 'none'; return; }
   favSection.style.display = 'block';
-  favGrid.innerHTML = favorites.map(f => `
+  favGrid.innerHTML = window.favorites.map(f => `
     <div class="chip active favorite" onclick="calcBus('${f}', this)">
       ${f}
       <div class="fav-indicator">관심 항목</div>
     </div>`).join('');
 }
 
-function clearRes() {
+window.clearRes = function() {
   document.getElementById('resArea').innerHTML = `
     <div class="glass-card" style="text-align:center; color:var(--text-sub); font-weight:700; padding:40px 20px;">
       상단 메뉴에서 조회하실 노선을 선택해 주십시오.
@@ -603,7 +528,7 @@ function clearRes() {
   document.querySelectorAll('.chip').forEach(c => { if(!c.innerText.includes('발')) c.classList.remove('active'); });
 }
 
-function findBusGlobal(name) {
+window.findBusGlobal = function(name) {
   if (curMode === 'town') return { origin: 'town', bus: busData.town.find(b => b.name === name) };
   for (const [orig, buses] of Object.entries(busData.inter)) {
     const b = buses.find(x => x.name === name);
@@ -612,7 +537,7 @@ function findBusGlobal(name) {
   return { origin: null, bus: null };
 }
 
-function getCleanDestName(name) {
+window.getCleanDestName = function(name) {
   if (name.includes("서울남부")) return "서울남부터미널";
   if (name.includes("강남") || name.includes("센트럴")) return "센트럴시티터미널";
   if (name.includes("고속") && name.includes("서울")) return "서울고속버스터미널";
@@ -633,7 +558,7 @@ function getCleanDestName(name) {
   return clean + (curMode === 'town' ? ' 정류장' : ' 터미널');
 }
 
-function openNaverMapRoute(destName) {
+window.openNaverMapRoute = function(destName) {
   if(!selectedRouteTime) { showToast("목록에서 원하시는 출발 시간을 먼저 선택해 주십시오."); return; }
   
   const originFull = termGuides[curMode === 'town' ? 'buan' : curOrigin];
@@ -654,7 +579,7 @@ function openNaverMapRoute(destName) {
   }
 }
 
-function triggerNotification(busName) {
+window.triggerNotification = function(busName) {
   if(!selectedRouteTime) { showToast("안내 시스템 활성화를 위해 출발 시간을 먼저 지정해 주십시오."); return; }
   
   function scheduleNotification() {
@@ -689,7 +614,7 @@ window.selectTimeRow = function(time, diff, element) {
   element.classList.add('selected');
 };
 
-function calcBus(name, el) {
+window.calcBus = function(name, el) {
   const { origin, bus } = findBusGlobal(name);
   if (!bus) return;
 
@@ -748,7 +673,7 @@ function calcBus(name, el) {
         </div>
         
         <div class="action-bar">
-          <button class="act-btn fav" onclick="event.stopPropagation(); toggleFavGlobal('${name}')">${favorites.includes(name) ? '관심 항목 해제' : '관심 노선 등록'}</button>
+          <button class="act-btn fav" onclick="event.stopPropagation(); toggleFavGlobal('${name}')">${window.favorites.includes(name) ? '관심 항목 해제' : '관심 노선 등록'}</button>
           <button class="act-btn map" onclick="event.stopPropagation(); openNaverMapRoute('${name}')">지도 경로 안내</button>
           <button class="act-btn noti" onclick="event.stopPropagation(); triggerNotification('${name}')">출발 알림 설정</button>
         </div>
@@ -760,7 +685,7 @@ function calcBus(name, el) {
   resArea.innerHTML = resultHtml;
 }
 
-async function fetchWeather(originKey) {
+window.fetchWeather = async function(originKey) {
   const banner = document.getElementById('weatherBanner');
   try {
     const coords = terminalCoords[originKey] || terminalCoords['buan'];
@@ -777,7 +702,7 @@ async function fetchWeather(originKey) {
   }
 }
 
-function updateWeatherDisplay() {
+window.updateWeatherDisplay = function() {
   const banner = document.getElementById('weatherBanner');
   if(!weatherDataCache) return;
   const currentTemp = weatherDataCache.current_weather.temperature;
@@ -795,18 +720,18 @@ function updateWeatherDisplay() {
   banner.innerHTML = `[${names[displayOrigin]} 기상 정보 분석] 현재 기온: ${Math.round(currentTemp)}°C | 조회 기준 시간(${hour}시) 예상 기온: ${forecastTemp}°C, 기상 상태: ${weatherText}`;
 }
 
-function getWeatherText(code) {
+window.getWeatherText = function(code) {
   if(code === 0) return '맑음 상태 유지'; if(code <= 3) return '구름 및 흐린 날씨'; if(code <= 48) return '안개 발생 주의';
   if(code <= 67) return '강우 예상'; if(code <= 77) return '강설 예상'; if(code <= 82) return '국지성 소나기'; if(code <= 86) return '눈보라 주의';
   if(code >= 95) return '천둥 번개 동반'; return '기상 상태 양호';
 }
 
-function refreshUI() { 
+window.refreshUI = function() { 
   if(selectedBusName) calcBus(selectedBusName, document.querySelector(`.chip.active:not(.grid-origins .chip)`)); 
   updateTablesUnconditionally(); updateWeatherDisplay();
 }
 
-function generateTableHTML() {
+window.generateTableHTML = function() {
   const list = curMode === 'inter' ? busData.inter[curOrigin] : busData.town;
   const refTimeRaw = document.getElementById('searchTime').value;
   if(!refTimeRaw) return "";
@@ -827,9 +752,9 @@ function generateTableHTML() {
   return h + '</table>';
 }
 
-function updateTablesUnconditionally() {
+window.updateTablesUnconditionally = function() {
   const names = {jeonju: '전주 출발', buan: '부안 출발', gimje: '김제 출발', gunsan: '군산 출발'};
-  const titleText = curMode==='inter' ? `${names[curOrigin]} 전체 노선 데이터 열람` : '부안 관내 시내버스 노선 데이터 열람';
+  const titleText = curMode==='inter' ? `${names[curOrigin]} 전체 노선 데이터 열람` : '부안 관내 시내버스 통합 노선 데이터 열람';
   const tableHTML = generateTableHTML();
   
   const dTitle = document.getElementById('desktopTableTitle'); if(dTitle) dTitle.innerText = titleText;
@@ -838,18 +763,46 @@ function updateTablesUnconditionally() {
   const mBody = document.getElementById('mBody'); if(mBody) mBody.innerHTML = tableHTML;
 }
 
-function openScheduleModal() { 
+window.openScheduleModal = function() { 
   updateTablesUnconditionally(); document.getElementById('scheduleModal').classList.add('active');
   setTimeout(() => { const nextEl = document.querySelector('#mBody .time-next'); if(nextEl) nextEl.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 300);
 }
-function closeScheduleModal() { document.getElementById('scheduleModal').classList.remove('active'); }
+
+window.closeScheduleModal = function() { document.getElementById('scheduleModal').classList.remove('active'); }
+
+window.searchBus = function() {
+  const query = document.getElementById('searchInput').value.trim(); 
+  if(query && event && event.key === 'Enter') {
+    let recentSearches = JSON.parse(localStorage.getItem('recentSearches') || '[]');
+    recentSearches = [query, ...recentSearches.filter(s => s !== query)].slice(0, 5);
+    localStorage.setItem('recentSearches', JSON.stringify(recentSearches));
+    closeDropdowns();
+  }
+  renderGrids(query); 
+}
+
+window.closeDropdowns = function() { document.getElementById('recentDropdown').style.display = 'none'; }
+window.applyRecent = function(term) {
+  document.getElementById('searchInput').value = term;
+  closeDropdowns(); searchBus();
+}
+window.showRecentSearches = function(e) {
+  e.stopPropagation();
+  const dd = document.getElementById('recentDropdown');
+  let recentSearches = JSON.parse(localStorage.getItem('recentSearches') || '[]');
+  if(recentSearches.length === 0) { dd.style.display = 'none'; return; }
+  dd.innerHTML = recentSearches.slice(0,3).map(s => `<div class="recent-item" onclick="applyRecent('${s}')">${s}</div>`).join('');
+  dd.style.display = 'block';
+}
+
+</script>
 
 <script type="module">
-  // 1. Firebase 코어 및 인증 모듈 불러오기
+  // Firebase 10.8.1 모듈 불러오기
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
   import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
-  // 2. 우성님의 고유 열쇠 (사진에서 추출한 값)
+  // 우성님의 Firebase 인증 설정
   const firebaseConfig = {
     apiKey: "AIzaSyDlEq5_K5JlR8EipOfRopsM7CODQFv-EsQ",
     authDomain: "smartbus-pro.firebaseapp.com",
@@ -859,88 +812,71 @@ function closeScheduleModal() { document.getElementById('scheduleModal').classLi
     appId: "1:908746765212:web:07f1e402870af621208e59"
   };
 
-  // 3. Firebase 실행 및 설정
+  // Firebase 초기화
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const provider = new GoogleAuthProvider();
 
-  // 기존 버스 데이터 및 기능 로직 (전역 변수 설정)
-  window.currentUser = null;
-  window.favorites = [];
-
-  /* 기존에 있던 버스 데이터 (busData), 경로(routeInfo) 등은 너무 길어서 생략했습니다. 
-     원래 파일에 있던 버스 데이터 변수들과 UI 조작 함수들(calcBus, setTab 등)을 
-     이 아래에 그대로 두시면 됩니다. */
-
-  // ==========================================
-  // 진짜 구글 로그인 로직 연동 파트
-  // ==========================================
-
-  // 로그인 버튼 눌렀을 때
+  // 구글 로그인 실행 함수
   window.processLogin = function() {
     signInWithPopup(auth, provider)
       .then((result) => {
         const user = result.user;
-        showToast(`${user.displayName}님, 구글 로그인 성공!`);
+        window.showToast(`${user.displayName}님, 구글 로그인 완료!`);
         document.getElementById('loginModal').classList.remove('active');
       }).catch((error) => {
-        showToast("로그인 중 오류가 발생했습니다.");
+        window.showToast("로그인 중 오류가 발생했습니다.");
         console.error(error);
       });
   }
 
-  // 로그아웃 버튼 눌렀을 때
+  // 로그아웃 실행 함수
   window.logout = function() {
     signOut(auth).then(() => {
-      showToast("안전하게 로그아웃 되었습니다.");
+      window.showToast("안전하게 로그아웃 되었습니다.");
       window.favorites = [];
       setTimeout(() => { location.reload(); }, 1000);
     }).catch((error) => {
-      showToast("로그아웃 중 오류가 발생했습니다.");
+      window.showToast("로그아웃 오류 발생");
     });
   }
 
-  // 사용자의 로그인 상태를 실시간으로 감지
+  // 로그인 상태 변화 감지 및 UI 변경
   onAuthStateChanged(auth, (user) => {
     if (user) {
-      // 로그인 성공 상태
       window.currentUser = user;
       document.getElementById('loginModal').classList.remove('active');
-      loadUserData(user.uid); // 유저 고유 ID(uid)로 즐겨찾기 불러오기
-      updateGreeting(user.displayName);
+      
+      // 유저 고유 ID를 이용해 데이터 로드
+      const storageKey = `busFav_${user.uid}`;
+      window.favorites = JSON.parse(localStorage.getItem(storageKey) || '[]');
+      
+      // 인사말 업데이트
+      const hour = new Date().getHours();
+      let timeMsg = "반갑습니다";
+      if (hour >= 5 && hour < 11) timeMsg = "활기찬 아침입니다";
+      else if (hour >= 11 && hour < 17) timeMsg = "즐거운 오후입니다";
+      else if (hour >= 17 && hour < 21) timeMsg = "편안한 저녁입니다";
+      else timeMsg = "평온한 밤 되십시오";
+      document.getElementById('userGreeting').innerText = `${timeMsg}, ${user.displayName}님.`;
+      
+      // 초기 UI 로딩
+      window.setToNow(); 
+      window.setOrigin('jeonju', document.querySelector('.grid-origins .chip'));
     } else {
-      // 로그아웃 상태
       window.currentUser = null;
       document.getElementById('loginModal').classList.add('active');
-      document.getElementById('userNameInput').style.display = 'none'; // 모의 입력칸 숨김
-      document.getElementById('userGreeting').innerText = "환영합니다. 로그인해 주십시오.";
+      document.getElementById('userNameInput').style.display = 'none'; // 모의 이름 입력칸 영구 숨김
+      document.getElementById('userGreeting').innerText = "환영합니다. 시스템 로그인을 진행해 주십시오.";
     }
   });
 
-  function updateGreeting(name) {
-    const hour = new Date().getHours();
-    let timeMsg = "반갑습니다";
-    if (hour >= 5 && hour < 11) timeMsg = "활기찬 아침입니다";
-    else if (hour >= 11 && hour < 17) timeMsg = "즐거운 오후입니다";
-    else if (hour >= 17 && hour < 21) timeMsg = "편안한 저녁입니다";
-    else timeMsg = "평온한 밤 되십시오";
-    
-    document.getElementById('userGreeting').innerText = `${timeMsg}, ${name}님.`;
-  }
-
-  // 즐겨찾기 데이터를 브라우저에 저장할 때 유저의 고유 ID(uid)를 사용
-  window.loadUserData = function(uid) {
-    const storageKey = `busFav_${uid}`;
-    window.favorites = JSON.parse(localStorage.getItem(storageKey) || '[]');
-    setToNow(); 
-    setOrigin('jeonju', document.querySelector('.grid-origins .chip'));
-  }
-
+  // 데이터 저장 함수 업데이트 (Firebase User ID 활용)
   window.saveUserData = function() {
     if(!window.currentUser) return;
     const storageKey = `busFav_${window.currentUser.uid}`;
     localStorage.setItem(storageKey, JSON.stringify(window.favorites));
   }
-
+</script>
 </body>
 </html>
