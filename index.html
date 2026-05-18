@@ -716,7 +716,12 @@ window.toggleFavGlobal = function(name) {
 }
 
 window.showLoginModal = function() { document.getElementById('loginModal').classList.add('active'); }
-window.closeLoginModal = function() { document.getElementById('loginModal').classList.remove('active'); document.getElementById('tab-my').classList.remove('active'); document.getElementById(`tab-${curMode}`).classList.add('active'); }
+window.closeLoginModal = function() { 
+  document.getElementById('loginModal').classList.remove('active'); 
+  document.querySelectorAll('.tab-btn, .desktop-tab-btn').forEach(b => b.classList.remove('active'));
+  const mobileTab = document.getElementById(`tab-${curMode}`); if(mobileTab) mobileTab.classList.add('active');
+  const desktopTab = document.querySelector(`.desktop-tab-btn[data-tab="${curMode}"]`); if(desktopTab) desktopTab.classList.add('active');
+}
 
 window.onload = function() { 
   window.clearRes = function() {
