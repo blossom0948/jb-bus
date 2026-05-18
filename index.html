@@ -503,12 +503,17 @@ window.switchMainTab = function(mode) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active')); 
   document.getElementById(`view-${mode}`).classList.add('active');
   document.getElementById('searchInput').value = '';
-  window.renderGrids(); window.clearRes();
+  if (mode === 'my') {
+    if (window.renderMyView) window.renderMyView();
+    document.getElementById('resArea').innerHTML = ''; // 마이페이지에서는 안내 텍스트 숨김
+  } else {
+    window.renderGrids(); window.clearRes();
+  }
 }
 
 window.handleMyTab = function() {
   if(window.currentUser) {
-    if(confirm("OmniBus에서 로그아웃 하시겠습니까?")) window.logout();
+    window.switchMainTab('my'); // 즉시 로그아웃 대신 마이페이지 탭으로 이동
   } else { window.showLoginModal(); }
 }
 
