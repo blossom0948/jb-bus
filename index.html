@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#1c1c1e">
+<title>OmniBus</title>
+
+<link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiT21uaUJ1cyIsInNob3J0X25hbWUiOiJPbW5pQnVzIiwic3RhcnRfdXJsIjoiLiIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiMxYzFjMWUiLCJ0aGVtZV9jb2xvciI6IiMxYzFjMWUifQ==">
+
+<style>
+  @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+
+  :root {
+    --bg-gradient: radial-gradient(circle at 50% 0%, #f4f5f8 0%, #dbe2ef 100%);
+    --nav-bg: rgba(255, 255, 255, 0.85);
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.9);
+    --glass-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+    --inner-glow: inset 0 2px 4px rgba(255, 255, 255, 0.9), inset 0 -1px 2px rgba(0, 0, 0, 0.02);
+    --text-main: #1c1c1e;
+    --text-sub: #636366;
+    --text-muted: #aeaeb2;
+    --primary: #007aff;
+    --accent: #34c759;
+    --warning: #ff3b30;
+    --btn-bg: #ffffff;
+    --input-bg: rgba(255, 255, 255, 0.8);
+    --card-alt: #ffffff;
+  }
+
+  body.dark-mode {
+    --bg-gradient: radial-gradient(circle at 50% 0%, #2c2c2e 0%, #000000 100%);
+    --nav-bg: rgba(28, 28, 30, 0.85);
+    --glass-bg: rgba(44, 44, 46, 0.6);
+    --glass-border: rgba(255, 255, 255, 0.15);
+    --glass-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+    --inner-glow: inset 0 2px 4px rgba(255, 255, 255, 0.15), inset 0 -1px 2px rgba(0, 0, 0, 0.4);
+    --text-main: #ffffff;
+    --text-sub: #ebebf5;
+    --text-muted: #636366;
+    --primary: #0a84ff;
+    --accent: #30d158;
+    --warning: #ff453a;
+    --btn-bg: rgba(80, 80, 84, 0.7);
+    --input-bg: rgba(0, 0, 0, 0.5);
+    --card-alt: rgba(60, 60, 64, 0.9);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; user-select: none; -webkit-user-select: none; }
+  input, textarea, select { user-select: auto; -webkit-user-select: auto; }
+  
+  body { 
+    background: var(--bg-gradient); 
+    background-attachment: fixed;
+    font-family: 'Pretendard', -apple-system, sans-serif;
+    color: var(--text-main); 
+    overflow-x: hidden; 
+    transition: background 0.4s ease, color 0.4s ease; 
+    padding-top: 80px; 
+    padding-bottom: 110px; 
+    min-height: 100vh;
+  }
+
+  .top-navbar {
+    position: fixed; top: 0; left: 0; width: 100%; height: 70px;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0 24px; z-index: 1000;
+    background: var(--nav-bg);
+    backdrop-filter: blur(40px) saturate(200%); -webkit-backdrop-filter: blur(40px) saturate(200%);
+    border-bottom: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+  }
+  .top-navbar .logo-title { font-size: 20px; font-weight: 900; letter-spacing: -0.5px; color: var(--text-main); display: flex; align-items: center; gap: 6px; }
+  .top-navbar .nav-actions { display: flex; gap: 10px; }
+  .top-btn { background: var(--btn-bg); border: 1px solid var(--glass-border); padding: 8px 14px; border-radius: 12px; color: var(--text-main); font-size: 13px; font-weight: 800; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+  .top-btn:active { transform: scale(0.95); }
+
+  .glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(30px) saturate(200%); -webkit-backdrop-filter: blur(30px) saturate(200%);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow), var(--inner-glow);
+    border-radius: 32px; padding: 24px; margin-bottom: 20px; transition: all 0.3s ease;
+  }
+
+  .weather-banner { background: rgba(0, 122, 255, 0.08); padding: 16px 24px; font-size: 14px; font-weight: 700; color: var(--text-main); text-align: center; border-radius: 16px; margin-bottom: 20px; backdrop-filter: blur(20px); border: 1px solid rgba(0, 122, 255, 0.2); display: flex; flex-direction: column; gap: 6px; }
+  #userGreeting { color: var(--primary); font-size: 14px; font-weight: 900; }
+  .pro-badge { display: inline-block; background: var(--primary); color: white; font-size: 10px; font-weight: 900; padding: 3px 6px; border-radius: 6px; margin-left: 8px; vertical-align: middle; }
+
+  /* 1단/2단 자동 반응형 적용 */
+  .main { padding: 0 20px; max-width: 600px; margin: 0 auto; transition: 0.4s ease; }
+  .right-pane { display: none; }
+  
+  @media (min-width: 900px) {
+    .main { max-width: 1400px; display: flex; flex-direction: row; gap: 32px; padding-top: 20px; }
+    .left-pane { flex: 4; width: 40%; }
+    .right-pane { flex: 6; display: block; width: 60%; }
+  }
+
+  .section { display: none; animation: popIn 0.3s ease-out forwards; }
+  .section.active { display: block; }
+  @keyframes popIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+  .label { font-size: 15px; color: var(--text-main); margin-bottom: 12px; display: block; font-weight: 800; letter-spacing: -0.5px; }
+  
+  .control-group { margin-bottom: 24px; }
+  .input-field { width: 100%; background: var(--input-bg); border: 1px solid var(--glass-border); border-radius: 20px; padding: 18px; font-size: 16px; color: var(--text-main); font-weight: 700; outline: none; transition: 0.3s; box-shadow: inset 0 2px 6px rgba(0,0,0,0.05); }
+  .input-field:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.25); }
+  
+  .time-picker-wrapper { display: flex; gap: 12px; }
+  .time-input { flex: 1.5; background: var(--input-bg); border: 1px solid var(--glass-border); border-radius: 20px; padding: 16px; font-size: 18px; font-weight: 800; color: var(--text-main); outline: none; text-align: center; color-scheme: dark; box-shadow: inset 0 2px 6px rgba(0,0,0,0.05); }
+  .now-btn { flex: 1; background: #007aff; color: #ffffff; border: none; border-radius: 20px; font-size: 15px; font-weight: 800; cursor: pointer; transition: 0.2s; box-shadow: 0 8px 20px rgba(0, 122, 255, 0.35), inset 0 2px 2px rgba(255,255,255,0.3); padding: 0 10px; }
+  .now-btn:active { transform: scale(0.95); }
+
+  .grid-origins, .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(105px, 1fr)); gap: 12px; }
+  .grid-origins { margin-bottom: 16px; }
+  
+  .chip { background: var(--btn-bg); border: 1px solid var(--glass-border); border-radius: 20px; padding: 18px 8px; font-size: 15px; font-weight: 800; color: var(--text-main); text-align: center; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.04); position: relative; overflow: hidden; }
+  .chip:active { transform: scale(0.95); }
+  .chip.active { background: var(--primary); color: #ffffff; border-color: var(--primary); box-shadow: 0 12px 30px rgba(0, 122, 255, 0.4), inset 0 2px 2px rgba(255,255,255,0.3); transform: translateY(-2px); }
+  
+  .cat-title { font-size: 19px; color: var(--text-main); margin: 40px 0 20px; font-weight: 900; display: flex; align-items: center; gap: 10px; letter-spacing: -0.5px; }
+  .cat-title::before { content: ''; width: 8px; height: 20px; background: var(--primary); border-radius: 4px; }
+
+  .result-display { margin-top: 30px; }
+  .ticket-header { background: rgba(52, 199, 89, 0.15); padding: 16px 24px; border-top-left-radius: 24px; border-top-right-radius: 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px dashed rgba(142, 142, 147, 0.3); }
+  body.dark-mode .ticket-header { background: rgba(52, 199, 89, 0.25); }
+  .ticket-gate { font-size: 15px; color: var(--text-main); font-weight: 900; display: flex; align-items: center; gap: 8px; }
+  .fare-toggle-btn { font-size: 13px; background: var(--accent); color: white; padding: 8px 14px; border-radius: 14px; cursor: pointer; font-weight: 900; border: none; }
+  
+  .bus-row { background: var(--btn-bg); border: 1px solid var(--glass-border); border-radius: 24px; margin-bottom: 20px; cursor: pointer; transition: 0.3s; box-shadow: 0 8px 25px rgba(0,0,0,0.04); position: relative; overflow: hidden; }
+  .bus-row.selected { border-color: var(--primary); box-shadow: 0 20px 40px rgba(0, 122, 255, 0.25); transform: scale(1.02); }
+  .bus-row-body { padding: 24px; }
+  
+  .bus-row-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+  .bus-time { font-size: 40px; font-weight: 900; color: var(--text-main); display: flex; align-items: center; gap: 12px; letter-spacing: -1.5px; }
+  
+  /* 지나간 시간 완벽 비활성화 로직 */
+  .bus-row.past-bus { opacity: 0.45; filter: grayscale(1); pointer-events: none; background: rgba(150, 150, 150, 0.1); border-color: transparent; box-shadow: none; }
+  .bus-row.past-bus .bus-time { text-decoration: line-through; color: var(--text-muted) !important; font-weight: 600; }
+  .bus-row.past-bus .bus-wait { color: var(--text-muted) !important; background: transparent !important; }
+  
+  .time-badge { font-size: 13px; padding: 6px 12px; border-radius: 12px; font-weight: 900; }
+  .badge-fast { background: rgba(0, 122, 255, 0.15); color: var(--primary); }
+  .badge-next { background: var(--input-bg); color: var(--text-sub); }
+  
+  .bus-eta-info { font-size: 15px; color: var(--text-sub); font-weight: 800; margin-bottom: 16px; }
+  .info-tag { background: var(--input-bg); padding: 6px 12px; border-radius: 10px; font-size: 13px; color: var(--text-main); font-weight: 800; border: 1px solid var(--glass-border); margin-right: 8px; }
+
+  .bus-wait { font-size: 20px; color: var(--primary); font-weight: 900; text-align: right; background: rgba(0, 122, 255, 0.1); padding: 12px 18px; border-radius: 16px; }
+  
+  .action-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--glass-border); display: none; }
+  .bus-row.selected .action-grid { display: grid; }
+  .act-btn { padding: 14px 0; border-radius: 16px; font-size: 14px; font-weight: 900; border: none; cursor: pointer; transition: 0.2s; text-align: center; }
+  .act-btn:active { transform: scale(0.95); }
+  .act-btn.share { background: #ff9500; color: #ffffff; }
+  .act-btn.fav { background: rgba(0, 122, 255, 0.1); color: var(--primary); }
+  .act-btn.map { background: var(--text-main); color: var(--btn-bg); }
+  .act-btn.noti { background: #34c759; color: #ffffff; }
+
+  /* 하단 고정 탭바 */
+  .bottom-tab-bar {
+    position: fixed; bottom: 0; left: 0; width: 100%; height: 90px;
+    background: var(--nav-bg); backdrop-filter: blur(40px) saturate(250%); -webkit-backdrop-filter: blur(40px) saturate(250%);
+    border-top: 1px solid var(--glass-border); display: flex; justify-content: space-around; align-items: center;
+    padding-bottom: 15px; z-index: 2000; box-shadow: 0 -10px 30px rgba(0,0,0,0.05);
+  }
+  .tab-btn { display: flex; flex-direction: column; align-items: center; gap: 6px; color: var(--text-sub); cursor: pointer; transition: 0.3s; flex: 1; }
+  .tab-btn.active { color: var(--primary); }
+  .tab-btn span { font-size: 11px; font-weight: 900; letter-spacing: -0.3px; }
+  .tab-btn svg { width: 26px; height: 26px; fill: currentColor; }
+  
+  .tab-center { position: relative; top: -15px; }
+  .tab-center .circle-bg { width: 60px; height: 60px; background: var(--primary); border-radius: 30px; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 25px rgba(0, 122, 255, 0.4); color: white; border: 4px solid var(--bg-gradient); transition: 0.3s; }
+  .tab-center svg { fill: white; width: 28px; height: 28px; }
+
+  /* 전체 시간표 테이블 (모달 & 데스크톱 뷰) */
+  .schedule-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-gradient); z-index: 4000; display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.4s ease; }
+  .schedule-modal.active { transform: translateY(0); }
+  .sm-head { padding: 20px 24px; display: flex; justify-content: space-between; align-items: center; background: var(--nav-bg); backdrop-filter: blur(40px); border-bottom: 1px solid var(--glass-border); padding-top: calc(20px + env(safe-area-inset-top)); }
+  .sm-body { flex: 1; overflow-y: auto; padding: 24px; padding-bottom: 100px; }
+  
+  .full-table { width: 100%; border-collapse: separate; border-spacing: 0 16px; }
+  .full-table td { padding: 20px 18px; background: var(--btn-bg); font-size: 16px; border: 1px solid var(--glass-border); border-radius: 16px; font-weight: 700; line-height: 1.8; }
+  .full-table td:first-child { width: 110px; font-weight: 900; color: var(--primary); vertical-align: top; }
+  
+  .t-times span { display: inline-block; margin-right: 12px; }
+  .time-item.is-past { color: var(--text-muted) !important; text-decoration: line-through; opacity: 0.5; }
+  .time-item.is-future { color: var(--text-main); }
+  .t-times .time-next { color: var(--primary); font-weight: 900; font-size: 20px; background: rgba(0, 122, 255, 0.15); padding: 4px 10px; border-radius: 8px; }
+
+  /* 폼 & 모달 */
+  .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(20px); z-index: 5000; display: none; align-items: center; justify-content: center; opacity: 0; transition: 0.3s ease; }
+  .modal-overlay.active { display: flex; opacity: 1; }
+  .login-card { width: 90%; max-width: 420px; text-align: left; padding: 40px 30px; border-radius: 32px; position: relative; }
+  .login-close-btn { position: absolute; top: 20px; right: 24px; background: var(--input-bg); border: none; width: 40px; height: 40px; border-radius: 20px; font-size: 18px; color: var(--text-main); cursor: pointer; font-weight: bold; }
+  .login-title { font-size: 24px; font-weight: 900; margin-bottom: 24px; color: var(--text-main); }
+  
+  .social-login-btn { display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%; padding: 18px; border-radius: 20px; font-size: 16px; font-weight: 800; border: none; cursor: pointer; margin-bottom: 14px; box-shadow: 0 8px 20px rgba(0,0,0,0.08); }
+
+  .toast-container { position: fixed; bottom: 130px; left: 50%; transform: translateX(-50%); z-index: 6000; display: flex; flex-direction: column; gap: 12px; align-items: center; pointer-events: none; width: 90%; max-width: 400px; }
+  .toast { width: 100%; text-align: center; background: rgba(30, 30, 30, 0.9); backdrop-filter: blur(30px); color: #ffffff; padding: 16px 20px; border-radius: 20px; font-size: 15px; font-weight: 800; box-shadow: 0 10px 30px rgba(0,0,0,0.3); animation: toastAnim 3s forwards; }
+  @keyframes toastAnim { 0% { opacity: 0; transform: translateY(20px); } 10% { opacity: 1; transform: translateY(0); } 90% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-20px); } }
+
+  /* 폼 콤보박스 디자인 */
+  select.input-field { appearance: none; background-image: url('data:image/svg+xml;utf8,<svg fill="black" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>'); background-repeat: no-repeat; background-position-x: 95%; background-position-y: center; }
+  body.dark-mode select.input-field { background-image: url('data:image/svg+xml;utf8,<svg fill="white" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>'); }
+</style>
+</head>
+<body class="dark-mode">
+
+<div class="top-navbar">
+  <div class="logo-title">
+    <svg viewBox="0 0 24 24" width="24" height="24" fill="var(--primary)"><path d="M4 16c0 .88.39 1.67 1 2.22V20c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h8v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1.78c.61-.55 1-1.34 1-2.22V6c0-3.5-3.58-4-8-4s-8 .5-8 4v10zm3.5 1c-.83 0-1.5-.67-1.5-1.5S6.67 14 7.5 14s1.5.67 1.5 1.5S8.33 17 7.5 17zm9 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm-10-7V6h11v4H6.5z"/></svg>
+    OmniBus
+  </div>
+  <div class="nav-actions">
+    <button class="top-btn" onclick="toggleDarkMode()">테마 변경</button>
+    <button class="top-btn" onclick="openReportModal()" style="color:var(--primary);">시간표 제보</button>
+  </div>
+</div>
+
+<div class="main">
+  <div class="left-pane">
+    <div class="weather-banner">
+      <div id="userGreeting">게스트 접속 중</div>
+      <div id="weatherInfo">기상청 연결 중...</div>
+    </div>
+
+    <div class="glass-card" style="padding-bottom: 30px;">
+      <div class="control-group">
+        <span class="label">어디로 가시나요?</span>
+        <input type="text" id="searchInput" class="input-field" placeholder="도착지 검색 (예: 서울, 격포)" onkeyup="searchBus()">
+      </div>
+      <div class="control-group" style="margin-bottom:0;">
+        <span class="label">출발 기준 시간</span>
+        <div class="time-picker-wrapper">
+          <input type="time" id="searchTime" class="time-input" onchange="manualTimeChange()">
+          <button class="now-btn" onclick="setToNow()">현재 시간 적용</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="view-inter" class="section active">
+      <div class="glass-card">
+        <span class="label">출발 터미널</span>
+        <div class="grid-origins">
+          <div class="chip active" onclick="setOrigin('jeonju', this)">전주발</div>
+          <div class="chip" onclick="setOrigin('buan', this)">부안발</div>
+          <div class="chip" onclick="setOrigin('gimje', this)">김제발</div>
+          <div class="chip" onclick="setOrigin('gunsan', this)">군산발</div>
+        </div>
+      </div>
+      <div id="cats-jeonju"></div>
+      <div id="cats-buan" style="display:none;"></div>
+      <div id="cats-gimje" style="display:none;"></div>
+      <div id="cats-gunsan" style="display:none;"></div>
+    </div>
+
+    <div id="view-town" class="section">
+      <div id="cats-town"></div>
+    </div>
+    
+    <div id="view-my" class="section">
+      <!-- MY/Favorites view will be rendered here by JS -->
+    </div>
+    
+    <div class="result-display" id="resArea">
+      <div class="glass-card" style="text-align:center; color:var(--text-sub); font-weight:800; padding:60px 20px;">
+        상단에서 노선을 탭하여 탑승 정보를 확인하십시오.
+      </div>
+    </div>
+  </div>
+  
+  <div class="right-pane">
+    <div class="glass-card desktop-table-card">
+      <div class="cat-title" style="margin-top:0;">전체 시간표 안내</div>
+      <div id="desktopTableBody"></div>
+    </div>
+  </div>
+</div>
+
+<div class="bottom-tab-bar">
+  <div class="tab-btn active" id="tab-inter" onclick="switchMainTab('inter')">
+    <svg viewBox="0 0 24 24"><path d="M4 16c0 .88.39 1.67 1 2.22V20c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h8v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1.78c.61-.55 1-1.34 1-2.22V6c0-3.5-3.58-4-8-4s-8 .5-8 4v10zm3.5 1c-.83 0-1.5-.67-1.5-1.5S6.67 14 7.5 14s1.5.67 1.5 1.5S8.33 17 7.5 17zm9 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm-10-7V6h11v4H6.5z"/></svg>
+    <span>시외고속</span>
+  </div>
+  <div class="tab-btn" id="tab-town" onclick="switchMainTab('town')">
+    <svg viewBox="0 0 24 24"><path d="M12 2c-4 0-8 .5-8 4v9.5C4 17.43 5.57 19 7.5 19L6 20.5v.5h12v-.5L16.5 19c1.93 0 3.5-1.57 3.5-3.5V6c0-3.5-4-4-8-4zm0 2c3.5 0 5.6.35 5.8 1H6.2C6.4 4.35 8.5 4 12 4zm-4 12c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm8 0c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zM5 10V7h14v3H5z"/></svg>
+    <span>시내버스</span>
+  </div>
+  <div class="tab-btn tab-center" onclick="openScheduleModal()">
+    <div class="circle-bg">
+      <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+    </div>
+    <span>전체시간표</span>
+  </div>
+  <div class="tab-btn" id="tab-my" onclick="handleMyTab()">
+    <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+    <span id="tabMyText">로그인</span>
+  </div>
+</div>
+
+<div class="schedule-modal" id="scheduleModal">
+  <div class="sm-head">
+    <div id="mTitle" style="font-weight:900; font-size:20px; color:var(--text-main);">전체 노선 시간표</div>
+    <button onclick="closeScheduleModal()" style="padding:8px 16px; border-radius:12px; border:1px solid var(--glass-border); background:var(--btn-bg); color:var(--text-main); font-weight:800; cursor:pointer;">닫기</button>
+  </div>
+  <div class="sm-body" id="mBody"></div>
+</div>
+
+<div class="modal-overlay" id="reportModal">
+  <div class="glass-card login-card" style="max-width: 500px;">
+    <button class="login-close-btn" onclick="closeReportModal()">✕</button>
+    <div class="login-title">시간표 변경 제보</div>
+    <div style="font-size:14px; color:var(--text-sub); margin-bottom:20px; font-weight:700;">변경된 시간표가 있다면 익명으로 알려주세요.<br>빠르게 확인하여 반영하겠습니다.</div>
+    
+    <form action="https://formspree.io/f/xwvayvqn" method="POST" enctype="multipart/form-data">
+      <select name="출발_터미널" class="input-field" style="margin-bottom:12px;" required>
+        <option value="" disabled selected>출발 터미널 선택</option>
+        <option value="전주">전주</option><option value="부안">부안</option>
+        <option value="김제">김제</option><option value="군산">군산</option>
+        <option value="시내버스">기타(시내버스)</option>
+      </select>
+      <input type="text" name="도착지_노선" class="input-field" placeholder="도착지 노선명 (예: 서울 강남)" style="margin-bottom:12px;" required>
+      <textarea name="변경_내용" class="input-field" placeholder="변경된 시간표 내용이나 특이사항을 적어주세요." style="margin-bottom:12px; height:100px; resize:none;" required></textarea>
+      
+      <div style="text-align:left; font-size:14px; margin-bottom:16px; font-weight:700;">
+        <label style="display:block; margin-bottom:6px;">사진 첨부 (선택)</label>
+        <input type="file" name="attachment" accept="image/*" style="font-size:14px; color:var(--text-main);">
+      </div>
+      
+      <button type="submit" class="now-btn" style="width:100%; padding:18px; border-radius:20px;">익명으로 제보 전송</button>
+    </form>
+  </div>
+</div>
+
+<div class="modal-overlay" id="loginModal">
+  <div class="glass-card login-card">
+    <button class="login-close-btn" onclick="closeLoginModal()">✕</button>
+    <div class="login-title">계정 연동</div>
+    <div style="font-size:14px; color:var(--text-sub); margin-bottom:24px; font-weight:700;">나의 노선을 모든 기기에서 안전하게 확인하세요.</div>
+    <button class="social-login-btn google" style="background:#fff; color:#000;" onclick="processLogin('google')">Google 로그인</button>
+    <button class="social-login-btn apple" style="background:#000; color:#fff;" onclick="processLogin('apple')">Apple 로그인</button>
+    <button class="social-login-btn github" style="background:#24292e; color:#fff;" onclick="processLogin('github')">GitHub 로그인</button>
+  </div>
+</div>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+window.currentUser = null; window.favorites = []; window.fareType = 'adult'; // 'adult', 'teen', 'child'
+
+// 1. 전체 데이터베이스 완전 복구본
+const busData = {
+  inter: {
+    jeonju: [
+      { cat: "수도권 방면", name: "서울남부(우)", times: ["05:45","06:25","06:45","07:05","07:35","08:05","08:45","09:05","09:25","10:05","10:25","10:55","11:25","11:45","12:15","12:45","13:15","13:45","14:15","14:45","15:15","15:45","16:15","16:45","17:15","17:45","18:15","18:45","19:15","19:45","20:15","20:45","21:15"] },
+      { cat: "수도권 방면", name: "서울남부(일)", times: ["06:05","08:25","09:45","10:45","11:05","12:15","13:35","15:05","16:05","17:25","19:05","20:25"] },
+      { cat: "수도권 방면", name: "인천공항", times: ["03:10","03:30","04:00","04:30","05:00","06:00","07:00","08:00","09:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00"] },
+      { cat: "수도권 방면", name: "수원", times: ["08:20","10:00","11:40","13:20","14:50","16:20","18:10"] },
+      { cat: "수도권 방면", name: "안산", times: ["08:30","10:35","12:40","14:35","16:30","18:30"] },
+      { cat: "수도권 방면", name: "인천", times: ["08:05","09:05","10:05","11:05","12:05","13:10","14:10","15:05","16:00","17:10","18:20"] },
+      { cat: "수도권 방면", name: "부천", times: ["08:05","09:05","10:05","11:05","12:05","13:10","14:10","15:05","16:00","17:10","18:20"] },
+      { cat: "수도권 방면", name: "시화", times: ["07:50","09:50","11:50","13:50","15:50"] },
+      { cat: "수도권 방면", name: "고양", times: ["07:50","09:50","11:50","13:50","15:50"] },
+      { cat: "충청 및 경상 방면", name: "대전복합", times: ["06:30","07:40","08:50","10:00","11:10","12:20","13:30","14:40","15:50","17:00","18:10","19:20"] },
+      { cat: "충청 및 경상 방면", name: "유성", times: ["07:05","08:00","08:40","09:45","10:30","11:20","12:25","13:10","14:10","15:20","16:10","17:10","18:00","19:10"] },
+      { cat: "충청 및 경상 방면", name: "청주", times: ["07:05","08:00","08:40","09:45","10:30","11:20","12:25","13:10","14:10","15:20","16:10","17:10","18:00","19:10"] },
+      { cat: "충청 및 경상 방면", name: "천안", times: ["06:40","07:40","08:40","09:30","10:20","11:10","12:00","12:50","13:40","14:30","15:20","16:10","17:00","17:50","18:45","19:30"] },
+      { cat: "충청 및 경상 방면", name: "평택", times: ["06:40","07:40","08:40","09:30","10:20","11:10","12:00","12:50","13:40","14:30","15:20","16:10","17:00","17:50","18:45","19:30"] },
+      { cat: "충청 및 경상 방면", name: "강릉", times: ["09:05","11:05","14:20","16:40"] },
+      { cat: "충청 및 경상 방면", name: "원주", times: ["09:05","11:05","14:20","16:40"] },
+      { cat: "충청 및 경상 방면", name: "부산 사상", times: ["07:00","08:10","09:20","10:30","11:40","12:50","14:00","15:10","16:20","17:30","18:40","19:50"] },
+      { cat: "충청 및 경상 방면", name: "대구 서부", times: ["06:35","08:05","09:25","10:45","12:05","13:25","14:45","16:05","17:25","18:45"] },
+      { cat: "충청 및 경상 방면", name: "진주", times: ["09:10","11:20","13:10","15:20","17:30","19:00"] },
+      { cat: "충청 및 경상 방면", name: "마산", times: ["09:10","11:20","13:10","15:20","17:30","19:00"] },
+      { cat: "전라권 방면", name: "광주(직통)", times: ["06:40","07:30","08:20","09:20","10:20","11:20","12:20","13:20","14:20","15:20","16:20","17:20","18:20","19:45"] },
+      { cat: "전라권 방면", name: "부안(직통)", times: ["07:10","09:20","10:00","10:25","11:35","12:20","12:40","13:50","15:00","16:00","16:30","17:15","18:10","18:50","19:40"] },
+      { cat: "전라권 방면", name: "정읍(직통)", times: ["06:30","07:10","08:20","09:30","10:30","11:20","12:20","13:20","14:50","16:20","17:40","18:10","19:10","20:00","21:40"] },
+      { cat: "전라권 방면", name: "김제", times: ["06:45","07:20","08:00","08:50","10:20","11:00","12:40","14:10","15:25","17:20","18:40","20:00","22:00"] },
+      { cat: "전라권 방면", name: "군산(무정차)", times: ["06:00","06:20","06:35","07:00","07:25","07:40","08:15","08:30","08:40","21:00","21:30","22:00","22:50"] },
+      { cat: "전라권 방면", name: "익산", times: ["05:50","06:15","06:30","06:35","06:50","07:00","07:15","07:16","07:25","16:25","16:50","17:15","17:30","17:55","18:15","18:40","19:05","19:35"] },
+      { cat: "전라권 방면", name: "고창(직통)", times: ["06:05","07:23","09:26","11:04","11:53","13:06","13:55","14:20","15:09","16:44","17:32","18:21","19:10","20:02","20:30"] }
+    ],
+    buan: [
+      { cat: "수도권 방면", name: "서울 강남(우등)", times: ["07:00","08:40","10:20","13:40","16:10","17:50","19:30"] },
+      { cat: "수도권 방면", name: "서울 강남(일반)", times: ["07:50","09:30","11:10","12:00","17:00"] },
+      { cat: "수도권 방면", name: "인천", times: ["09:40","18:20"] },
+      { cat: "수도권 방면", name: "안산", times: ["09:40","18:20"] },
+      { cat: "전라권 방면", name: "전주(직통)", times: ["06:50","07:30","08:00","08:40","09:40","10:50","11:55","12:50","13:15","13:50","14:40","15:45","16:40","17:40","18:40","19:30"] },
+      { cat: "전라권 방면", name: "광주", times: ["10:30","14:40","18:20"] },
+      { cat: "전라권 방면", name: "정읍", times: ["07:55","12:30","15:30","18:45"] },
+      { cat: "전라권 방면", name: "익산/군산", times: ["08:10", "19:50"] }
+    ],
+    gimje: [
+      { cat: "수도권 방면", name: "서울 강남", times: ["06:40","10:00","11:40","17:30","18:40","19:10"] },
+      { cat: "수도권 방면", name: "동서울", times: ["09:30","14:30","19:30"] },
+      { cat: "수도권 방면", name: "인천공항", times: ["01:10","11:10"] },
+      { cat: "수도권 방면", name: "인천", times: ["10:10"] },
+      { cat: "전북 권역", name: "부안", times: ["07:20","08:15","09:45","10:40","11:45","12:55","14:05","15:30","16:20","17:45","18:55","20:10","22:00"] },
+      { cat: "전북 권역", name: "군산", times: ["06:50","08:05","08:30","10:20","11:20","14:20","15:10","16:30","17:30","19:40"] },
+      { cat: "전북 권역", name: "익산", times: ["07:10","08:40","09:25","10:20","11:30","12:40","13:30","14:05","14:50","15:50","17:30","18:35","20:20","21:00"] },
+      { cat: "전북 권역", name: "고창", times: ["10:40","14:50"] }
+    ],
+    gunsan: [
+      { cat: "수도권 방면", name: "서울(고속)", times: ["06:00","07:00","08:00","09:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"] },
+      { cat: "전라권 방면", name: "전주", times: ["06:30","07:00","07:40","08:20","09:05","09:45","10:25","11:15","11:50","12:35","13:20","13:55","14:40","15:40","16:40","17:35","18:20","19:00","19:50","20:45","21:50","22:50"] },
+      { cat: "전라권 방면", name: "익산", times: ["06:05","06:30","07:05","07:35","08:25","09:00","09:55","10:20","11:00","11:40","12:00","12:40","13:10","13:45","14:20","14:55","15:25","16:15","16:55","17:35","18:05","18:35","19:05","19:40","20:10","20:40","21:20","22:00","22:50"] }
+    ]
+  },
+  town: [
+    { cat: "격포/변산", name: "모항", times: ["06:40","07:30","08:40","09:10","10:00","11:00","11:50","13:10","14:30","15:30","16:30","17:10","18:00","19:00","19:55","20:40"] },
+    { cat: "격포/변산", name: "격포", times: ["06:40","07:30","08:40","09:10","10:00","11:00","11:50","13:10","14:30","15:30","16:30","17:10","18:00","19:00","19:55","20:40"] },
+    { cat: "격포/변산", name: "내소사", times: ["06:00","06:40","07:10","08:10","09:10","10:40","12:10","13:30","15:10","16:30","18:10"] },
+    { cat: "줄포/곰소", name: "줄포", times: ["06:30","07:40","08:30","09:10","10:00","11:00","11:50","12:30","13:30","14:30","15:50","16:30","17:30","18:10","19:10","19:55","20:30"] },
+    { cat: "줄포/곰소", name: "곰소", times: ["06:30","08:20","10:00","12:10","14:10","16:10","18:10"] },
+    { cat: "정읍/백산", name: "정읍(시내)", times: ["07:10","08:30","09:10","11:00","13:30","15:40","18:10"] },
+    { cat: "정읍/백산", name: "백산", times: ["07:15","08:45","11:50","15:15","18:40"] },
+    { cat: "정읍/백산", name: "화호", times: ["07:15","08:45","11:50","15:15","18:40"] },
+    { cat: "계화/돈지", name: "청호", times: ["06:30","06:40","07:00","08:00","09:20","10:50","12:40","14:10","15:40","17:20","18:50","20:00"] },
+    { cat: "계화/돈지", name: "돈지", times: ["06:30","06:40","07:00","08:00","09:20","10:50","12:40","14:10","15:40","17:20","18:50","20:00"] },
+    { cat: "계화/돈지", name: "계화", times: ["06:30","06:50","07:50","08:50","09:30","10:30","11:30","12:30","13:30","14:30","15:30","16:30","17:30","18:20","19:10","19:35","20:25"] }
+  ]
+};
+
+const routeInfo = {
+  "서울 강남(우등)": { fare: 23100, gate: "1번" }, "서울 강남(일반)": { fare: 15300, gate: "1번" },
+  "서울남부(우)": { fare: 23100, gate: "1번" }, "서울남부(일)": { fare: 15300, gate: "1번" },
+  "부안(직통)": { fare: 5200, gate: "2번" }, "전주(직통)": { fare: 5200, gate: "2번" },
+  "광주": { fare: 9400, gate: "3번" }, "익산/군산": { fare: 6500, gate: "4번" },
+  "김제": { fare: 2800, gate: "4번" }, "정읍": { fare: 3700, gate: "5번" },
+  "격포": { fare: 4500, gate: "시내버스장" }, "곰소": { fare: 3300, gate: "시내버스장" }
+};
+
+window.showToast = function(msg) {
+  const container = document.getElementById('toastContainer');
+  const toast = document.createElement('div');
+  toast.className = 'toast'; toast.innerText = msg;
+  container.appendChild(toast); setTimeout(() => { toast.remove(); }, 3000);
+}
+
+// 브라우저 출발 알림 권한 및 전송
+window.requestNoti = function(busName, time, diff) {
+  if (Notification.permission !== "granted") {
+    Notification.requestPermission().then(p => {
+      if(p === "granted") window.showToast("알림 권한이 허용되었습니다.");
+    });
+  }
+  
+  if (Notification.permission === "granted" || Notification.permission === "default") {
+    if(diff <= 10) {
+      window.showToast("곧 출발합니다! 즉시 이동하세요.");
+      new Notification("OmniBus 알림", { body: `[${busName}] 버스가 ${diff}분 뒤에 출발합니다!` });
+    } else {
+      window.showToast(`출발 10분 전(${diff-10}분 뒤)에 알림을 전송합니다.`);
+      const alarmTime = (diff - 10) * 60000;
+      setTimeout(() => {
+        new Notification("OmniBus 알림", { body: `[${busName}] 출발 10분 전입니다! 터미널로 이동하세요.` });
+      }, alarmTime);
+    }
+  } else {
+    window.showToast("브라우저 알림 권한이 차단되어 있습니다.");
+  }
+}
+
+window.setToNow = function() {
+  const now = new Date();
+  document.getElementById('searchTime').value = now.getHours().toString().padStart(2,'0') + ":" + now.getMinutes().toString().padStart(2,'0');
+  window.refreshUI();
+  if(!refreshInterval) refreshInterval = setInterval(() => window.setToNow(), 60000);
+}
+window.manualTimeChange = function() { clearInterval(refreshInterval); refreshInterval = null; window.refreshUI(); }
+
+let curMode = 'inter', curOrigin = 'jeonju', selectedBusName = null;
+let isManualTime = false, refreshInterval = null;
+let selectedRouteTime = null, selectedRouteDiff = 0;
+
+window.timeToMin = function(t) { if(!t) return 0; const [h,m] = t.split(':').map(Number); return h*60+m; }
+
+window.formatFare = function(fare) {
+  let finalFare = fare;
+  if (window.fareType === 'teen') finalFare = Math.floor(fare * 0.8);
+  else if (window.fareType === 'child') finalFare = Math.floor(fare * 0.5);
+  return finalFare.toLocaleString('ko-KR') + "원";
+}
+window.toggleFare = function(e) {
+  e.stopPropagation();
+  const types = ['adult', 'teen', 'child'];
+  const currentIndex = types.indexOf(window.fareType);
+  window.fareType = types[(currentIndex + 1) % types.length];
+  window.refreshUI();
+}
+window.toggleDarkMode = function() { document.body.classList.toggle('dark-mode'); window.showToast("테마가 변경되었습니다."); }
+
+window.switchMainTab = function(mode) {
+  curMode = mode; selectedBusName = null; selectedRouteTime = null;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(`tab-${mode}`).classList.add('active');
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active')); 
+  document.getElementById(`view-${mode}`).classList.add('active');
+  document.getElementById('searchInput').value = '';
+  window.renderGrids(); window.clearRes();
+}
+
+window.handleMyTab = function() {
+  if(window.currentUser) {
+    if(confirm("OmniBus에서 로그아웃 하시겠습니까?")) window.logout();
+  } else { window.showLoginModal(); }
+}
+
+window.setOrigin = function(o, el) {
+  curOrigin = o; selectedBusName = null; selectedRouteTime = null;
+  document.querySelectorAll('.grid-origins .chip').forEach(c => c.classList.remove('active')); el.classList.add('active');
+  ['jeonju', 'buan', 'gimje', 'gunsan'].forEach(loc => {
+    const s = document.getElementById(`cats-${loc}`); if(s) s.style.display = o === loc ? 'block' : 'none';
+  });
+  window.renderGrids(); window.clearRes();
+}
+
+window.renderGrids = function(query = "") {
+  const dataList = curMode === 'inter' ? busData.inter[curOrigin] : busData.town;
+  const container = document.getElementById(`cats-${curMode === 'town' ? 'town' : curOrigin}`);
+  if(!container) return;
+  
+  let html = '';
+  const cats = [...new Set(dataList.map(b => b.cat))];
+  cats.forEach(cat => {
+    const buses = dataList.filter(b => b.cat === cat && b.name.includes(query));
+    if(buses.length > 0) {
+      html += `<div class="cat-title">${cat}</div><div class="grid">`;
+      buses.forEach(b => {
+        html += `<div class="chip ${window.favorites.includes(b.name)?'favorite':''}" onclick="window.calcBus('${b.name}')">${b.name}</div>`;
+      });
+      html += `</div>`;
+    }
+  });
+  container.innerHTML = html;
+}
+
+// 👑 스마트 배차 뷰 (지나간 버스 완벽 회색 처리 + 터치 비활성화)
+window.calcBus = function(name) {
+  const bus = curMode === 'town' ? busData.town.find(b => b.name === name) : busData.inter[curOrigin]?.find(b => b.name === name);
+  if (!bus) return;
+  selectedBusName = name;
+  const nowMin = window.timeToMin(document.getElementById('searchTime').value);
+  const info = routeInfo[name] || { gate: "확인불가", fare: 0 };
+  const fareTypeMap = { adult: '일반', teen: '청소년', child: '어린이' };
+  
+  let html = `<div class="ticket-header"><div class="ticket-gate"><span>승차홈 ${info.gate}</span> 스마트 배차</div>
+              ${info.fare ? `<button class="fare-toggle-btn" onclick="window.toggleFare(event)">${fareTypeMap[window.fareType]} ${window.formatFare(info.fare)} ↻</button>` : ''}</div>`;
+  
+  let pastBus = null;
+  let futureBuses = [];
+  
+  bus.times.forEach(t => {
+    let diff = window.timeToMin(t) - nowMin;
+    if (diff < -720) diff += 1440; 
+    
+    if (diff < 0) {
+      pastBus = { t, diff, isPast: true };
+    } else {
+      futureBuses.push({ t, diff, isPast: false });
+    }
+  });
+
+  futureBuses = futureBuses.sort((a,b) => a.diff - b.diff).slice(0, 3); // 다가올 버스 3대
+  let renderList = [];
+  if (pastBus) renderList.push(pastBus); // 지나간 버스 가장 최근 1대
+  renderList = renderList.concat(futureBuses);
+
+  if(renderList.length === 0) {
+    html += `<div class="bus-row"><div class="bus-row-body" style="text-align:center; color:var(--warning); font-weight:900; font-size:18px;">배차 운행이 모두 종료되었습니다.</div></div>`;
+  } else {
+    if(selectedRouteTime === null && futureBuses.length > 0) {
+      selectedRouteTime = futureBuses[0].t;
+      selectedRouteDiff = futureBuses[0].diff;
+    }
+
+    html += renderList.map((item, idx) => {
+      const isSelected = (selectedRouteTime === item.t && !item.isPast);
+      
+      // 지나간 버스는 회색 및 취소선, 터치 불가 처리
+      if(item.isPast) {
+        return `
+        <div class="bus-row past-bus">
+          <div class="bus-row-body" style="padding: 16px 24px;">
+            <div class="bus-row-top" style="margin-bottom:0;">
+              <div class="bus-time time-past">${item.t} <span class="time-badge" style="background:transparent; color:inherit;">지나간 배차</span></div>
+              <div class="bus-wait past-wait" style="font-size:15px; padding:6px 12px; background:transparent;">출발 완료</div>
+            </div>
+          </div>
+        </div>`;
+      }
+
+      return `
+      <div class="bus-row ${isSelected ? 'selected' : ''}" onclick="window.selectTimeRow('${item.t}', ${item.diff}, this)">
+        <div class="bus-row-body">
+          <div class="bus-row-top">
+            <div class="bus-time time-future">${item.t}</div>
+            <div class="bus-wait">${item.diff}분 대기</div>
+          </div>
+          <div class="action-grid">
+            <button class="act-btn fav" onclick="event.stopPropagation(); window.toggleFavGlobal('${name}')">관심 등록</button>
+            <button class="act-btn map" onclick="event.stopPropagation(); window.openNaverMapRoute('${name}')">경로 보기</button>
+            <button class="act-btn noti" onclick="event.stopPropagation(); window.requestNoti('${name}','${item.t}',${item.diff})">출발 알림</button>
+            <button class="act-btn share" onclick="event.stopPropagation(); window.shareRoute('${name}','${item.t}')">정보 공유</button>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+  
+  document.getElementById('resArea').innerHTML = html;
+}
+
+window.selectTimeRow = function(t, d, el) {
+  selectedRouteTime = t; selectedRouteDiff = d;
+  document.querySelectorAll('.bus-row').forEach(r => r.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+// 👑 기상청 듀얼 날씨 (현재 + 선택 시간대)
+window.fetchWeather = async function() {
+  try {
+    const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=35.731&longitude=126.733&current_weather=true&hourly=temperature_2m,weathercode&timezone=Asia/Seoul`);
+    const data = await res.json();
+    window.weatherDataCache = data;
+    window.updateWeatherDisplay();
+  } catch(e) { document.getElementById('weatherInfo').innerText = "날씨 연동 대기 중"; }
+}
+
+window.updateWeatherDisplay = function() {
+  if(!window.weatherDataCache) return;
+  const currentTemp = Math.round(window.weatherDataCache.current_weather.temperature);
+  const currentCode = window.weatherDataCache.current_weather.weathercode;
+  
+  const timeStr = document.getElementById('searchTime').value;
+  let forecastStr = "";
+  
+  if(timeStr) {
+    const hour = parseInt(timeStr.split(':')[0], 10);
+    const forecastTemp = Math.round(window.weatherDataCache.hourly.temperature_2m[hour]);
+    const forecastCode = window.weatherDataCache.hourly.weathercode[hour];
+    forecastStr = ` | 선택시간(${hour}시): ${forecastTemp}°C (${window.getWeatherText(forecastCode)})`;
+  }
+  
+  document.getElementById('weatherInfo').innerText = `부안 현재: ${currentTemp}°C (${window.getWeatherText(currentCode)})${forecastStr}`;
+}
+
+window.getWeatherText = function(code) {
+  if(code === 0) return '맑음'; if(code <= 3) return '흐림'; if(code <= 48) return '안개';
+  if(code <= 67) return '비'; if(code <= 77) return '눈'; if(code <= 82) return '소나기'; 
+  return '양호';
+}
+
+window.searchBus = function() { window.renderGrids(document.getElementById('searchInput').value); }
+window.refreshUI = function() { if(selectedBusName) window.calcBus(selectedBusName); window.updateTablesUnconditionally(); window.updateWeatherDisplay(); }
+
+// 전체 시간표 모달 & 데스크톱 뷰 (지나간 시간 회색 처리 적용)
+window.openScheduleModal = function() { window.updateTablesUnconditionally(); document.getElementById('scheduleModal').classList.add('active'); }
+window.closeScheduleModal = function() { document.getElementById('scheduleModal').classList.remove('active'); }
+window.openReportModal = function() { document.getElementById('reportModal').classList.add('active'); }
+window.closeReportModal = function() { document.getElementById('reportModal').classList.remove('active'); }
+
+window.updateTablesUnconditionally = function() {
+  const list = curMode === 'inter' ? busData.inter[curOrigin] : busData.town;
+  if(!list) return;
+  const nowMin = window.timeToMin(document.getElementById('searchTime').value);
+  
+  let html = '<table class="full-table">';
+  list.forEach(r => {
+    let timesHTML = r.times.map(t => {
+      let diff = window.timeToMin(t) - nowMin;
+      if (diff < -720) diff += 1440;
+      if (diff < 0) return `<span class="time-item is-past">${t}</span>`; // 취소선 스타일
+      return `<span class="time-item is-future">${t}</span>`;
+    }).join('');
+    html += `<tr><td>${r.name}</td><td class="t-times">${timesHTML}</td></tr>`;
+  });
+  
+  // PC 뷰와 모달 뷰 모두 동시 적용
+  const targetId = document.body.classList.contains('desktop-mode') || window.innerWidth >= 900 ? 'desktopTableBody' : 'mBody';
+  const el = document.getElementById(targetId);
+  if(el) el.innerHTML = html + '</table>';
+  
+  document.getElementById('mBody').innerHTML = html + '</table>';
+}
+
+window.shareRoute = function(busName, time) {
+  if(!selectedRouteTime) return;
+  const originName = curOrigin === 'jeonju' ? '전주' : (curOrigin === 'buan' ? '부안' : (curOrigin === 'gimje' ? '김제' : '군산'));
+  const text = `[스마트 승차권]\n출발: ${originName}\n도착: ${busName}\n탑승 시간: ${time}`;
+  if (navigator.share) { navigator.share({ title: '스마트 승차권', text: text }).catch(console.error); } 
+  else { navigator.clipboard.writeText(text).then(() => { window.showToast("승차권 정보가 클립보드에 복사되었습니다."); }); }
+}
+
+window.openNaverMapRoute = function(destName) {
+  const originName = curOrigin === 'jeonju' ? '전주' : (curOrigin === 'buan' ? '부안' : (curOrigin === 'gimje' ? '김제' : '군산'));
+  let cleanDest = destName.replace(/\(.*\)/g, '').split('/')[0].trim();
+  if (cleanDest.includes("강남") || cleanDest.includes("서울남부")) cleanDest = "서울고속버스터미널";
+  const url = `https://map.naver.com/p/directions/${encodeURIComponent(originName)}/${encodeURIComponent(cleanDest)}/-/car`;
+  window.open(url);
+}
+
+window.toggleFavGlobal = function(name) {
+  if (!window.currentUser) { window.showToast("로그인이 필요합니다."); window.showLoginModal(); return; }
+  if(window.favorites.includes(name)) { window.favorites = window.favorites.filter(f => f !== name); window.showToast(`관심 노선 해제`); } 
+  else { window.favorites.push(name); window.showToast(`관심 노선 등록`); }
+  window.saveUserData(); window.renderGrids(document.getElementById('searchInput').value); window.refreshUI();
+}
+
+window.showLoginModal = function() { document.getElementById('loginModal').classList.add('active'); }
+window.closeLoginModal = function() { document.getElementById('loginModal').classList.remove('active'); document.getElementById('tab-my').classList.remove('active'); document.getElementById(`tab-${curMode}`).classList.add('active'); }
+
+window.onload = function() { 
+  window.clearRes = function() {
+    document.getElementById('resArea').innerHTML = `<div class="glass-card" style="text-align:center; color:var(--text-sub); font-weight:800; padding:60px 20px;">
+        상단에서 노선을 탭하여 탑승 정보를 확인하십시오.
+      </div>`;
+  }
+
+  window.renderMyView = function() {
+      const container = document.getElementById('view-my');
+      if (!container) return;
+
+      if (!window.currentUser) {
+          container.innerHTML = `<div class="glass-card" style="text-align:center; padding: 60px 20px;">
+              <div style="font-size:18px; font-weight:800; margin-bottom:20px;">관심 노선, Pro 기능을 사용하려면<br>로그인이 필요합니다.</div>
+              <button class="now-btn" style="width:100%;" onclick="showLoginModal()">로그인 / 계정 연동</button>
+          </div>`;
+          return;
+      }
+
+      let html = `<div class="glass-card">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+              <div class="login-title" style="margin-bottom:0;">${window.currentUser.displayName || 'Pro회원'}님의 MY</div>
+              <button class="top-btn" onclick="if(confirm('로그아웃 하시겠습니까?')) window.logout();">로그아웃</button>
+          </div>
+          <div class="cat-title" style="margin-top:10px;">관심 노선 목록</div>`;
+
+      if (window.favorites.length === 0) {
+          html += `<div style="text-align:center; color:var(--text-sub); font-weight:700; padding: 40px 0;">등록된 관심 노선이 없습니다.<br>노선 카드에서 '관심 등록'을 눌러 추가해 보세요.</div>`;
+      } else {
+          const nowMin = window.timeToMin(document.getElementById('searchTime').value);
+          const allBuses = [ ...Object.values(busData.inter).flat(), ...busData.town ];
+
+          let favsHtml = '';
+          window.favorites.forEach(favName => {
+              const bus = allBuses.find(b => b.name === favName);
+              if (!bus) return;
+
+              const futureBuses = bus.times.map(t => {
+                  let diff = window.timeToMin(t) - nowMin;
+                  if (diff < -720) diff += 1440;
+                  return { t, diff };
+              }).filter(b => b.diff >= 0).sort((a, b) => a.diff - b.diff);
+
+              const nextBus = futureBuses[0];
+              
+              let originName = '';
+              if (busData.town.some(b => b.name === favName)) {
+                  originName = '부안(시내)';
+              } else {
+                  for (const o in busData.inter) {
+                      if (busData.inter[o].some(b => b.name === favName)) {
+                          originName = o === 'jeonju' ? '전주' : (o === 'buan' ? '부안' : (o === 'gimje' ? '김제' : '군산'));
+                          break;
+                      }
+                  }
+              }
+
+              favsHtml += `<div class="bus-row" onclick="window.showFavoriteRoute('${bus.name}')">
+                  <div class="bus-row-body" style="padding: 20px;">
+                      <div style="font-weight: 800; font-size: 18px; margin-bottom: 12px;">${originName} → ${favName}</div>
+                      ${nextBus ? `
+                      <div class="bus-row-top" style="margin-bottom:0;">
+                          <div class="bus-time time-future" style="font-size:32px;">${nextBus.t}</div>
+                          <div class="bus-wait">${nextBus.diff}분 대기</div>
+                      </div>
+                      ` : `
+                      <div style="color: var(--warning); font-weight: 700;">운행 종료</div>
+                      `}
+                  </div>
+              </div>`;
+          });
+          html += favsHtml;
+      }
+      html += `</div>`; // close glass-card
+      container.innerHTML = html;
+  }
+
+  window.showFavoriteRoute = function(name) {
+      const allBuses = [ ...Object.values(busData.inter).flat(), ...busData.town ];
+      const bus = allBuses.find(b => b.name === name);
+      if (!bus) return;
+
+      let mode = '';
+      let origin = '';
+
+      if (busData.town.some(b => b.name === name)) {
+          mode = 'town';
+      } else {
+          mode = 'inter';
+          for (const o in busData.inter) {
+              if (busData.inter[o].some(b => b.name === name)) {
+                  origin = o;
+                  break;
+              }
+          }
+      }
+
+      switchMainTab(mode);
+      if (mode === 'inter' && origin) {
+          const originEl = [...document.querySelectorAll('.grid-origins .chip')].find(el => el.onclick.toString().includes(`setOrigin('${origin}'`));
+          if (originEl) {
+              setOrigin(origin, originEl);
+          }
+      }
+      
+      calcBus(name);
+      document.getElementById('resArea').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  window.setToNow(); 
+  window.fetchWeather(); 
+  window.setOrigin('jeonju', document.querySelector('.grid-origins .chip')); 
+  window.addEventListener('resize', () => { window.updateTablesUnconditionally(); });
+}
+</script>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+  import { getAuth, signInWithPopup, GoogleAuthProvider, OAuthProvider, GithubAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDIEq5_K5J1R8EipOfRopsM7CODQFv-EsQ",
+    authDomain: "smartbus-pro.firebaseapp.com",
+    projectId: "smartbus-pro",
+    storageBucket: "smartbus-pro.firebasestorage.app",
+    messagingSenderId: "908746765212",
+    appId: "1:908746765212:web:07f1e402870af621208e59"
+  };
+
+  let auth;
+  try { const app = initializeApp(firebaseConfig); auth = getAuth(app); } catch(e) {}
+
+  window.processLogin = function(type) {
+    if(!auth) { alert("API 서버 연결이 끊겼습니다."); return; }
+    let provider = type === 'google' ? new GoogleAuthProvider() : (type === 'apple' ? new OAuthProvider('apple.com') : new GithubAuthProvider());
+    
+    signInWithPopup(auth, provider).then(res => {
+      window.showToast("환영합니다!"); window.closeLoginModal();
+    }).catch(e => {
+      if (e.code === 'auth/popup-closed-by-user') return;
+      alert(`로그인 오류: ${e.code}`);
+    });
+  }
+
+  if(auth) {
+    onAuthStateChanged(auth, user => {
+      if (user) {
+        window.currentUser = user;
+        document.getElementById('userGreeting').innerHTML = `${user.displayName || 'Pro회원'}님 <span class="pro-badge">PRO</span>`;
+        document.getElementById('tabMyText').innerText = "MY";
+        window.favorites = JSON.parse(localStorage.getItem(`busFav_${user.uid}`) || '[]');
+        window.refreshUI();
+      } else {
+        window.currentUser = null;
+        window.favorites = [];
+        document.getElementById('userGreeting').innerText = "게스트 접속 중";
+        document.getElementById('tabMyText').innerText = "로그인";
+        if(curMode === 'my') switchMainTab('inter'); // If on MY tab after logout, switch to home
+        window.refreshUI();
+      }
+    });
+  }
+
+  window.logout = () => { if(auth) signOut(auth).then(() => location.reload()); }
+  window.saveUserData = () => { if(window.currentUser) localStorage.setItem(`busFav_${window.currentUser.uid}`, JSON.stringify(window.favorites)); }
+</script>
+</body>
+</html>
