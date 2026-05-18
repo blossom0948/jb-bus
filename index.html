@@ -499,7 +499,13 @@ window.toggleDarkMode = function() { document.body.classList.toggle('dark-mode')
 window.switchMainTab = function(mode) {
   curMode = mode; selectedBusName = null; selectedRouteTime = null;
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById(`tab-${mode}`).classList.add('active');
+  const mobileTab = document.getElementById(`tab-${mode}`);
+  if(mobileTab) mobileTab.classList.add('active');
+
+  document.querySelectorAll('.desktop-tab-btn').forEach(b => b.classList.remove('active'));
+  const desktopTab = document.querySelector(`.desktop-tab-btn[data-tab="${mode}"]`);
+  if(desktopTab) desktopTab.classList.add('active');
+
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active')); 
   document.getElementById(`view-${mode}`).classList.add('active');
   document.getElementById('searchInput').value = '';
