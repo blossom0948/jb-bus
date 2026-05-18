@@ -90,11 +90,21 @@
   #userGreeting { color: var(--primary); font-size: 14px; font-weight: 900; }
   .pro-badge { display: inline-block; background: var(--primary); color: white; font-size: 10px; font-weight: 900; padding: 3px 6px; border-radius: 6px; margin-left: 8px; vertical-align: middle; }
 
+  /* PC 전용 상단 탭 */
+  .desktop-tabs { display: none; position: absolute; left: 50%; transform: translateX(-50%); gap: 24px; align-items: center; height: 100%; }
+  .desktop-tab-btn { background: none; border: none; font-family: inherit; font-size: 16px; font-weight: 800; color: var(--text-muted); cursor: pointer; padding: 10px 4px; position: relative; transition: color 0.2s; }
+  .desktop-tab-btn:hover { color: var(--text-main); }
+  .desktop-tab-btn.active { color: var(--primary); }
+  .desktop-tab-btn.active::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 24px; height: 3px; background: var(--primary); border-radius: 2px; }
+
   /* 1단/2단 자동 반응형 적용 */
   .main { padding: 0 20px; max-width: 600px; margin: 0 auto; transition: 0.4s ease; }
   .right-pane { display: none; }
   
   @media (min-width: 900px) {
+    body { padding-bottom: 40px; }
+    .bottom-tab-bar { display: none !important; }
+    .desktop-tabs { display: flex; }
     .main { max-width: 1400px; display: flex; flex-direction: row; gap: 32px; padding-top: 20px; }
     .left-pane { flex: 4; width: 40%; }
     .right-pane { flex: 6; display: block; width: 60%; }
